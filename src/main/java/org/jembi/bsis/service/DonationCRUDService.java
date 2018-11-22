@@ -1,11 +1,5 @@
 package org.jembi.bsis.service;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Objects;
-
-import javax.persistence.NoResultException;
-
 import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.backingform.BloodTypingResolutionsBackingForm;
@@ -24,6 +18,13 @@ import org.jembi.bsis.repository.DonorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
+import java.util.UUID;
+
+import javax.persistence.NoResultException;
 
 @Transactional
 @Service
@@ -56,7 +57,7 @@ public class DonationCRUDService {
   @Autowired
   private DateGeneratorService dateGeneratorService;
 
-  public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
+  public void deleteDonation(UUID donationId) throws IllegalStateException, NoResultException {
 
     if (!donationConstraintChecker.canDeleteDonation(donationId)) {
       throw new IllegalStateException("Cannot delete donation with constraints");
@@ -65,7 +66,7 @@ public class DonationCRUDService {
     // Soft delete donation
     Donation donation = donationRepository.findDonationById(donationId);
     donation.setIsDeleted(true);
-    donationRepository.updateDonation(donation);
+    donationRepository.update(donation);
 
     Date donationDate = donation.getDonationDate();
     Donor donor = donation.getDonor();
@@ -93,7 +94,7 @@ public class DonationCRUDService {
   }
 
   public Donation createDonation(Donation donation) {
-  
+
     donation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     donation.setTTIStatus(TTIStatus.NOT_DONE);
@@ -119,14 +120,14 @@ public class DonationCRUDService {
 
     Component component = componentCRUDService.createInitialComponent(donation);
     donation.addComponent(component);
-    donationRepository.saveDonation(donation);
+    donationRepository.save(donation);
 
     if (discardComponents) {
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
       //Also flag for counselling
       postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
     }
-    
+
     // update donor
     updateDonorFields(donation);
     return donation;
@@ -146,7 +147,7 @@ public class DonationCRUDService {
    */
   public Donation updateDonation(Donation updatedDonation) {
     Donation existingDonation = donationRepository.findDonationById(updatedDonation.getId());
-    
+
     // Check if pack type has been updated
     boolean packTypeUpdated = !Objects.equals(existingDonation.getPackType(), updatedDonation.getPackType());
 
@@ -176,44 +177,39 @@ public class DonationCRUDService {
 
       // Check that if the donor is deferred, the packType can't be updated to one that produces
       // components (doesn't apply to back entry)
-      if (newPackType.getCountAsDonation() && 
+      if (newPackType.getCountAsDonation() &&
           donorConstraintChecker.isDonorDeferred(existingDonation.getDonor().getId())) {
         DonationBatch donationBatch = existingDonation.getDonationBatch();
         if (!donationBatch.isBackEntry()) {
           throw new IllegalArgumentException("Cannot set pack type that produces components");
         }
       }
-      
+
       // Set new pack type
       existingDonation.setPackType(newPackType);
-      
+
       // If the new packType does not count as donation, delete initial component
       if (!newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {
           existingDonation.getComponents().get(0).setIsDeleted(true);
       }
-     
+
       // If the new packType count as donation, update initial component
-      if (newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {    
-        componentCRUDService.updateComponentWithNewPackType(existingDonation.getComponents().get(0), newPackType);  
+      if (newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {
+        componentCRUDService.updateComponentWithNewPackType(existingDonation.getComponents().get(0), newPackType);
       }
-      
+
       // If the new PackType count as donation and there is no initial component then create it
       if (newPackType.getCountAsDonation() && existingDonation.getComponents().isEmpty()) {
         Component component = componentCRUDService.createInitialComponent(existingDonation);
         existingDonation.getComponents().add(component);
         // ensure that the Donation is released, so that the new initial component is made available (or not)
-        releaseDonation = existingDonation.getDonationBatch().getTestBatch() != null
-                && TestBatchStatus.hasBeenReleased(existingDonation.getDonationBatch().getTestBatch().getStatus());
+        releaseDonation = existingDonation.getTestBatch() != null
+                && TestBatchStatus.hasBeenReleased(existingDonation.getTestBatch().getStatus());
       }
-      
+
       // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
       if (!newPackType.getTestSampleProduced()) {
-        bloodTestsService.setTestOutcomesAsDeleted(existingDonation);
-        existingDonation.setTTIStatus(TTIStatus.NOT_DONE);
-        existingDonation.setBloodAbo(null);
-        existingDonation.setBloodRh(null);
-        existingDonation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-        existingDonation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+        clearTestOutcomes(existingDonation);
       }
     }
 
@@ -239,7 +235,7 @@ public class DonationCRUDService {
       }
     }
 
-    Donation donation = donationRepository.updateDonation(existingDonation);
+    Donation donation = donationRepository.update(existingDonation);
 
     if (packTypeUpdated) {
       donorService.setDonorDueToDonate(existingDonation.getDonor());
@@ -251,13 +247,18 @@ public class DonationCRUDService {
 
     return donation;
   }
-  
+
+  public void clearTestOutcomes(Donation donation) {
+    bloodTestsService.setTestOutcomesAsDeleted(donation);
+    donation.resetTestStatuses();
+  }
+
   public void updateDonationsBloodTypingResolutions(BloodTypingResolutionsBackingForm backingForm) {
     for (BloodTypingResolutionBackingForm form : backingForm.getBloodTypingResolutions()) {
       updateDonationBloodTypingResolution(form);
     }
   }
-  
+
   public void updateDonationBloodTypingResolution(BloodTypingResolutionBackingForm form) {
 
     Donation donation = donationRepository.findDonationById(form.getDonationId());
@@ -269,9 +270,9 @@ public class DonationCRUDService {
       donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
     }
 
-    donation = donationRepository.updateDonation(donation);
+    donation = donationRepository.update(donation);
 
-    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+    if (donation.getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
       testBatchStatusChangeService.handleRelease(donation);
     }
   }

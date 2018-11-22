@@ -5,12 +5,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -26,7 +28,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.component.Component;
@@ -35,6 +37,7 @@ import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.DonationNamedQueryConstants;
 
@@ -65,12 +68,22 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED,
         query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER,
-        query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER)
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATIONS_BETWEEN_TWO_DINS,
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATIONS_BETWEEN_TWO_DINS),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_IN_RANGE,
+        query = DonationNamedQueryConstants.QUERY_FIND_IN_RANGE),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_BY_PACK_TYPE_ID_IN_RANGE,
+        query = DonationNamedQueryConstants.QUERY_FIND_BY_PACK_TYPE_ID_IN_RANGE),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_BY_VENUE_ID_IN_RANGE,
+        query = DonationNamedQueryConstants.QUERY_FIND_BY_VENUE_ID_IN_RANGE),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_BY_VENUE_ID_AND_PACK_TYPE_ID_IN_RANGE,
+        query = DonationNamedQueryConstants.QUERY_FIND_BY_VENUE_ID_AND_PACK_TYPE_ID_IN_RANGE)
 })
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Donation extends BaseModificationTrackerEntity implements Comparable<Donation> {
+public class Donation extends BaseModificationTrackerUUIDEntity implements Comparable<Donation> {
 
   private static final long serialVersionUID = 1L;
 
@@ -107,7 +120,8 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @ManyToOne
   private DonationType donationType;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "packType_id", nullable = false)
   private PackType packType;
 
   /**
@@ -144,6 +158,9 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
 
   @ManyToOne(optional = true)
   private DonationBatch donationBatch;
+
+  @ManyToOne(optional = true)
+  private TestBatch testBatch;
 
   @Lob
   private String notes;
@@ -215,6 +232,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.donorWeight = donation.getDonorWeight();
     this.donationCreatedBy = donation.getCreatedBy();
     this.donationBatch = donation.getDonationBatch();
+    this.testBatch = donation.getTestBatch();
     this.notes = donation.getNotes();
     this.bloodTypingStatus = donation.getBloodTypingStatus();
     this.bloodTypingMatchStatus = donation.getBloodTypingMatchStatus();
@@ -227,6 +245,22 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.adverseEvent = donation.getAdverseEvent();
     this.titre = donation.getTitre();
     this.flagCharacters = donation.getFlagCharacters();
+  }
+
+  public boolean isTestable() {
+    return getPackType().getTestSampleProduced();
+  }
+
+  public boolean isIncludedIn(TestBatch testBatch) {
+    return this.getTestBatch() != null && Objects.equals(this.getTestBatch(), testBatch);
+  }
+
+  public void resetTestStatuses() {
+    setTTIStatus(TTIStatus.NOT_DONE);
+    setBloodAbo(null);
+    setBloodRh(null);
+    setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
   }
 
   public String getDonationIdentificationNumber() {
@@ -279,29 +313,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.isDeleted = isDeleted;
   }
 
-  public void copy(Donation donation) {
-    assert (this.getId().equals(donation.getId()));
-    this.donationIdentificationNumber = donation.donationIdentificationNumber;
-    this.donor = donation.donor;
-    this.setDonationType(donation.getDonationType());
-    this.packType = donation.packType;
-    this.donationDate = donation.donationDate;
-    this.donationBatch = donation.donationBatch;
-    this.notes = donation.notes;
-    this.haemoglobinCount = donation.haemoglobinCount;
-    this.haemoglobinLevel = donation.haemoglobinLevel;
-    this.donorPulse = donation.donorPulse;
-    this.donorWeight = donation.donorWeight;
-    this.bloodPressureDiastolic = donation.bloodPressureDiastolic;
-    this.bloodPressureSystolic = donation.bloodPressureSystolic;
-    this.venue = donation.getVenue();
-    this.bloodAbo = donation.bloodAbo;
-    this.bloodRh = donation.bloodRh;
-    this.flagCharacters = donation.flagCharacters;
-    this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
-    this.titre = donation.titre;
-  }
-
   /**
    * Finds the initial component (which is the component which is the parent
    * of all other components) for this Donation.
@@ -324,7 +335,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   public void setComponents(List<Component> components) {
     this.components = components;
   }
-  
+
   public void addComponent(Component component) {
     if (component == null) {
       return;
@@ -340,12 +351,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
    */
   @Override
   public int compareTo(Donation c) {
-    Long diff = (this.getId() - c.getId());
-    if (diff < 0)
-      return -1;
-    if (diff > 0)
-      return 1;
-    return 0;
+    return this.getId().compareTo(c.getId());
   }
 
   public TTIStatus getTTIStatus() {
@@ -402,6 +408,14 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
 
   public void setDonationBatch(DonationBatch donationBatch) {
     this.donationBatch = donationBatch;
+  }
+
+  public TestBatch getTestBatch() {
+    return testBatch;
+  }
+
+  public void setTestBatch(TestBatch testBatch) {
+    this.testBatch = testBatch;
   }
 
   public DonationType getDonationType() {
@@ -543,5 +557,4 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   public void setFlagCharacters(String flagCharacters) {
     this.flagCharacters = flagCharacters;
   }
-
 }

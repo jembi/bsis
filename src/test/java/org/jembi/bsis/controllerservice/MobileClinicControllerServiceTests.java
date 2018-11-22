@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.DonorOutcomesViewModelFactory;
@@ -56,12 +57,12 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   @Test
   public void testGetDonorOutcomes_shouldReturnCorrectViewModels() {
     // Set up fixture
-    long venueId = 1;
+    UUID venueId = UUID.randomUUID();
     Date startDate = new DateTime().minusDays(30).toDate();
     Date endDate = new DateTime().minusDays(7).toDate();
 
-    Location donorVenue = aVenue().withId(1L).build();
-    List<Donation> donations = Arrays.asList(aDonation().withId(1L).build(), aDonation().withId(2L).build());
+    Location donorVenue = aVenue().withId(venueId).build();
+    List<Donation> donations = Arrays.asList(aDonation().withId(UUID.randomUUID()).build(), aDonation().withId(UUID.randomUUID()).build());
 
     // Set up expectations
     List<DonorOutcomesViewModel> expectedViewModels = Arrays.asList(
@@ -84,11 +85,11 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   @Test
   public void testGetBloodTestNames_shouldReturnCorrectNames() {
     // Set up fixture
-    BloodTest firstBasicTtiTest = aBloodTest().withId(1L).withTestNameShort("First").build();
-    BloodTest secondBasicTtiTest = aBloodTest().withId(1L).withTestNameShort("Second").build();
-    BloodTest firstRepestTtiTest = aBloodTest().withId(2L).withTestNameShort("Third").build();
-    BloodTest secondRepeatTtiTest = aBloodTest().withId(3L).withTestNameShort("Fourth").build();
-    BloodTest firstConfirmatoryTtiTest = aBloodTest().withId(1L).withTestNameShort("Fifth").build();
+    BloodTest firstBasicTtiTest = aBloodTest().withId(UUID.randomUUID()).withTestNameShort("First").build();
+    BloodTest secondBasicTtiTest = aBloodTest().withId(UUID.randomUUID()).withTestNameShort("Second").build();
+    BloodTest firstRepestTtiTest = aBloodTest().withId(UUID.randomUUID()).withTestNameShort("Third").build();
+    BloodTest secondRepeatTtiTest = aBloodTest().withId(UUID.randomUUID()).withTestNameShort("Fourth").build();
+    BloodTest firstConfirmatoryTtiTest = aBloodTest().withId(UUID.randomUUID()).withTestNameShort("Fifth").build();
 
     // Set expectations
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(
@@ -111,7 +112,9 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   public void testGetMobileClinicDonorsByVenue() throws Exception {
     // Set up
     Date clinicDate = new Date();
-    Location venue = LocationBuilder.aLocation().withId(1L).withName("test").build();
+
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).withName("test").build();
     MobileClinicDonorDTO donor1 = MobileClinicDonorBuilder.aMobileClinicDonor()
         .withVenue(venue)
         .build();
@@ -129,7 +132,8 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
 
     //Mock
     when(mobileClinicControllerService.getMobileClinicDonorsByVenue(venue.getId(), clinicDate)).thenReturn(expectedClinicDonorsViewModels);
-    when(donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())))).thenReturn(clinicDonorDTOs);
+    when(donorRepository.findMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId()))))
+        .thenReturn(clinicDonorDTOs);
     when(mobileClinicDonorFactory.createMobileClinicDonorViewModels(clinicDonorDTOs,clinicDate)).thenReturn(expectedClinicDonorsViewModels);
 
     // Exercise SUT
@@ -143,7 +147,8 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   public void testGetMobileClinicDonorsByVenues() throws Exception {
     // Set up
     Date clinicDate = new Date();
-    Location venue = LocationBuilder.aLocation().withId(1L).withName("test").build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).withName("test").build();
     MobileClinicDonorDTO donor1 = MobileClinicDonorBuilder.aMobileClinicDonor()
         .withVenue(venue)
         .build();
@@ -162,13 +167,16 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
         .add(mobileClinicDonorFactory.createMobileClinicExportDonorViewModel(donor2, clinicDate));
 
     //Mock
-    when(mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())), clinicDate)).thenReturn(expectedClinicDonorsViewModels);
-    when(donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())))).thenReturn(clinicDonorDTOs);
+    when(mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId())),
+        clinicDate)).thenReturn(expectedClinicDonorsViewModels);
+    when(donorRepository.findMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId()))))
+        .thenReturn(clinicDonorDTOs);
     when(mobileClinicDonorFactory.createMobileClinicExportDonorViewModels(clinicDonorDTOs, clinicDate))
         .thenReturn(expectedClinicDonorsViewModels);
 
     // Exercise SUT
-    List<MobileClinicExportDonorViewModel> returnedClinicDonorsViewModels = mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())), clinicDate);
+    List<MobileClinicExportDonorViewModel> returnedClinicDonorsViewModels = mobileClinicControllerService
+        .getMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId())), clinicDate);
 
     // Verify
     assertThat(returnedClinicDonorsViewModels, is(expectedClinicDonorsViewModels));

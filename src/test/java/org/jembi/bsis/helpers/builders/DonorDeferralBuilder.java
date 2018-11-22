@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.DonorDeferralPersister;
@@ -9,21 +10,22 @@ import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.user.User;
+import org.jembi.bsis.util.RandomTestDate;
 
 public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
 
-  private Long id;
+  private UUID id;
   private Donor deferredDonor = DonorBuilder.aDonor().build();
   private DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().build();
   private Date deferredUntil;
   private Boolean voided;
   private String deferralReasonText;
   private Location venue = LocationBuilder.aLocation().build();
-  private Date deferralDate = new Date();
+  private Date deferralDate = new RandomTestDate();
   private User createdBy;
   private Date createdDate;
 
-  public DonorDeferralBuilder withId(Long id) {
+  public DonorDeferralBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

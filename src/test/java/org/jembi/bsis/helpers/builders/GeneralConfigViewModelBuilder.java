@@ -1,17 +1,19 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.admin.DataType;
 import org.jembi.bsis.viewmodel.GeneralConfigViewModel;
 
 public class GeneralConfigViewModelBuilder extends AbstractBuilder<GeneralConfigViewModel> {
 
-  private Long id;
+  private UUID id;
   private DataType dataType;
   private String value;
   private String name;
   private String description;
 
-  public GeneralConfigViewModelBuilder withId(Long id) {
+  public GeneralConfigViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

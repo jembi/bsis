@@ -156,6 +156,11 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
       errors.rejectValue("flagComponentsContainingPlasmaForDiscard", "errors.required",
           "flagComponentsContainingPlasmaForDiscard is required");
     }
+    
+    // Validate rankInCategory
+    if (form.getRankInCategory() !=null && form.getRankInCategory() < 1) {
+      errors.rejectValue("RankInCategory", "errors.invalid", "Rank in Category is invalid");
+    }
 
   }
 

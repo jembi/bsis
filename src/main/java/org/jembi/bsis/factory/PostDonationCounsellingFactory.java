@@ -12,7 +12,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingSummaryViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
@@ -37,9 +37,9 @@ public class PostDonationCounsellingFactory {
 
     PostDonationCounsellingViewModel viewModel = new PostDonationCounsellingViewModel();
 
-    DonationViewModel donationViewModel = donationFactory.createDonationViewModelWithoutPermissions(
+    DonationFullViewModel donationFullViewModel = donationFactory.createDonationFullViewModelWithoutPermissions(
         postDonationCounselling.getDonation());
-    viewModel.setDonation(donationViewModel);
+    viewModel.setDonation(donationFullViewModel);
     viewModel.setId(postDonationCounselling.getId());
     viewModel.setCounsellingDate(postDonationCounselling.getCounsellingDate());
     viewModel.setCounsellingStatus(postDonationCounselling.getCounsellingStatus());
@@ -109,6 +109,7 @@ public class PostDonationCounsellingFactory {
     viewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
     viewModel.setDonationDate(donation.getDonationDate());
     viewModel.setVenue(locationFactory.createViewModel(donation.getVenue()));
+    
     viewModel.setDonorId(donor.getId());
     return viewModel;
   }

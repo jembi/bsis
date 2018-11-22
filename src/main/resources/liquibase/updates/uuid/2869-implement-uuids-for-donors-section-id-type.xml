@@ -1,0 +1,90 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170331-1150" author="jmuzinda">
+    <dropForeignKeyConstraint baseTableName="Donor" constraintName="Donor_Idtype_FK"/>
+
+    <addColumn tableName="IdType">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor">
+      <column name="idType_id_temp" type="BIGINT" afterColumn="idType_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor_AUD">
+      <column name="idType_id_temp" type="BIGINT" afterColumn="idType_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE IdType 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="idtype_id_temp_index" tableName="IdType" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET idType_id_temp = idType_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor 
+      SET idType_id_temp = idType_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="IdType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="IdType"/>
+
+    <modifyDataType columnName="idType_id" newDataType="BINARY(16)" tableName="Donor"/>
+
+    <modifyDataType columnName="idType_id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
+
+    <sql>
+      UPDATE IdType SET id = UNHEX("11e868b0546f87278826e4a471449260") WHERE id_temp = 1;
+      UPDATE IdType SET id = UNHEX("11e868b0546f8ab38826e4a471449260") WHERE id_temp = 2;
+      UPDATE IdType SET id = UNHEX("11e868b0546f8cc28826e4a471449260") WHERE id_temp = 3;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE IdType ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE Donor AS updateTable
+        LEFT JOIN IdType AS joinedTable ON (updateTable.idType_id_temp = joinedTable.id_temp)
+      SET updateTable.idType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+        LEFT JOIN IdType AS joinedTable ON (updateTable.idType_id_temp = joinedTable.id_temp)
+      SET updateTable.idType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="IdType"/>
+
+    <dropColumn columnName="idType_id_temp" tableName="Donor"/>
+
+    <dropColumn columnName="idType_id_temp" tableName="Donor_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="idType_id" baseTableName="Donor" constraintName="Donor_Idtype_FK"
+      referencedColumnNames="id" referencedTableName="IdType"/>
+    
+  </changeSet>
+
+</databaseChangeLog>

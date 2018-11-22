@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -117,7 +118,7 @@ public class DonationBatchRepositoryTests extends ContextDependentTestSuite {
     List<DonationBatch> expectedDonationBatches =
         Arrays.asList(donationBatchDateInRange, anotherDonationBatchDateInRange);
 
-    List<DonationBatch> returnedDonationBatches = donationBatchRepository.findDonationBatches(null, Collections.<Long>emptyList(), dateRangeStart, dateRangeEnd);
+    List<DonationBatch> returnedDonationBatches = donationBatchRepository.findDonationBatches(null, Collections.<UUID>emptyList(), dateRangeStart, dateRangeEnd);
 
     assertThat(returnedDonationBatches, is(expectedDonationBatches));
   }

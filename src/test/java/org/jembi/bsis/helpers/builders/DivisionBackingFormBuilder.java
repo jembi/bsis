@@ -1,15 +1,17 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.DivisionBackingForm;
 
 public class DivisionBackingFormBuilder extends AbstractBuilder<DivisionBackingForm> {
   
-  private Long id;
+  private UUID id;
   private String name;
   private Integer level;
   private DivisionBackingForm parent;
   
-  public DivisionBackingFormBuilder withId(Long id) {
+  public DivisionBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

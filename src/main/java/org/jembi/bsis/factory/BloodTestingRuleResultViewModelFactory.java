@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -13,7 +14,7 @@ import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.service.BloodTestResultConstraintChecker;
 import org.jembi.bsis.service.DonationConstraintChecker;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,15 +34,15 @@ public class BloodTestingRuleResultViewModelFactory {
   @Autowired
   private BloodTestResultFactory bloodTestResultFactory;
 
-  public BloodTestingRuleResult createBloodTestResultViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet) {
+  public BloodTestingRuleResult createBloodTestResultFullViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet) {
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
 
     // the blood donation
     Donation donation = bloodTestingRuleResultSet.getDonation();
-    ruleResult.setDonation(donationFactory.createDonationViewModelWithoutPermissions(donation));
+    ruleResult.setDonation(donationFactory.createDonationFullViewModelWithoutPermissions(donation));
 
     // pending tests
-    List<Long> pendingBloodTypingTestsIds = new ArrayList<>();
+    List<UUID> pendingBloodTypingTestsIds = new ArrayList<>();
     pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingAboTestsIds());
     pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingRhTestsIds());
     ruleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
@@ -82,14 +83,14 @@ public class BloodTestingRuleResultViewModelFactory {
     ruleResult.setTTIStatus(bloodTestingRuleResultSet.getTtiStatus());
 
     // Determine if the Donation is released
-    TestBatch testBatch = donation.getDonationBatch().getTestBatch();
+    TestBatch testBatch = donation.getTestBatch();
     boolean isDonationReleased = donationConstraintChecker.donationIsReleased(testBatch, donation, ruleResult);
 
     // test data in various formats
     ruleResult.setStoredTestResults(bloodTestingRuleResultSet.getStoredTestResults());
-    Map<Long, BloodTestResultViewModel> recentTestResultsViewModel = new HashMap<>();
-    for (Long testId : bloodTestingRuleResultSet.getRecentTestResults().keySet()) {
-      recentTestResultsViewModel.put(testId, createBloodTestResultViewModel(bloodTestingRuleResultSet, bloodTestingRuleResultSet.getRecentTestResults().get(testId), isDonationReleased));
+    Map<UUID, BloodTestResultFullViewModel> recentTestResultsViewModel = new HashMap<>();
+    for (UUID testId : bloodTestingRuleResultSet.getRecentTestResults().keySet()) {
+      recentTestResultsViewModel.put(testId, createBloodTestResultFullViewModel(bloodTestingRuleResultSet, bloodTestingRuleResultSet.getRecentTestResults().get(testId), isDonationReleased));
     }
     ruleResult.setRecentTestResults(recentTestResultsViewModel);
     ruleResult.setAvailableTestResults(bloodTestingRuleResultSet.getAvailableTestResults());
@@ -97,11 +98,11 @@ public class BloodTestingRuleResultViewModelFactory {
     return ruleResult;
   }
 
-  public BloodTestResultViewModel createBloodTestResultViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet, BloodTestResult bloodTestResult, boolean isDonationReleased) {
-    BloodTestResultViewModel bloodTestResultViewModel = bloodTestResultFactory.createBloodTestResultViewModel(bloodTestResult);
+  public BloodTestResultFullViewModel createBloodTestResultFullViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet, BloodTestResult bloodTestResult, boolean isDonationReleased) {
+    BloodTestResultFullViewModel bloodTestResultFullViewModel = bloodTestResultFactory.createFullViewModel(bloodTestResult);
     Map<String, Boolean> permissions = new HashMap<String, Boolean>();
     permissions.put("canEdit", bloodTestResultConstraintChecker.canEdit(bloodTestingRuleResultSet, bloodTestResult, isDonationReleased));
-    bloodTestResultViewModel.setPermissions(permissions);
-    return bloodTestResultViewModel;
+    bloodTestResultFullViewModel.setPermissions(permissions);
+    return bloodTestResultFullViewModel;
   }
 }

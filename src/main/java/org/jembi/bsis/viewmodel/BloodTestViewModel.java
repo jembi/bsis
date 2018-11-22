@@ -1,9 +1,11 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
-public class BloodTestViewModel extends BaseViewModel {
+public class BloodTestViewModel extends BaseViewModel<UUID> {
 
   private String testName;
   private String testNameShort;
@@ -11,6 +13,7 @@ public class BloodTestViewModel extends BaseViewModel {
   private BloodTestType bloodTestType;
   private Boolean isActive;
   private Boolean isDeleted;
+  private Integer rankInCategory;
 
   public String getTestName() {
     return testName;
@@ -58,5 +61,13 @@ public class BloodTestViewModel extends BaseViewModel {
 
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public Integer getRankInCategory() {
+    return rankInCategory;
+  }
+
+  public void setRankInCategory(Integer rankInCategory) {
+    this.rankInCategory = rankInCategory;
   }
 }

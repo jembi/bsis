@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.StockLevelDTO;
@@ -39,7 +40,8 @@ public class StockLevelsReportGeneratorTests extends UnitTestSuite {
   @Test
   public void testStockLevelsForLocationReport() {
 
-    Location location = LocationBuilder.aLocation().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location location = LocationBuilder.aLocation().withId(locationId).build();
     List<StockLevelDTO> dtos = Arrays.asList(aStockLevelDTO().withComponentType(aComponentType().withComponentTypeName("Type1").build())
             .withBloodAbo("A").withBloodRh("+").withCount(2).build()
     );

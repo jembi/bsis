@@ -3,12 +3,13 @@ package org.jembi.bsis.backingform;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ComponentTypeCombinationBackingForm {
 
-  private Long id;
+  private UUID id;
 
   private String combinationName;
 
@@ -18,11 +19,11 @@ public class ComponentTypeCombinationBackingForm {
 
   private Boolean isDeleted;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

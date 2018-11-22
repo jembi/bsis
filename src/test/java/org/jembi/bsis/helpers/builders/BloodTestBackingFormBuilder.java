@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.LinkedHashSet;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
@@ -8,7 +9,7 @@ import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
 public class BloodTestBackingFormBuilder extends AbstractBuilder<BloodTestBackingForm> {
   
-  private Long id;
+  private UUID id;
   private String testName;
   private String testNameShort;
   private BloodTestCategory category;
@@ -20,8 +21,9 @@ public class BloodTestBackingFormBuilder extends AbstractBuilder<BloodTestBackin
   private Boolean isDeleted;
   private boolean flagComponentsContainingPlasmaForDiscard;
   private boolean flagComponentsForDiscard;
+  private Integer rankInCategory;
   
-  public BloodTestBackingFormBuilder withId(Long id) {
+  public BloodTestBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
@@ -99,7 +101,12 @@ public class BloodTestBackingFormBuilder extends AbstractBuilder<BloodTestBackin
   public BloodTestBackingFormBuilder thatShouldNotFlagComponentsForDiscard() {
     this.flagComponentsForDiscard = false;
     return this;
-  }  
+  }
+  
+  public BloodTestBackingFormBuilder withRankInCategory(Integer rankInCategory) {
+    this.rankInCategory = rankInCategory;
+    return this;
+  }
   
   @Override
   public BloodTestBackingForm build() {
@@ -116,6 +123,7 @@ public class BloodTestBackingFormBuilder extends AbstractBuilder<BloodTestBackin
     bloodTestBackingForm.setIsDeleted(isDeleted);
     bloodTestBackingForm.setFlagComponentsContainingPlasmaForDiscard(flagComponentsContainingPlasmaForDiscard);
     bloodTestBackingForm.setFlagComponentsForDiscard(flagComponentsForDiscard);
+    bloodTestBackingForm.setRankInCategory(rankInCategory);
     return bloodTestBackingForm;
   }
   

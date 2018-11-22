@@ -3,6 +3,7 @@ package org.jembi.bsis.controllerservice;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -73,7 +74,7 @@ public class BloodTestingRuleControllerService {
     return bloodTestingRuleFactory.createFullViewModel(bloodTestingRuleCRUDService.createBloodTestingRule(bloodTestingRule));
   }
   
-  public BloodTestingRuleViewModel findBloodTestingRuleById(long id) {
+  public BloodTestingRuleViewModel findBloodTestingRuleById(UUID id) {
     return bloodTestingRuleFactory.createFullViewModel(bloodTestingRuleRepository.findBloodTestingRuleById(id));
   }
   

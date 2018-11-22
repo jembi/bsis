@@ -1,17 +1,19 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.DivisionPersister;
 import org.jembi.bsis.model.location.Division;
 
 public class DivisionBuilder extends AbstractEntityBuilder<Division> {
   
-  private Long id;
+  private UUID id;
   private String name = "default.division.name";
   private int level;
   private Division parent;
 
-  public DivisionBuilder withId(long id) {
+  public DivisionBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -1,0 +1,183 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170510-1647"  author="patience-mpofu">
+    <comment>This change set migrates the Role and Role_AUD tables from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+        
+    <dropForeignKeyConstraint baseTableName="Permission_Role" constraintName="FK63DCE8E61D2E2631"/>
+    <dropForeignKeyConstraint baseTableName="User_Role" constraintName="FK8B9F886A1D2E2631"/>
+
+    <addColumn tableName="Role">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Role_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Permission_Role">
+      <column name="roles_id_temp" type="BIGINT" afterColumn="roles_id"/>
+    </addColumn>
+
+    <addColumn tableName="User_Role">
+      <column name="roles_id_temp" type="BIGINT" afterColumn="roles_id"/>
+    </addColumn>
+
+    <addColumn tableName="Permission_Role_AUD">
+      <column name="roles_id_temp" type="BIGINT" afterColumn="roles_id"/>
+    </addColumn>
+
+    <addColumn tableName="User_Role_AUD">
+      <column name="roles_id_temp" type="BIGINT" afterColumn="roles_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE Role 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="role_id_temp_index" tableName="Role" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE Role_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE Permission_Role_AUD 
+      SET roles_id_temp = roles_id;
+    </sql>
+
+    <sql>
+      UPDATE User_Role_AUD 
+      SET roles_id_temp = roles_id;
+    </sql>
+
+    <sql>
+      UPDATE Permission_Role 
+      SET roles_id_temp = roles_id;
+    </sql>
+
+    <sql>
+      UPDATE User_Role 
+      SET roles_id_temp = roles_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="Role"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Role"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Role_AUD"/>
+
+    <modifyDataType columnName="roles_id" newDataType="BINARY(16)" tableName="Permission_Role"/>
+    <modifyDataType columnName="roles_id" newDataType="BINARY(16)" tableName="User_Role"/>
+
+    <modifyDataType columnName="roles_id" newDataType="BINARY(16)" tableName="Permission_Role_AUD"/>
+    <modifyDataType columnName="roles_id" newDataType="BINARY(16)" tableName="User_Role_AUD"/>
+
+    <sql>
+      UPDATE Role SET id = UNHEX("11e868b09ce5787b8826e4a471449260") WHERE id_temp = 1;
+      UPDATE Role SET id = UNHEX("11e868b09ce57cb28826e4a471449260") WHERE id_temp = 2;
+      UPDATE Role SET id = UNHEX("11e868b09ce57f168826e4a471449260") WHERE id_temp = 3;
+      UPDATE Role SET id = UNHEX("11e868b09ce581518826e4a471449260") WHERE id_temp = 4;
+      UPDATE Role SET id = UNHEX("11e868b09ce5834c8826e4a471449260") WHERE id_temp = 5;
+      UPDATE Role SET id = UNHEX("11e868b09ce5b3598826e4a471449260") WHERE id_temp = 6;
+      UPDATE Role SET id = UNHEX("11e868b09ce5b7478826e4a471449260") WHERE id_temp = 9;
+      UPDATE Role SET id = UNHEX("11e868b09ce5b9958826e4a471449260") WHERE id_temp = 10;
+      UPDATE Role SET id = UNHEX("11e868b09ce5bba28826e4a471449260") WHERE id_temp = 11;
+      UPDATE Role SET id = UNHEX("11e868b09ce5bd908826e4a471449260") WHERE id_temp = 12;
+      UPDATE Role SET id = UNHEX("11e868b09ce5bf768826e4a471449260") WHERE id_temp = 13;
+      UPDATE Role SET id = UNHEX("11e868b09ce5c1478826e4a471449260") WHERE id_temp = 14;
+      UPDATE Role SET id = UNHEX("11e868b09ce5c31c8826e4a471449260") WHERE id_temp = 15;
+      UPDATE Role SET id = UNHEX("11e868b09ce5c4f98826e4a471449260") WHERE id_temp = 16;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Role ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Role_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE Role_AUD AS updateTable
+        LEFT JOIN Role AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE Role_AUD
+      FROM Role_AUD
+        LEFT JOIN Role AS joinTable ON (Role_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE Permission_Role AS updateTable
+        LEFT JOIN Role AS joinedTable ON (updateTable.roles_id_temp = joinedTable.id_temp)
+      SET updateTable.roles_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE User_Role AS updateTable
+        LEFT JOIN Role AS joinedTable ON (updateTable.roles_id_temp = joinedTable.id_temp)
+      SET updateTable.roles_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Permission_Role_AUD AS updateTable
+        LEFT JOIN Role AS joinedTable ON (updateTable.roles_id_temp = joinedTable.id_temp)
+      SET updateTable.roles_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE User_Role_AUD AS updateTable
+        LEFT JOIN Role AS joinedTable ON (updateTable.roles_id_temp = joinedTable.id_temp)
+      SET updateTable.roles_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="Role"/>
+
+    <dropColumn columnName="id_temp" tableName="Role_AUD"/>
+
+    <dropColumn columnName="roles_id_temp" tableName="Permission_Role"/>
+
+    <dropColumn columnName="roles_id_temp" tableName="User_Role"/>
+
+    <dropColumn columnName="roles_id_temp" tableName="Permission_Role_AUD"/>
+
+    <dropColumn columnName="roles_id_temp" tableName="User_Role_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="roles_id" baseTableName="Permission_Role" constraintName="FK_Permission_Role_Role_id"
+      referencedColumnNames="id" referencedTableName="Role"/>
+
+    <addForeignKeyConstraint baseColumnNames="roles_id" baseTableName="User_Role" constraintName="FK_User_Role_Role_id"
+      referencedColumnNames="id" referencedTableName="Role"/>
+        
+  </changeSet>
+</databaseChangeLog>

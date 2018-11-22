@@ -1,13 +1,14 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class PatientViewModel extends BaseViewModel {
+public class PatientViewModel extends BaseViewModel<UUID> {
   
   private String name1;
   private String name2;

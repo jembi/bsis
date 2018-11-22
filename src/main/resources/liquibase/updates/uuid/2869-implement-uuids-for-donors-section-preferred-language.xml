@@ -1,0 +1,111 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170404-1526"  author="tumijacob">
+    <comment>This change set migrates the PreferredLanguage table from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+        
+    <dropForeignKeyConstraint baseTableName="Donor" constraintName="fk_donor_preferredLanguage"/>
+
+    <addColumn tableName="PreferredLanguage">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor">
+      <column name="preferredLanguage_id_temp" type="BIGINT" afterColumn="preferredLanguage_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor_AUD">
+      <column name="preferredLanguage_id_temp" type="BIGINT" afterColumn="preferredLanguage_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE PreferredLanguage 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="preferredlanguage_id_temp_index" tableName="PreferredLanguage" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET preferredLanguage_id_temp = preferredLanguage_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor 
+      SET preferredLanguage_id_temp = preferredLanguage_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="PreferredLanguage"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="PreferredLanguage"/>
+
+    <modifyDataType columnName="preferredLanguage_id" newDataType="BINARY(16)" tableName="Donor"/>
+
+    <modifyDataType columnName="preferredLanguage_id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
+
+    <sql>
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb1fd328826e4a471449260") WHERE id_temp = 1;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb200c98826e4a471449260") WHERE id_temp = 2;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb202a08826e4a471449260") WHERE id_temp = 3;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb204268826e4a471449260") WHERE id_temp = 4;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb208118826e4a471449260") WHERE id_temp = 5;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb209d18826e4a471449260") WHERE id_temp = 6;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb20b778826e4a471449260") WHERE id_temp = 7;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb20dbe8826e4a471449260") WHERE id_temp = 8;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb211bd8826e4a471449260") WHERE id_temp = 9;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb213dd8826e4a471449260") WHERE id_temp = 10;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb2160b8826e4a471449260") WHERE id_temp = 11;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb218128826e4a471449260") WHERE id_temp = 12;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb21a108826e4a471449260") WHERE id_temp = 13;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb21c3d8826e4a471449260") WHERE id_temp = 14;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb21e618826e4a471449260") WHERE id_temp = 15;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb21fe18826e4a471449260") WHERE id_temp = 16;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb221468826e4a471449260") WHERE id_temp = 17;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb222aa8826e4a471449260") WHERE id_temp = 18;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb2240c8826e4a471449260") WHERE id_temp = 19;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb225628826e4a471449260") WHERE id_temp = 20;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb226be8826e4a471449260") WHERE id_temp = 21;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb228208826e4a471449260") WHERE id_temp = 22;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE PreferredLanguage ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+    
+    <sql>
+      UPDATE Donor AS updateTable
+        LEFT JOIN PreferredLanguage AS joinedTable ON (updateTable.preferredLanguage_id_temp = joinedTable.id_temp)
+      SET updateTable.preferredLanguage_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+        LEFT JOIN PreferredLanguage AS joinedTable ON (updateTable.preferredLanguage_id_temp = joinedTable.id_temp)
+      SET updateTable.preferredLanguage_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="PreferredLanguage"/>
+
+    <dropColumn columnName="preferredLanguage_id_temp" tableName="Donor"/>
+
+    <dropColumn columnName="preferredLanguage_id_temp" tableName="Donor_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="preferredLanguage_id" baseTableName="Donor" constraintName="fk_donor_preferredLanguage"
+      referencedColumnNames="id" referencedTableName="PreferredLanguage"/>
+
+  </changeSet>
+</databaseChangeLog>

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.DonorPersister;
@@ -23,7 +24,7 @@ import org.jembi.bsis.model.util.Gender;
 
 public class DonorBuilder extends AbstractEntityBuilder<Donor> {
 
-  private Long id;
+  private UUID id;
   private String donorNumber;
   private String title;
   private String firstName;
@@ -52,7 +53,7 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
   private AddressType addressType;
   private Date createdDate;
 
-  public DonorBuilder withId(Long id) {
+  public DonorBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

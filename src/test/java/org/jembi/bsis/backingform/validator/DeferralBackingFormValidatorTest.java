@@ -10,10 +10,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
-import org.jembi.bsis.backingform.validator.DeferralBackingFormValidator;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
@@ -30,8 +30,8 @@ import org.springframework.validation.MapBindingResult;
 public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   
   private static final Date DEFERRED_UNTIL = new DateTime().plusDays(1).toDate();
-  private static final Long DEFERRED_DONOR_ID = 88L;
-  private static final long DEFERRAL_REASON_ID = 115L;
+  private static final UUID DEFERRED_DONOR_ID = UUID.randomUUID();
+  private static final UUID DEFERRAL_REASON_ID = UUID.randomUUID();
   
   @InjectMocks
   private DeferralBackingFormValidator deferralBackingFormValidator;
@@ -52,7 +52,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testValid() throws Exception {
-    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm venue = aLocationBackingForm().withId(locationId).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withDeferralReason(aDeferralReasonBackingForm().withId(DEFERRAL_REASON_ID).build())
@@ -63,7 +64,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .build();
     
     mockFormFields();
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.verifyLocationExists(locationId)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
     when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(true);
 
@@ -77,7 +78,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidVenueDoesNotExist() throws Exception {
-    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm venue = aLocationBackingForm().withId(locationId).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withDeferralReason(aDeferralReasonBackingForm().withId(DEFERRAL_REASON_ID).build())
@@ -88,7 +90,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .build();
 
     mockFormFields();
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(false);
+    when(locationRepository.verifyLocationExists(locationId)).thenReturn(false);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
     when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(true);
     // run test
@@ -125,7 +127,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidDeferralReasonNotSpecified() throws Exception {
-    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm venue = aLocationBackingForm().withId(locationId).build();
     
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withVenue(venue)
@@ -135,7 +138,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .build();
     
     mockFormFields();
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.verifyLocationExists(locationId)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
     // run test
@@ -149,7 +152,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidDeferralReasonDoesNotExist() throws Exception {
-    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm venue = aLocationBackingForm().withId(locationId).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withDeferralReason(aDeferralReasonBackingForm().withId(DEFERRAL_REASON_ID).build())
@@ -160,7 +164,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .build();
     
     mockFormFields();
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.verifyLocationExists(locationId)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
     when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(false);
 
@@ -175,7 +179,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   
   @Test
   public void testInvalidDeferredUntilNotSpecified() throws Exception {
-    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm venue = aLocationBackingForm().withId(locationId).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withDeferralReason(aDeferralReasonBackingForm().withId(DEFERRAL_REASON_ID).build())
@@ -185,7 +190,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .build();
     
     mockFormFields();
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.verifyLocationExists(locationId)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
     when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(true);
 
@@ -200,7 +205,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   
   @Test
   public void testInvalidDeferredUntilBeforeDeferralDate() throws Exception {
-    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm venue = aLocationBackingForm().withId(locationId).build();
     Date deferredUntil = new DateTime().minusDays(1).toDate();
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withDeferralReason(aDeferralReasonBackingForm().withId(DEFERRAL_REASON_ID).build())
@@ -211,7 +217,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .build();
     
     mockFormFields();
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.verifyLocationExists(locationId)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
     when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(true);
 
@@ -226,7 +232,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidDeferredDonorNotSpecified() throws Exception {
-    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm venue = aLocationBackingForm().withId(locationId).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withDeferralReason(aDeferralReasonBackingForm().withId(DEFERRAL_REASON_ID).build())
@@ -236,7 +243,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .build();
     
     mockFormFields();
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.verifyLocationExists(locationId)).thenReturn(true);
     when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(true);
 
     // run test
@@ -250,7 +257,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   
   @Test
   public void testInvalidDeferredDonorDoesNotExist() throws Exception {
-    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm venue = aLocationBackingForm().withId(locationId).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withDeferralReason(aDeferralReasonBackingForm().withId(DEFERRAL_REASON_ID).build())
@@ -261,7 +269,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .build();
     
     mockFormFields();
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.verifyLocationExists(locationId)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(false);
     when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(true);
 
@@ -276,7 +284,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidDeferralDateNotSpecified() throws Exception {
-    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm venue = aLocationBackingForm().withId(locationId).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withDeferralReason(aDeferralReasonBackingForm().withId(DEFERRAL_REASON_ID).build())
@@ -286,7 +295,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .build();
     
     mockFormFields();
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.verifyLocationExists(locationId)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
     when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(true);
 

@@ -1,12 +1,14 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.donor.DonorStatus;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.MobileClinicExportDonorViewModel;
 
 public class MobileClinicExportDonorViewModelBuilder extends AbstractBuilder<MobileClinicExportDonorViewModel> { 
   
-  private Long id;
+  private UUID id;
   private String donorNumber;
   private String firstName;
   private String lastName;
@@ -18,7 +20,7 @@ public class MobileClinicExportDonorViewModelBuilder extends AbstractBuilder<Mob
   private Boolean deleted;
   private Boolean eligibility;
   
-  public MobileClinicExportDonorViewModelBuilder withId(Long id){
+  public MobileClinicExportDonorViewModelBuilder withId(UUID id){
     this.id = id;
     return  this;
   }

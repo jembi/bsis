@@ -3,6 +3,7 @@ package org.jembi.bsis.service.report;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.DiscardedComponentDTO;
@@ -33,7 +34,7 @@ public class DiscardedComponentReportGenerator {
    * @param endDate - The report end date
    * @return the report
    */
-  public Report generateDiscardedComponents(Long processingSiteId, Date startDate, Date endDate) {
+  public Report generateDiscardedComponents(UUID processingSiteId, Date startDate, Date endDate) {
     Report report = new Report();
 
     report.setStartDate(startDate);
@@ -44,7 +45,7 @@ public class DiscardedComponentReportGenerator {
     return report;
   }
 
-  private List<DataValue> getDiscardedComponentsDataValues(Long processingSiteId, Date startDate, Date endDate) {
+  private List<DataValue> getDiscardedComponentsDataValues(UUID processingSiteId, Date startDate, Date endDate) {
     List<DiscardedComponentDTO> dtos =
         componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(processingSiteId, startDate, endDate);
 

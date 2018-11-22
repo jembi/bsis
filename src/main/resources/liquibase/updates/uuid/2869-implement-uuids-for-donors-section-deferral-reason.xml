@@ -1,0 +1,134 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170330-O745"  author="tmvumbi2">
+    <comment>This change set migrates the DeferralReason table from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+
+    <dropForeignKeyConstraint baseTableName="DonorDeferral" constraintName="fk_DonorDeferral_DeferralReason"/>
+
+    <addColumn tableName="DeferralReason">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="DeferralReason_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="DonorDeferral">
+      <column name="deferralReason_id_temp" type="BIGINT" afterColumn="deferralReason_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonorDeferral_AUD">
+      <column name="deferralReason_id_temp" type="BIGINT" afterColumn="deferralReason_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE DeferralReason 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="deferralreason_id_temp_index" tableName="DeferralReason" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE DeferralReason_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD 
+      SET deferralReason_id_temp = deferralReason_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral 
+      SET deferralReason_id_temp = deferralReason_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="DeferralReason"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="DeferralReason"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="DeferralReason_AUD"/>
+
+    <modifyDataType columnName="deferralReason_id" newDataType="BINARY(16)" tableName="DonorDeferral"/>
+
+    <modifyDataType columnName="deferralReason_id" newDataType="BINARY(16)" tableName="DonorDeferral_AUD"/>
+
+    <sql>
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff1f2c08826e4a471449260") WHERE id_temp = 1;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff1ff638826e4a471449260") WHERE id_temp = 2;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff207528826e4a471449260") WHERE id_temp = 3;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff20e0e8826e4a471449260") WHERE id_temp = 4;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff216758826e4a471449260") WHERE id_temp = 5;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff21d178826e4a471449260") WHERE id_temp = 6;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff223938826e4a471449260") WHERE id_temp = 7;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE DeferralReason ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE DeferralReason_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE DeferralReason_AUD AS updateTable
+        LEFT JOIN DeferralReason AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE DeferralReason_AUD
+      FROM DeferralReason_AUD
+        LEFT JOIN DeferralReason AS joinTable ON (DeferralReason_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral AS updateTable
+        LEFT JOIN DeferralReason AS joinedTable ON (updateTable.deferralReason_id_temp = joinedTable.id_temp)
+      SET updateTable.deferralReason_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD AS updateTable
+        LEFT JOIN DeferralReason AS joinedTable ON (updateTable.deferralReason_id_temp = joinedTable.id_temp)
+      SET updateTable.deferralReason_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="DeferralReason"/>
+
+    <dropColumn columnName="id_temp" tableName="DeferralReason_AUD"/>
+
+    <dropColumn columnName="deferralReason_id_temp" tableName="DonorDeferral"/>
+
+    <dropColumn columnName="deferralReason_id_temp" tableName="DonorDeferral_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="deferralReason_id" baseTableName="DonorDeferral" constraintName="fk_DonorDeferral_DeferralReason"
+      referencedColumnNames="id" referencedTableName="DeferralReason"/>
+
+  </changeSet>
+</databaseChangeLog>

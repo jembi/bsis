@@ -12,12 +12,12 @@ import org.jembi.bsis.model.audit.EntityModification;
 
 public class AuditRevisionBuilder extends AbstractBuilder<AuditRevision> {
 
-  private int id;
+  private long id;
   private long timestamp;
   private String username;
   private Set<EntityModification> entityModifications = new HashSet<>();
 
-  public AuditRevisionBuilder withId(int id) {
+  public AuditRevisionBuilder withId(long id) {
     this.id = id;
     return this;
   }

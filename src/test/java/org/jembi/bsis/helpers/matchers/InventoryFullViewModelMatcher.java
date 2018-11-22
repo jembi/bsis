@@ -4,31 +4,29 @@ import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 
-public class InventoryFullViewModelMatcher extends TypeSafeMatcher<InventoryFullViewModel> {
-  private InventoryFullViewModel expected;
+public class InventoryFullViewModelMatcher extends AbstractTypeSafeMatcher<InventoryFullViewModel> {
 
   public InventoryFullViewModelMatcher(InventoryFullViewModel expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, InventoryFullViewModel inventoryFullViewModel) {
     description.appendText("An InventoryFullViewModel with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nComponentCode: ").appendValue(expected.getComponentCode())
-        .appendText("\nComponentType: ").appendValue(expected.getComponentType())
-        .appendText("\nInventoryStatus: ").appendValue(expected.getInventoryStatus())
-        .appendText("\nLocation: ").appendValue(expected.getLocation())
-        .appendText("\ncreatedOn: ").appendValue(expected.getCreatedOn())
-        .appendText("\ndonationIdentificationNumber: ").appendValue(expected.getDonationIdentificationNumber())
-        .appendText("\nexpiryStatus: ").appendValue(expected.getExpiryStatus())
-        .appendText("\nBloodGroup: ").appendValue(expected.getBloodGroup())
-        .appendText("\nexpiresOn: ").appendValue(expected.getExpiresOn())
-        .appendText("\nOrderForms: ").appendValue(expected.getOrderForms())
-        .appendText("\ncomponentStatus: ").appendValue(expected.getComponentStatus());
+        .appendText("\nId: ").appendValue(inventoryFullViewModel.getId())
+        .appendText("\nComponentCode: ").appendValue(inventoryFullViewModel.getComponentCode())
+        .appendText("\nComponentType: ").appendValue(inventoryFullViewModel.getComponentType())
+        .appendText("\nInventoryStatus: ").appendValue(inventoryFullViewModel.getInventoryStatus())
+        .appendText("\nLocation: ").appendValue(inventoryFullViewModel.getLocation())
+        .appendText("\ncreatedOn: ").appendValue(inventoryFullViewModel.getCreatedOn())
+        .appendText("\ndonationIdentificationNumber: ").appendValue(inventoryFullViewModel.getDonationIdentificationNumber())
+        .appendText("\ndaysToExpire: ").appendValue(inventoryFullViewModel.getDaysToExpire())
+        .appendText("\nBloodGroup: ").appendValue(inventoryFullViewModel.getBloodGroup())
+        .appendText("\nexpiresOn: ").appendValue(inventoryFullViewModel.getExpiresOn())
+        .appendText("\nOrderForms: ").appendValue(inventoryFullViewModel.getOrderForms())
+        .appendText("\ncomponentStatus: ").appendValue(inventoryFullViewModel.getComponentStatus());
   }
 
   @Override
@@ -41,7 +39,7 @@ public class InventoryFullViewModelMatcher extends TypeSafeMatcher<InventoryFull
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn())
             || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
-        Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus()) &&
+        Objects.equals(actual.getDaysToExpire(), expected.getDaysToExpire()) &&
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn())
             || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getLocation(), expected.getLocation()) &&

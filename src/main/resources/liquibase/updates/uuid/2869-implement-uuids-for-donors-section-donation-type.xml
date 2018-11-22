@@ -1,0 +1,130 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170331-0940" author="tmvumbi2">
+
+    <dropForeignKeyConstraint baseTableName="Donation" constraintName="fk_Donation_DonationType"/>
+
+    <addColumn tableName="DonationType">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationType_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Donation">
+      <column name="donationType_id_temp" type="BIGINT" afterColumn="donationType_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donation_AUD">
+      <column name="donationType_id_temp" type="BIGINT" afterColumn="donationType_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE DonationType 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="donationtype_id_temp_index" tableName="DonationType" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE DonationType_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD 
+      SET donationType_id_temp = donationType_id;
+    </sql>
+
+    <sql>
+      UPDATE Donation 
+      SET donationType_id_temp = donationType_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="DonationType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="DonationType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="DonationType_AUD"/>
+
+    <modifyDataType columnName="donationType_id" newDataType="BINARY(16)" tableName="Donation"/>
+
+    <modifyDataType columnName="donationType_id" newDataType="BINARY(16)" tableName="Donation_AUD"/>
+
+    <sql>
+      UPDATE DonationType SET id = UNHEX("11e868b0524e329b8826e4a471449260") WHERE id_temp = 1;
+      UPDATE DonationType SET id = UNHEX("11e868b0524e45a28826e4a471449260") WHERE id_temp = 2;
+      UPDATE DonationType SET id = UNHEX("11e868b0524e4f398826e4a471449260") WHERE id_temp = 3;
+      UPDATE DonationType SET id = UNHEX("11e868b0524e595a8826e4a471449260") WHERE id_temp = 4;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE DonationType ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE DonationType_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE DonationType_AUD AS updateTable
+        LEFT JOIN DonationType AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE DonationType_AUD
+      FROM DonationType_AUD
+        LEFT JOIN DonationType AS joinTable ON (DonationType_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE Donation AS updateTable
+        LEFT JOIN DonationType AS joinedTable ON (updateTable.donationType_id_temp = joinedTable.id_temp)
+      SET updateTable.donationType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD AS updateTable
+        LEFT JOIN DonationType AS joinedTable ON (updateTable.donationType_id_temp = joinedTable.id_temp)
+      SET updateTable.donationType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="DonationType"/>
+
+    <dropColumn columnName="id_temp" tableName="DonationType_AUD"/>
+
+    <dropColumn columnName="donationType_id_temp" tableName="Donation"/>
+
+    <dropColumn columnName="donationType_id_temp" tableName="Donation_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="donationType_id" baseTableName="Donation" constraintName="fk_Donation_DonationType"
+      referencedColumnNames="id" referencedTableName="DonationType"/>
+
+  </changeSet>
+
+</databaseChangeLog>

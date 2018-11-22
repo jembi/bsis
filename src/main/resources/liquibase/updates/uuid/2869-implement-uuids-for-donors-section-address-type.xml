@@ -1,0 +1,97 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170331-1226"  author="lauravignoli">
+    <comment>This change set migrates the AddressType table from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+
+    <dropForeignKeyConstraint baseTableName="Donor" constraintName="Address_AddressType_fk"/>
+
+    <addColumn tableName="AddressType">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor">
+      <column name="addressType_id_temp" type="BIGINT" afterColumn="addressTypeId"/>
+    </addColumn>
+
+    <addColumn tableName="Donor_AUD">
+      <column name="addressType_id_temp" type="BIGINT" afterColumn="addressTypeId"/>
+    </addColumn>
+
+    <sql>
+      UPDATE AddressType 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="addresstype_id_temp_index" tableName="AddressType" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET addressType_id_temp = addressTypeId;
+    </sql>
+
+    <sql>
+      UPDATE Donor 
+      SET addressType_id_temp = addressTypeId;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="AddressType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="AddressType"/>
+
+    <modifyDataType columnName="addressTypeId" newDataType="BINARY(16)" tableName="Donor"/>
+
+    <modifyDataType columnName="addressTypeId" newDataType="BINARY(16)" tableName="Donor_AUD"/>
+    
+    <!-- Rename from addressTypeId to addressType_id -->
+    <renameColumn tableName="Donor" oldColumnName="addressTypeId" newColumnName="addressType_id" columnDataType="BINARY(16)"/>
+    <renameColumn tableName="Donor_AUD" oldColumnName="addressTypeId" newColumnName="addressType_id" columnDataType="BINARY(16)"/>
+
+    <sql>
+      UPDATE AddressType SET id = UNHEX("11e868b0565cd4168826e4a471449260") WHERE id_temp = 1;
+      UPDATE AddressType SET id = UNHEX("11e868b0565cd9058826e4a471449260") WHERE id_temp = 2;
+      UPDATE AddressType SET id = UNHEX("11e868b0565cdbe28826e4a471449260") WHERE id_temp = 3;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE AddressType ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      UPDATE Donor AS updateTable
+        LEFT JOIN AddressType AS joinedTable ON (updateTable.addressType_id_temp = joinedTable.id_temp)
+      SET updateTable.addressType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+        LEFT JOIN AddressType AS joinedTable ON (updateTable.addressType_id_temp = joinedTable.id_temp)
+      SET updateTable.addressType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="AddressType"/>
+
+    <dropColumn columnName="addressType_id_temp" tableName="Donor"/>
+
+    <dropColumn columnName="addressType_id_temp" tableName="Donor_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="addressType_id" baseTableName="Donor" constraintName="Address_AddressType_fk"
+      referencedColumnNames="id" referencedTableName="AddressType"/>
+
+  </changeSet>
+</databaseChangeLog>

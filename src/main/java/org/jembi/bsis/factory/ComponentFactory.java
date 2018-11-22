@@ -2,18 +2,20 @@ package org.jembi.bsis.factory;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
+import org.jembi.bsis.repository.component.ComponentStatusChangeRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
+import org.jembi.bsis.service.ComponentStatusCalculator;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,12 @@ public class ComponentFactory {
 
   @Autowired
   private ComponentConstraintChecker componentConstraintChecker;
+  
+  @Autowired
+  private ComponentStatusCalculator componentStatusCalculator;
+
+  @Autowired
+  private ComponentStatusChangeRepository statusChangeRepository;
 
   public List<ComponentManagementViewModel> createManagementViewModels(Collection<Component> components) {
     List<ComponentManagementViewModel> viewModels = new ArrayList<>();
@@ -48,16 +56,22 @@ public class ComponentFactory {
     viewModel.setComponentType(componentTypeFactory.createFullViewModel(component.getComponentType()));
     viewModel.setCreatedOn(component.getCreatedOn());
     viewModel.setExpiresOn(component.getExpiresOn());
-    viewModel.setExpiryStatus(getExpiryStatus(component));
+    viewModel.setDaysToExpire(componentStatusCalculator.getDaysToExpire(component));
     viewModel.setId(component.getId());
     viewModel.setStatus(component.getStatus());
     viewModel.setWeight(component.getWeight());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
-    viewModel.setHasComponentBatch(component.hasComponentBatch());
+    viewModel.setBatched(component.hasComponentBatch());
     viewModel.setInventoryStatus(component.getInventoryStatus());
     viewModel.setBleedStartTime(component.getDonation().getBleedStartTime());
     viewModel.setBleedEndTime(component.getDonation().getBleedEndTime());
     viewModel.setDonationDateTime(component.getDonation().getInitialComponent().getCreatedOn());
+    Optional<ComponentStatusChange> optionalDiscardReason = statusChangeRepository.findLatestDiscardReasonForComponent(component);
+    if (optionalDiscardReason.isPresent()) {
+      ComponentStatusChange discardReason = optionalDiscardReason.get();
+      viewModel.setDiscardReason(discardReason.getStatusChangeReason().getStatusChangeReason());
+      viewModel.setDiscardReasonComment(discardReason.getStatusChangeReasonText());
+    }
     if (component.getParentComponent() != null) {
       viewModel.setParentComponentId(component.getParentComponent().getId());
     }
@@ -124,24 +138,10 @@ public class ComponentFactory {
     viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setDonationFlagCharacters(component.getDonation().getFlagCharacters());
-    viewModel.setExpiryStatus(getExpiryStatus(component));
+    viewModel.setDaysToExpire(componentStatusCalculator.getDaysToExpire(component));
     viewModel.setId(component.getId());
     viewModel.setLocation(locationFactory.createViewModel(component.getLocation()));
     viewModel.setStatus(component.getStatus());
     return viewModel;
-  }
-
-  private String getExpiryStatus(Component component) {
-    Date today = new Date();
-    if (component.getExpiresOn() == null) {
-      return "";
-    }
-    if (today.equals(component.getExpiresOn()) || today.before(component.getExpiresOn())) {
-      DateTime expiresOn = new DateTime(component.getExpiresOn().getTime());
-      Long age = (long) Days.daysBetween(expiresOn, new DateTime()).getDays();
-      return Math.abs(age) + " days to expire";
-    } else {
-      return "Already expired";
-    }
   }
 }

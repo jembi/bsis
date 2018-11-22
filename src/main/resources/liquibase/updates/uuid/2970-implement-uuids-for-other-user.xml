@@ -1,0 +1,2282 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170410-1335"  author="timler">
+    <dropForeignKeyConstraint baseTableName="AdverseEventType" constraintName="fk_AdverseEventType_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="AdverseEventType" constraintName="fk_AdverseEventType_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="BloodTest" constraintName="fk_BloodTest_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="BloodTest" constraintName="fk_BloodTest_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestingRule" constraintName="fk_BloodTestingRule_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestingRule" constraintName="fk_BloodTestingRule_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestResult" constraintName="fk_BloodTestResult_User_createdBy_id"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestResult" constraintName="fk_BloodTestResult_User_lastUpdatedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Componentl_User_createdBy_id"/>
+    <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Component_User_lastUpdatedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="ComponentBatch" constraintName="fk_ComponentBatch_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="ComponentBatch" constraintName="fk_ComponentBatch_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="ComponentStatusChange" constraintName="fk_ComponentStatusChange_User_changedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="ComponentType" constraintName="fk_ComponentType_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="ComponentType" constraintName="fk_ComponentType_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="ComponentTypeCombination" constraintName="fk_ComponentTypeCombination_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="ComponentTypeCombination" constraintName="fk_ComponentTypeCombination_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="DeferralReason" constraintName="fk_DeferralReason_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="DeferralReason" constraintName="fk_DeferralReason_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="Division" constraintName="fk_Division_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="Division" constraintName="fk_Division_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="Donation" constraintName="fk_Donation_User_createdBy_id"/>
+    <dropForeignKeyConstraint baseTableName="Donation" constraintName="fk_Donation_User_donationCreatedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="Donation" constraintName="fk_Donation_User_lastUpdatedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="fk_DonationBatch_User_createdBy_id"/>
+    <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="fk_DonationBatch_User_lastUpdatedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="DonationType" constraintName="fk_DonationType_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="DonationType" constraintName="fk_DonationType_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="Donor" constraintName="fk_Donor_User_createdBy_id"/>
+    <dropForeignKeyConstraint baseTableName="Donor" constraintName="fk_Donor_User_lastUpdatedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="DonorDeferral" constraintName="fk_DonorDeferral_User_createdBy_id"/>
+    <dropForeignKeyConstraint baseTableName="DonorDeferral" constraintName="fk_DonorDeferral_User_lastUpdatedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="DonorDeferral" constraintName="fk_DonorDeferral_User_voidedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="GeneralConfig" constraintName="fk_GeneralConfig_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="GeneralConfig" constraintName="fk_GeneralConfig_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="Location" constraintName="fk_Location_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="Location" constraintName="fk_Location_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="OrderForm" constraintName="fk_OrderForm_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="OrderForm" constraintName="fk_OrderForm_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="PackType" constraintName="fk_PackType_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="PackType" constraintName="fk_PackType_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="PostDonationCounselling" constraintName="fk_PostDonationCounselling_User_createdBy_id"/>
+    <dropForeignKeyConstraint baseTableName="PostDonationCounselling" constraintName="fk_PostDonationCounselling_User_lastUpdatedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="ReturnForm" constraintName="fk_ReturnForm_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="ReturnForm" constraintName="fk_ReturnForm_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="Role" constraintName="fk_Role_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="Role" constraintName="fk_Role_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="TestBatch" constraintName="fk_TestBatch_User_createdBy_id"/>
+    <dropForeignKeyConstraint baseTableName="TestBatch" constraintName="fk_TestBatch_User_lastUpdatedBy_id"/>
+    <dropForeignKeyConstraint baseTableName="Transfusion" constraintName="fk_Transfusion_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="Transfusion" constraintName="fk_Transfusion_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="TransfusionReactionType" constraintName="fk_TransfusionReactionType_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="TransfusionReactionType" constraintName="fk_TransfusionReactionType_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="User" constraintName="fk_User_createdBy"/>
+    <dropForeignKeyConstraint baseTableName="User" constraintName="fk_User_lastUpdatedBy"/>
+    <dropForeignKeyConstraint baseTableName="User_Role" constraintName="fk_User_Role_User_users_id"/>
+
+    <addColumn tableName="User">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="User_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="AdverseEventType">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTest">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestingRule">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestResult">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Component">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentBatch">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentStatusChange">
+      <column name="changedBy_id_temp" type="BIGINT" afterColumn="changedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentType">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentTypeCombination">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="DeferralReason">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Division">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donation">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="donationCreatedBy_id_temp" type="BIGINT" afterColumn="donationCreatedBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationBatch">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationType">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonorDeferral">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+      <column name="voidedBy_id_temp" type="BIGINT" afterColumn="voidedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="GeneralConfig">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Location">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="PackType">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="PostDonationCounselling">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="ReturnForm">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Role">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="TestBatch">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Transfusion">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="TransfusionReactionType">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="User">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="User_Role">
+      <column name="users_id_temp" type="BIGINT" afterColumn="users_id"/>
+    </addColumn>
+
+    <addColumn tableName="AdverseEventType_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTest_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestingRule_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestResult_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Component_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentBatch_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentStatusChange_AUD">
+      <column name="changedBy_id_temp" type="BIGINT" afterColumn="changedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentType_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentTypeCombination_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="DeferralReason_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Division_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donation_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="donationCreatedBy_id_temp" type="BIGINT" afterColumn="donationCreatedBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationBatch_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationType_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonorDeferral_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+      <column name="voidedBy_id_temp" type="BIGINT" afterColumn="voidedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="GeneralConfig_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Location_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="PackType_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="PostDonationCounselling_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="ReturnForm_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Role_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="TestBatch_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="Transfusion_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="TransfusionReactionType_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="User_AUD">
+      <column name="createdBy_id_temp" type="BIGINT" afterColumn="createdBy_id"/>
+      <column name="lastUpdatedBy_id_temp" type="BIGINT" afterColumn="lastUpdatedBy_id"/>
+    </addColumn>
+
+    <addColumn tableName="User_Role_AUD">
+      <column name="users_id_temp" type="BIGINT" afterColumn="users_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE User 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="user_id_temp_index" tableName="User" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE User_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE AdverseEventType_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE AdverseEventType_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTest_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTest_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChange_AUD 
+      SET changedBy_id_temp = changedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DeferralReason_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DeferralReason_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD 
+      SET donationCreatedBy_id_temp = donationCreatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationType_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationType_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD 
+      SET voidedBy_id_temp = voidedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE GeneralConfig_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE GeneralConfig_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE PackType_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE PackType_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Role_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Role_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE TestBatch_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE TestBatch_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE TransfusionReactionType_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE TransfusionReactionType_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE User_AUD 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE User_AUD 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE User_Role_AUD 
+      SET users_id_temp = users_id;
+    </sql>
+
+    <sql>
+      UPDATE AdverseEventType 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE AdverseEventType 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTest 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTest 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Component 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Component 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChange 
+      SET changedBy_id_temp = changedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentType 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentType 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DeferralReason 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DeferralReason 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Division 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Division 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Donation 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Donation 
+      SET donationCreatedBy_id_temp = donationCreatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Donation 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationType 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationType 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral 
+      SET voidedBy_id_temp = voidedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE GeneralConfig 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE GeneralConfig 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Location 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Location 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE PackType 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE PackType 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Role 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Role 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE TestBatch 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE TestBatch 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE TransfusionReactionType 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE TransfusionReactionType 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE User 
+      SET createdBy_id_temp = createdBy_id;
+    </sql>
+
+    <sql>
+      UPDATE User 
+      SET lastUpdatedBy_id_temp = lastUpdatedBy_id;
+    </sql>
+
+    <sql>
+      UPDATE User_Role 
+      SET users_id_temp = users_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="User"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="User"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="User_AUD"/>
+
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="AdverseEventType"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="AdverseEventType"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="BloodTest"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="BloodTest"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="BloodTestingRule"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="BloodTestingRule"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="BloodTestResult"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="BloodTestResult"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Component"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Component"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="ComponentBatch"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="ComponentBatch"/>
+    <modifyDataType columnName="changedBy_id" newDataType="BINARY(16)" tableName="ComponentStatusChange"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="ComponentType"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="ComponentType"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="ComponentTypeCombination"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="ComponentTypeCombination"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="DeferralReason"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="DeferralReason"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Division"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Division"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Donation"/>
+    <modifyDataType columnName="donationCreatedBy_id" newDataType="BINARY(16)" tableName="Donation"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Donation"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="DonationBatch"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="DonationBatch"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="DonationType"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="DonationType"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Donor"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Donor"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="DonorDeferral"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="DonorDeferral"/>
+    <modifyDataType columnName="voidedBy_id" newDataType="BINARY(16)" tableName="DonorDeferral"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="GeneralConfig"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="GeneralConfig"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Location"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Location"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="OrderForm"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="OrderForm"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="PackType"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="PackType"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="PostDonationCounselling"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="PostDonationCounselling"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="ReturnForm"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="ReturnForm"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Role"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Role"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="TestBatch"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="TestBatch"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Transfusion"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Transfusion"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="TransfusionReactionType"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="TransfusionReactionType"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="User"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="User"/>
+    <modifyDataType columnName="users_id" newDataType="BINARY(16)" tableName="User_Role"/>
+
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="AdverseEventType_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="AdverseEventType_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="BloodTest_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="BloodTest_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="BloodTestingRule_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="BloodTestingRule_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="BloodTestResult_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="BloodTestResult_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Component_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Component_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="ComponentBatch_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="ComponentBatch_AUD"/>
+    <modifyDataType columnName="changedBy_id" newDataType="BINARY(16)" tableName="ComponentStatusChange_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="ComponentType_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="ComponentType_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="ComponentTypeCombination_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="ComponentTypeCombination_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="DeferralReason_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="DeferralReason_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Division_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Division_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Donation_AUD"/>
+    <modifyDataType columnName="donationCreatedBy_id" newDataType="BINARY(16)" tableName="Donation_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Donation_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="DonationBatch_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="DonationBatch_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="DonationType_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="DonationType_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="DonorDeferral_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="DonorDeferral_AUD"/>
+    <modifyDataType columnName="voidedBy_id" newDataType="BINARY(16)" tableName="DonorDeferral_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="GeneralConfig_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="GeneralConfig_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Location_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Location_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="OrderForm_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="OrderForm_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="PackType_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="PackType_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="PostDonationCounselling_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="PostDonationCounselling_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="ReturnForm_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="ReturnForm_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Role_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Role_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="TestBatch_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="TestBatch_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="Transfusion_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="Transfusion_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="TransfusionReactionType_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="TransfusionReactionType_AUD"/>
+    <modifyDataType columnName="createdBy_id" newDataType="BINARY(16)" tableName="User_AUD"/>
+    <modifyDataType columnName="lastUpdatedBy_id" newDataType="BINARY(16)" tableName="User_AUD"/>
+    <modifyDataType columnName="users_id" newDataType="BINARY(16)" tableName="User_Role_AUD"/>
+
+    <sql>
+      UPDATE User SET id = UNHEX("11e868b06a64bff48826e4a471449260") WHERE id_temp = 1;
+      UPDATE User SET id = UNHEX("11e868b06a64cd668826e4a471449260") WHERE id_temp = 2;
+      UPDATE User SET id = UNHEX("11e868b06a64d57b8826e4a471449260") WHERE id_temp = 3;
+      UPDATE User SET id = UNHEX("11e868b06a64dd638826e4a471449260") WHERE id_temp = 4;
+      UPDATE User SET id = UNHEX("11e868b06a64e4a48826e4a471449260") WHERE id_temp = 5;
+      UPDATE User SET id = UNHEX("11e868b06a64ef6d8826e4a471449260") WHERE id_temp = 6;
+      UPDATE User SET id = UNHEX("11e868b06a64f88e8826e4a471449260") WHERE id_temp = 7;
+      UPDATE User SET id = UNHEX("11e868b06a650b898826e4a471449260") WHERE id_temp = 8;
+      UPDATE User SET id = UNHEX("11e868b06a6513528826e4a471449260") WHERE id_temp = 9;
+      UPDATE User SET id = UNHEX("11e868b06a651a828826e4a471449260") WHERE id_temp = 10;
+      UPDATE User SET id = UNHEX("11e868b06a6521a78826e4a471449260") WHERE id_temp = 11;
+      UPDATE User SET id = UNHEX("11e868b06a6528a38826e4a471449260") WHERE id_temp = 12;
+      UPDATE User SET id = UNHEX("11e868b06a652f6e8826e4a471449260") WHERE id_temp = 13;
+      UPDATE User SET id = UNHEX("11e868b06a65366d8826e4a471449260") WHERE id_temp = 14;
+      UPDATE User SET id = UNHEX("11e868b06a653d618826e4a471449260") WHERE id_temp = 15;
+      UPDATE User SET id = UNHEX("11e868b06a6544328826e4a471449260") WHERE id_temp = 16;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE User ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE User_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE User_AUD AS updateTable
+        LEFT JOIN User AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE User_AUD
+      FROM User_AUD
+        LEFT JOIN User AS joinTable ON (User_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE AdverseEventType AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE AdverseEventType AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTest AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTest AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Component AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Component AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChange AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.changedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.changedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentType AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentType AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DeferralReason AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DeferralReason AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Division AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Division AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donation AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donation AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.donationCreatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.donationCreatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donation AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationType AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationType AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.voidedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.voidedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE GeneralConfig AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE GeneralConfig AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Location AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Location AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PackType AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PackType AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Role AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Role AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE TestBatch AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE TestBatch AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Transfusion AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Transfusion AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE TransfusionReactionType AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE TransfusionReactionType AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE User AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE User AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE User_Role AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.users_id_temp = joinedTable.id_temp)
+      SET updateTable.users_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE AdverseEventType_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE AdverseEventType_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTest_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTest_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChange_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.changedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.changedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DeferralReason_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DeferralReason_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.donationCreatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.donationCreatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationType_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationType_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.voidedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.voidedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE GeneralConfig_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE GeneralConfig_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PackType_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PackType_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Role_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Role_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE TestBatch_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE TestBatch_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE TransfusionReactionType_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE TransfusionReactionType_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE User_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.createdBy_id_temp = joinedTable.id_temp)
+      SET updateTable.createdBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE User_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.lastUpdatedBy_id_temp = joinedTable.id_temp)
+      SET updateTable.lastUpdatedBy_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE User_Role_AUD AS updateTable
+        LEFT JOIN User AS joinedTable ON (updateTable.users_id_temp = joinedTable.id_temp)
+      SET updateTable.users_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="User"/>
+
+    <dropColumn columnName="id_temp" tableName="User_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="AdverseEventType"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="AdverseEventType"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="BloodTest"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="BloodTest"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="BloodTestingRule"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="BloodTestingRule"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="BloodTestResult"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="BloodTestResult"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Component"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Component"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="ComponentBatch"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="ComponentBatch"/>
+
+    <dropColumn columnName="changedBy_id_temp" tableName="ComponentStatusChange"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="ComponentType"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="ComponentType"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="ComponentTypeCombination"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="ComponentTypeCombination"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="DeferralReason"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="DeferralReason"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Division"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Division"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Donation"/>
+
+    <dropColumn columnName="donationCreatedBy_id_temp" tableName="Donation"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Donation"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="DonationBatch"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="DonationBatch"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="DonationType"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="DonationType"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Donor"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Donor"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="DonorDeferral"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="DonorDeferral"/>
+
+    <dropColumn columnName="voidedBy_id_temp" tableName="DonorDeferral"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="GeneralConfig"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="GeneralConfig"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Location"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Location"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="OrderForm"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="OrderForm"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="PackType"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="PackType"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="PostDonationCounselling"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="PostDonationCounselling"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="ReturnForm"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="ReturnForm"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Role"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Role"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="TestBatch"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="TestBatch"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Transfusion"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Transfusion"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="TransfusionReactionType"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="TransfusionReactionType"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="User"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="User"/>
+
+    <dropColumn columnName="users_id_temp" tableName="User_Role"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="AdverseEventType_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="AdverseEventType_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="BloodTest_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="BloodTest_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="BloodTestingRule_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="BloodTestingRule_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="BloodTestResult_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="BloodTestResult_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Component_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Component_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="ComponentBatch_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="ComponentBatch_AUD"/>
+
+    <dropColumn columnName="changedBy_id_temp" tableName="ComponentStatusChange_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="ComponentType_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="ComponentType_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="ComponentTypeCombination_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="ComponentTypeCombination_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="DeferralReason_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="DeferralReason_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Division_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Division_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Donation_AUD"/>
+
+    <dropColumn columnName="donationCreatedBy_id_temp" tableName="Donation_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Donation_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="DonationBatch_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="DonationBatch_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="DonationType_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="DonationType_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Donor_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Donor_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="DonorDeferral_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="DonorDeferral_AUD"/>
+
+    <dropColumn columnName="voidedBy_id_temp" tableName="DonorDeferral_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="GeneralConfig_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="GeneralConfig_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Location_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Location_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="OrderForm_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="OrderForm_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="PackType_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="PackType_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="PostDonationCounselling_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="PostDonationCounselling_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="ReturnForm_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="ReturnForm_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Role_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Role_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="TestBatch_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="TestBatch_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="Transfusion_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="Transfusion_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="TransfusionReactionType_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="TransfusionReactionType_AUD"/>
+
+    <dropColumn columnName="createdBy_id_temp" tableName="User_AUD"/>
+
+    <dropColumn columnName="lastUpdatedBy_id_temp" tableName="User_AUD"/>
+
+    <dropColumn columnName="users_id_temp" tableName="User_Role_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="AdverseEventType" constraintName="fk_AdverseEventType_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="AdverseEventType" constraintName="fk_AdverseEventType_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="BloodTest" constraintName="fk_BloodTest_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="BloodTest" constraintName="fk_BloodTest_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="BloodTestingRule" constraintName="fk_BloodTestingRule_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="BloodTestingRule" constraintName="fk_BloodTestingRule_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="BloodTestResult" constraintName="fk_BloodTestResult_User_createdBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="BloodTestResult" constraintName="fk_BloodTestResult_User_lastUpdatedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="Component" constraintName="fk_Componentl_User_createdBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="Component" constraintName="fk_Component_User_lastUpdatedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="ComponentBatch" constraintName="fk_ComponentBatch_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="ComponentBatch" constraintName="fk_ComponentBatch_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="changedBy_id" baseTableName="ComponentStatusChange" constraintName="fk_ComponentStatusChange_User_changedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="ComponentType" constraintName="fk_ComponentType_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="ComponentType" constraintName="fk_ComponentType_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="ComponentTypeCombination" constraintName="fk_ComponentTypeCombination_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="ComponentTypeCombination" constraintName="fk_ComponentTypeCombination_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="DeferralReason" constraintName="fk_DeferralReason_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="DeferralReason" constraintName="fk_DeferralReason_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="Division" constraintName="fk_Division_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="Division" constraintName="fk_Division_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="Donation" constraintName="fk_Donation_User_createdBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="donationCreatedBy_id" baseTableName="Donation" constraintName="fk_Donation_User_donationCreatedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="Donation" constraintName="fk_Donation_User_lastUpdatedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="DonationBatch" constraintName="fk_DonationBatch_User_createdBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="DonationBatch" constraintName="fk_DonationBatch_User_lastUpdatedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="DonationType" constraintName="fk_DonationType_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="DonationType" constraintName="fk_DonationType_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="Donor" constraintName="fk_Donor_User_createdBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="Donor" constraintName="fk_Donor_User_lastUpdatedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="DonorDeferral" constraintName="fk_DonorDeferral_User_createdBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="DonorDeferral" constraintName="fk_DonorDeferral_User_lastUpdatedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="voidedBy_id" baseTableName="DonorDeferral" constraintName="fk_DonorDeferral_User_voidedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="GeneralConfig" constraintName="fk_GeneralConfig_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="GeneralConfig" constraintName="fk_GeneralConfig_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="Location" constraintName="fk_Location_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="Location" constraintName="fk_Location_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="OrderForm" constraintName="fk_OrderForm_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="OrderForm" constraintName="fk_OrderForm_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="PackType" constraintName="fk_PackType_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="PackType" constraintName="fk_PackType_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="PostDonationCounselling" constraintName="fk_PostDonationCounselling_User_createdBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="PostDonationCounselling" constraintName="fk_PostDonationCounselling_User_lastUpdatedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="ReturnForm" constraintName="fk_ReturnForm_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="ReturnForm" constraintName="fk_ReturnForm_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="Role" constraintName="fk_Role_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="Role" constraintName="fk_Role_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="TestBatch" constraintName="fk_TestBatch_User_createdBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="TestBatch" constraintName="fk_TestBatch_User_lastUpdatedBy_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="Transfusion" constraintName="fk_Transfusion_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="Transfusion" constraintName="fk_Transfusion_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="TransfusionReactionType" constraintName="fk_TransfusionReactionType_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="TransfusionReactionType" constraintName="fk_TransfusionReactionType_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="createdBy_id" baseTableName="User" constraintName="fk_User_createdBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="lastUpdatedBy_id" baseTableName="User" constraintName="fk_User_lastUpdatedBy"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+    <addForeignKeyConstraint baseColumnNames="users_id" baseTableName="User_Role" constraintName="fk_User_Role_User_users_id"
+      referencedColumnNames="id" referencedTableName="User"/>
+
+  </changeSet>
+</databaseChangeLog>

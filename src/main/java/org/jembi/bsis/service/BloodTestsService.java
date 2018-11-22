@@ -1,10 +1,12 @@
 package org.jembi.bsis.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -54,12 +56,25 @@ public class BloodTestsService {
   /**
    * Executes the BloodTestingRuleEngine with the configured BloodTests and returns the results
    *
+   * @param donations Collection of Donations to run the tests on
+   * @return List<BloodTestingRuleResult> containing the results from the tests for the specified Donations
+   */
+  public List<BloodTestingRuleResult> executeTests(Collection<Donation> donations) {
+    List<BloodTestingRuleResult> results = new ArrayList<>();
+    for (Donation donation : donations) {
+      results.add(executeTests(donation));
+    }
+    return results;
+  }
+
+  /**
+   * Executes the BloodTestingRuleEngine with the configured BloodTests and returns the results
+   *
    * @param donation Donation to run the tests on
    * @return BloodTestingRuleResult with the results from the tests
    */
   public BloodTestingRuleResult executeTests(Donation donation) {
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donation.getId());
-    return ruleResult;
+    return ruleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
   }
 
   /**
@@ -78,7 +93,7 @@ public class BloodTestsService {
           donationRepository.findDonationByDonationIdentificationNumber(form.getDonationIdentificationNumber());
 
       // Get testResults from form
-      Map<Long, String> bloodTestResults = form.getTestResults();
+      Map<UUID, String> bloodTestResults = form.getTestResults();
 
       // Apply reEntry system config
       if (!reEntry
@@ -89,7 +104,7 @@ public class BloodTestsService {
       }
 
       // Run rule engine for the 1st time and save testResults
-      Map<Long, String> reEnteredBloodTestResults = bloodTestResults;
+      Map<UUID, String> reEnteredBloodTestResults = bloodTestResults;
       if (!reEntry) {
         // only outcomes that have been entered twice will be considered by the rules engine
         reEnteredBloodTestResults = new HashMap<>();
@@ -104,7 +119,7 @@ public class BloodTestsService {
       bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
 
       // Update donation
-      if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
+      if (donation.getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
         testBatchStatusChangeService.handleRelease(donation);
       }
     }

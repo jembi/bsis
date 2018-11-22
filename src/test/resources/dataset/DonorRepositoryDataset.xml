@@ -1,23 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-    <user id="1" emailId="admin" firstName="admin" isactive="1"
+    <user id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
 
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="1" name="location 1" isVenue="true"/>
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="2" name="location 2" isVenue="true"/>
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="3" name="location 3" isVenue="true"/>
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" isUsageSite="0" isMobileSite="0" isDeleted="0" id="uuid'55321456-eeee-1234-b5b1-123412348811'" name="location 1" isVenue="true"/>
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" isUsageSite="0" isMobileSite="0" isDeleted="0" id="uuid'55321456-eeee-1234-b5b1-123412348812'" name="location 2" isVenue="true"/>
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" isUsageSite="0" isMobileSite="0" isDeleted="0" id="uuid'55321456-eeee-1234-b5b1-123412348813'" name="location 3" isVenue="true"/>
 
-    <contactmethodtype id="1" contactMethodType="None" isDeleted="0"/>
-    <contactmethodtype id="2" contactMethodType="Phone" isDeleted="0"/>
-    <contactmethodtype id="3" contactMethodType="SMS" isDeleted="0"/>
-    <contactmethodtype id="4" contactMethodType="Email" isDeleted="0"/>
-    <contactmethodtype id="5" contactMethodType="Mail" isDeleted="0"/>
-    <contactmethodtype id="6" contactMethodType="Do not Contact" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D1'" contactMethodType="None" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D2'" contactMethodType="Phone" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D3'" contactMethodType="SMS" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D4'" contactMethodType="Email" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D5'" contactMethodType="Mail" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D6'" contactMethodType="Do not Contact" isDeleted="0"/>
 
-    <AddressType id="1" preferredAddressType="Home Address"/>
-    <AddressType id="2" preferredAddressType="Work Address"/>
+    <AddressType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" preferredAddressType="Home Address"/>
+    <AddressType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" preferredAddressType="Work Address"/>
 
-    <address id="1" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
+    <address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
              homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
@@ -25,7 +25,7 @@
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
              postalAddressCountry="" postalAddressState="" postalAddressZipcode=""/>
-    <address id="2" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
+    <address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
              homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
@@ -33,7 +33,7 @@
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
              postalAddressCountry="" postalAddressState="" postalAddressZipcode=""/>
-    <address id="3" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
+    <address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
              homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
@@ -41,7 +41,7 @@
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
              postalAddressCountry="" postalAddressState="" postalAddressZipcode=""/>
-    <address id="4" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
+    <address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
              homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
@@ -49,7 +49,7 @@
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
              postalAddressCountry="" postalAddressState="" postalAddressZipcode=""/>
-    <address id="5" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
+    <address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
              homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
@@ -57,7 +57,7 @@
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
              postalAddressCountry="" postalAddressState="" postalAddressZipcode=""/>
-    <address id="6" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
+    <address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
              homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
@@ -66,106 +66,106 @@
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
              postalAddressCountry="" postalAddressState="" postalAddressZipcode=""/>
 
-    <contact id="1" mobileNumber="798897878" homeNumber="7578676" workNumber="656567"
+    <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" mobileNumber="798897878" homeNumber="7578676" workNumber="656567"
              email="drdfgdc"/>
 
-    <donor ID="1" age="50" birthDate="1991-06-10" birthDateEstimated="1"
+    <donor ID="uuid'11e715ee-e76a-1733-9763-28f10e1b4901'" age="50" birthDate="1991-06-10" birthDateEstimated="1"
            bloodAbo="A" bloodRh="+" callingName="callingName"
            dateOfLastDonation="${DateDonorNotDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
            donorNumber="000001" donorStatus="NORMAL" firstName="firstName"
            gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
            createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-           idNumber="123" notes="notes" addressId="1" contactId="1"
-           venue_id="3" createdBy_id="1" lastUpdatedBy_id="1"/>
-    <donor ID="2" age="50" birthDate="1991-06-10" birthDateEstimated="1"
+           idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348813'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
+    <donor ID="uuid'11e715ee-e76a-1733-9763-28f10e1b4902'" age="50" birthDate="1991-06-10" birthDateEstimated="1"
            bloodAbo="A" bloodRh="+" callingName="callingName"
            dateOfLastDonation="${DateDonorDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
            donorNumber="000002" donorStatus="NORMAL" firstName="firstName"
            gender="male" isDeleted="1" lastName="lastName" middleName="middleName"
            createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-           idNumber="123" notes="notes" addressId="2" contactId="1"
-           venue_id="3" createdBy_id="1" lastUpdatedBy_id="1"/>
-    <donor ID="3" age="50" birthDate="1991-06-10" birthDateEstimated="1"
+           idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348813'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
+    <donor ID="uuid'11e715ee-e76a-1733-9763-28f10e1b4903'" age="50" birthDate="1991-06-10" birthDateEstimated="1"
            bloodAbo="A" bloodRh="-" callingName="callingName"
            dateOfLastDonation="${DateDonorNotDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
            donorNumber="000003" donorStatus="NORMAL" firstName="firstName"
            gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
            createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-           idNumber="123" notes="notes" addressId="3" contactId="1"
-           venue_id="3" createdBy_id="1" lastUpdatedBy_id="1"/>
-    <donor ID="4" age="50" birthDate="1991-06-10" birthDateEstimated="1"
+           idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348813'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
+    <donor ID="uuid'11e715ee-e76a-1733-9763-28f10e1b4904'" age="50" birthDate="1991-06-10" birthDateEstimated="1"
            bloodAbo="AB" bloodRh="+" callingName="callingName"
            dateOfLastDonation="${DateDonorDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
            donorNumber="000004" donorStatus="NORMAL" firstName="firstName"
            gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
            createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-           idNumber="123" notes="notes" addressId="4" contactId="1"
-           venue_id="3" createdBy_id="1" lastUpdatedBy_id="1"/>
-    <donor ID="5" age="50" birthDate="1991-06-10" birthDateEstimated="1"
+           idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348813'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
+    <donor ID="uuid'11e715ee-e76a-1733-9763-28f10e1b4905'" age="50" birthDate="1991-06-10" birthDateEstimated="1"
            bloodAbo="null" bloodRh="null" callingName="callingName"
            dateOfLastDonation="${DateDonorNotDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
            donorNumber="000016" donorStatus="NORMAL" firstName="firstName"
            gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
            createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-           idNumber="123" notes="notes" addressId="5" contactId="1"
-           venue_id="3" createdBy_id="1" lastUpdatedBy_id="1"/>
-    <donor ID="6" age="50" birthDate="1991-06-10" birthDateEstimated="1"
+           idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348813'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
+    <donor ID="uuid'11e715ee-e76a-1733-9763-28f10e1b4906'" age="50" birthDate="1991-06-10" birthDateEstimated="1"
            bloodAbo="null" bloodRh="null" callingName="callingName"
            dateOfLastDonation="${DateDonorDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
            donorNumber="000017" donorStatus="NORMAL" firstName="firstName"
            gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
            createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
-           idNumber="123" notes="notes" addressId="6" contactId="1"
-           venue_id="3" createdBy_id="1" lastUpdatedBy_id="1"/>
+           idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348813'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
 
-    <packtype id="1" packType="Single" canPool="" testSampleProduced="true" countAsDonation="true"
+    <packtype id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" packType="Single" canPool="" testSampleProduced="true" countAsDonation="true"
               canSplit="" isDeleted="0"></packtype>
-    <packtype id="2" packType="Triple" canPool="" testSampleProduced="true" countAsDonation="true"
+    <packtype id="uuid'a60fc65c-8877-45d3-b31b-a374e43019a3'" packType="Triple" canPool="" testSampleProduced="true" countAsDonation="true"
               canSplit="" isDeleted="0"></packtype>
-    <packtype id="3" packType="Pedi" canPool="" testSampleProduced="true" countAsDonation="true"
+    <packtype id="uuid'52b78158-af2d-42af-bf98-64e9d8911249'" packType="Pedi" canPool="" testSampleProduced="true" countAsDonation="true"
               canSplit="" isDeleted="0"></packtype>
 
-    <donationtype id="1" donationType="Voluntary" isDeleted="0"></donationtype>
-    <donationtype id="2" donationType="Family" isDeleted="0"></donationtype>
-    <donationtype id="3" donationType="Autologous" isDeleted="0"></donationtype>
-    <donationtype id="4" donationType="Other" isDeleted="0"></donationtype>
+    <donationtype id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="0"></donationtype>
+    <donationtype id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType="Family" isDeleted="0"></donationtype>
+    <donationtype id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" donationType="Autologous" isDeleted="0"></donationtype>
+    <donationtype id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" donationType="Other" isDeleted="0"></donationtype>
 
-    <DonationBatch id="1" batchNumber="B0314000000"
+    <DonationBatch id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" batchNumber="B0314000000"
                    isDeleted="0" isClosed="0" createdDate="2014-02-22 20:18:17" donationBatchDate="2014-02-22 20:18:17"
                    lastUpdated="2014-02-21 17:31:59"
-                   notes="Notes" venue_Id="1"
-                   createdBy_id="1" lastUpdatedBy_id="1" backEntry="false"/>
+                   notes="Notes" venue_Id="uuid'55321456-eeee-1234-b5b1-123412348811'"
+                   createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" backEntry="false"/>
 
-    <Donation id="1" bloodAbo=""
+    <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" bloodAbo=""
               bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
               donationDate="2014-03-25 00:00:00" donationIdentificationNumber="000001"
               donorWeight="60.00" haemoglobinCount="14.00"
               isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
-              notes="notes" ttiStatus="NOT_DONE" packType_id="2"
-              donationBatch_id="1" venue_Id="1"
-              donationCreatedBy_id="1" donationType_id="2" donor_id="1"
-              createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
+              notes="notes" ttiStatus="NOT_DONE" packType_id="uuid'a60fc65c-8877-45d3-b31b-a374e43019a3'"
+              donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" venue_Id="uuid'55321456-eeee-1234-b5b1-123412348811'"
+              donationcreatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donor_id="uuid'11e715ee-e76a-1733-9763-28f10e1b4901'"
+              createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" bloodPressureDiastolic="55"
               donorPulse="60" ineligibleDonor="0" released="0"/>
 
-    <deferralreason id="1" isDeleted="0" reason="High risk behaviour" defaultDuration="30"
+    <deferralreason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" isDeleted="0" reason="High risk behaviour" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
-    <deferralreason id="2" isDeleted="0" reason="Low weight" defaultDuration="30"
+    <deferralreason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" isDeleted="0" reason="Low weight" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
-    <deferralreason id="3" isDeleted="0" reason="Low haemoglobin" defaultDuration="30"
+    <deferralreason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" isDeleted="0" reason="Low haemoglobin" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
-    <deferralreason id="4" isDeleted="0" reason="Other reasons" defaultDuration="30"
+    <deferralreason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" isDeleted="0" reason="Other reasons" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
-    <deferralreason id="5" isDeleted="0" reason="Other medical conditions" defaultDuration="30"
+    <deferralreason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" isDeleted="0" reason="Other medical conditions" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
-    <deferralreason id="6" isDeleted="0" reason="Travel history" defaultDuration="30"
+    <deferralreason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'" isDeleted="0" reason="Travel history" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
-    <deferralreason id="7" isDeleted="1" reason="Test Deleted Deferal" defaultDuration="30"
+    <deferralreason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870687'" isDeleted="1" reason="Test Deleted Deferal" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
 
@@ -174,31 +174,30 @@
                isAutoGeneratable="1" isHidable="0" isRequired="1" isTimeField="0"
                maxLength="15" useCurrentTime="0"/>
 
-    <donordeferral id="1" deferralReasonText="" createdDate="${DateDeferredOn}" deferralDate="${DateDeferredOn}"
-                   deferredUntil="${DateDeferredUnit}" deferralReason_id="2" createdBy_id="1" venue_id="1"
-                   deferredDonor_id="1" isVoided="false"/>
-    <donordeferral id="2" deferralReasonText="" createdDate="2014-03-01" deferralDate="${DateDeferredOn}"
-                   deferredUntil="2014-05-14" deferralReason_id="2" createdBy_id="1" venue_id="1"
-                   deferredDonor_id="1" isVoided="false"/>
-    <donordeferral id="3" deferralReasonText="" createdDate="2014-01-11" deferralDate="${DateDeferredOn}"
-                   deferredUntil="2014-08-22" deferralReason_id="2" createdBy_id="1" venue_id="1"
-                   deferredDonor_id="1" isVoided="false"/>
-    <donordeferral id="4" deferralReasonText="" createdDate="2014-01-11" deferralDate="${DateDeferredOn}"
-                   deferredUntil="2014-02-22" deferralReason_id="2" createdBy_id="1" venue_id="1"
-                   deferredDonor_id="4" isVoided="false"/>
-    <donordeferral id="5" deferralReasonText="" deferralDate="${DateDeferredOn}" venue_id="1"
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" deferralReasonText="" createdDate="${DateDeferredOn}" deferralDate="${DateDeferredOn}"
+                   deferredUntil="${DateDeferredUnit}" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"
+                   deferredDonor_id="uuid'11e715ee-e76a-1733-9763-28f10e1b4901'" isVoided="false"/>
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" deferralReasonText="" createdDate="2014-03-01" deferralDate="${DateDeferredOn}"
+                   deferredUntil="2014-05-14" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"
+                   deferredDonor_id="uuid'11e715ee-e76a-1733-9763-28f10e1b4901'" isVoided="false"/>
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" deferralReasonText="" createdDate="2014-01-11" deferralDate="${DateDeferredOn}"
+                   deferredUntil="2014-08-22" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"
+                   deferredDonor_id="uuid'11e715ee-e76a-1733-9763-28f10e1b4901'" isVoided="false"/>
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" deferralReasonText="" createdDate="2014-01-11" deferralDate="${DateDeferredOn}"
+                   deferredUntil="2014-02-22" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"
+                   deferredDonor_id="uuid'11e715ee-e76a-1733-9763-28f10e1b4904'" isVoided="false"/>
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" deferralReasonText="" deferralDate="${DateDeferredOn}" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"
                    createdDate="${DateDeferredOn}" deferredUntil="${DateDeferredOn}"
-                   deferralReason_id="2" createdBy_id="1" deferredDonor_id="4" isVoided="false"/>
-    <donordeferral id="6" deferralReasonText="" deferralDate="${DateDeferredOn}" venue_id="1"
+                   deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" 
+                   deferredDonor_id="uuid'11e715ee-e76a-1733-9763-28f10e1b4904'" isVoided="false"/>
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'" deferralReasonText="" deferralDate="${DateDeferredOn}" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"
                    createdDate="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}"
-                   deferralReason_id="2" createdBy_id="1" deferredDonor_id="6" isVoided="false"/>
+                   deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" 
+                   deferredDonor_id="uuid'11e715ee-e76a-1733-9763-28f10e1b4906'" isVoided="false"/>
 
-    <PreferredLanguage id="1" preferredLanguage="English"/>
-    <PreferredLanguage id="2" preferredLanguage="English"/>
-    <IdType id="1" idType="Passport" regExp=""/>
-    <IdType id="2" idType="National ID" regExp=""/>
-
-    <!--        <IdNumber id="1" donorId="1" idType="1" idNumber="123"/>-->
-
+    <PreferredLanguage id="uuid'11e71397-acc9-b7da-8cc5-34e6d78706f1'" preferredLanguage="English"/>
+    <PreferredLanguage id="uuid'11e71397-acc9-b7da-8cc5-34e6d78706f2'" preferredLanguage="English"/>
+    <IdType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" idType="Passport" regExp=""/>
+    <IdType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" idType="National ID" regExp=""/>  
 
 </dataset>

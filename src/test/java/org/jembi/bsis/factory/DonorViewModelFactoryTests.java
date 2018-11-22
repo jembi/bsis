@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.factory.DonorViewModelFactory;
@@ -36,8 +37,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class DonorViewModelFactoryTests {
 
-  private static final long IRRELEVANT_DONOR_ID = 865;
-
   @InjectMocks
   private DonorViewModelFactory donorViewModelFactory;
   @Mock
@@ -45,8 +44,8 @@ public class DonorViewModelFactoryTests {
 
   @Test
   public void testCreateDonorViewModel_shouldReturnViewModelWithCorrectDonor() {
-
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.fromString("11e71397-0000-0000-0000-000000000865");
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
 
     DonorViewModel expectedDonorViewModel = aDonorViewModel()
         .withDonor(donor)
@@ -61,15 +60,16 @@ public class DonorViewModelFactoryTests {
   public void testCreateDonorViewModelWithPermissions_shouldReturnViewModelWithCorrectDonorAndPermissions() {
 
     boolean irrelevantCanDeletePermission = true;
+    UUID irrelevantDonorId = UUID.randomUUID();
 
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
 
     DonorViewModel expectedDonorViewModel = aDonorViewModel()
         .withDonor(donor)
         .withPermission("canDelete", irrelevantCanDeletePermission)
         .build();
 
-    when(donorConstraintChecker.canDeleteDonor(IRRELEVANT_DONOR_ID)).thenReturn(irrelevantCanDeletePermission);
+    when(donorConstraintChecker.canDeleteDonor(irrelevantDonorId)).thenReturn(irrelevantCanDeletePermission);
 
     DonorViewModel returnedDonorViewModel = donorViewModelFactory.createDonorViewModelWithPermissions(donor);
 
@@ -117,9 +117,12 @@ public class DonorViewModelFactoryTests {
   @Test
   public void testCreateDonorViewModels_shouldReturnExpectedViewModels() {
     List<Donor> donors = new ArrayList<>();
-    Donor donor1 = aDonor().withId(1L).build();
+    UUID donorId1 = UUID.randomUUID();
+    UUID donorId2 = UUID.randomUUID();
+    
+    Donor donor1 = aDonor().withId(donorId1).build();
     donors.add(donor1);
-    Donor donor2 = aDonor().withId(2L).build();
+    Donor donor2 = aDonor().withId(donorId2).build();
     donors.add(donor2);
     
     DonorViewModel expectedDonorViewModel1 = aDonorViewModel().withDonor(donor1).build();
@@ -135,9 +138,12 @@ public class DonorViewModelFactoryTests {
   public void testCreateDonorSummaryViewModels_shouldReturnExpectedViewModels() {
     Location venue = LocationBuilder.aVenue().withName("Venue").build();
     List<Donor> donors = new ArrayList<>();
-    Donor donor1 = aDonor().withId(1L).withVenue(venue).build();
+    UUID donorId1 = UUID.randomUUID();
+    UUID donorId2 = UUID.randomUUID();
+    
+    Donor donor1 = aDonor().withId(donorId1).withVenue(venue).build();
     donors.add(donor1);
-    Donor donor2 = aDonor().withId(2L).withVenue(venue).build();
+    Donor donor2 = aDonor().withId(donorId2).withVenue(venue).build();
     donors.add(donor2);
 
     DonorSummaryViewModel expectedDonorSummaryViewModel1 = aDonorSummaryViewModel()

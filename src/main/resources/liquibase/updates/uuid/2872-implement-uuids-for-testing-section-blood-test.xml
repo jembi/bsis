@@ -1,0 +1,292 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170509-1215"  author="timler">
+
+    <comment>Refactor BloodTestingRule - pending BloodTest relationship to use a mapping table</comment>
+
+    <createTable tableName="BloodTestingRule_BloodTest">
+      <column name="bloodTestingRule_id" type="BINARY(16)">
+        <constraints foreignKeyName="fk_BloodTestingRule_BloodTest_BloodTestingRule" references="BloodTestingRule(id)" />
+      </column>
+      <column name="pendingBloodTests_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_BloodTestingRule_BloodTest_BloodTest" references="BloodTest(id)"  />
+      </column>
+    </createTable>
+
+    <createTable tableName="BloodTestingRule_BloodTest_AUD">
+      <column name="bloodTestingRule_id" type="BINARY(16)">
+        <constraints primaryKey="true"  />
+      </column>
+      <column name="pendingBloodTests_id" type="BIGINT(20)">
+        <constraints primaryKey="true"  />
+      </column>   
+      <column name="REV" type="INT(11)">
+     <constraints primaryKey="true" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)" />    
+    </createTable>
+
+    <sql dbms="mysql">
+      CREATE TEMPORARY TABLE numbers AS
+      SELECT 1 n FROM DUAL UNION ALL
+      SELECT 2   FROM DUAL UNION ALL
+      SELECT 3   FROM DUAL UNION ALL
+      SELECT 4   FROM DUAL UNION ALL
+      SELECT 5   FROM DUAL UNION ALL
+      SELECT 6   FROM DUAL UNION ALL
+      SELECT 7   FROM DUAL UNION ALL
+      SELECT 8   FROM DUAL UNION ALL
+      SELECT 9   FROM DUAL UNION ALL
+      SELECT 10  FROM DUAL;
+
+      INSERT INTO BloodTestingRule_BloodTest(bloodTestingRule_id, pendingBloodTests_id)
+        SELECT id, SUBSTRING_INDEX(
+                     SUBSTRING_INDEX(pendingTestsIds, ',', n), 
+                     ',', 
+                     -1
+                   ) AS pendingTestsId
+        FROM BloodTestingRule
+        JOIN numbers ON CHAR_LENGTH(pendingTestsIds) - CHAR_LENGTH(REPLACE(pendingTestsIds, ',', '')) >= n - 1
+        HAVING pendingTestsId != '';
+        
+      DROP TABLE numbers;
+    </sql>
+
+    <dropColumn columnName="pendingTestsIds" tableName="BloodTestingRule"/>
+    <dropColumn columnName="pendingTestsIds" tableName="BloodTestingRule_AUD"/>
+
+  </changeSet>
+
+  <changeSet id="20170509-2123" author="timler">
+
+    <comment>This change set migrates the BloodTest table from an integer id primary key 
+        to a UUID of type BINARY(16). </comment>
+
+    <dropForeignKeyConstraint baseTableName="BloodTestingRule" constraintName="fk_BloodTestingRule_BloodTest"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestingRule_BloodTest" constraintName="fk_BloodTestingRule_BloodTest_BloodTest"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestResult" constraintName="fk_BloodTestResult_BloodTest"/>
+
+    <addColumn tableName="BloodTest">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTest_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestingRule">
+      <column name="bloodTest_id_temp" type="BIGINT" afterColumn="bloodTest_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestingRule_BloodTest">
+      <column name="pendingBloodTests_id_temp" type="BIGINT" afterColumn="pendingBloodTests_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestResult">
+      <column name="bloodTest_id_temp" type="BIGINT" afterColumn="bloodTest_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestingRule_AUD">
+      <column name="bloodTest_id_temp" type="BIGINT" afterColumn="bloodTest_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestingRule_BloodTest_AUD">
+      <column name="pendingBloodTests_id_temp" type="BIGINT" afterColumn="pendingBloodTests_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestResult_AUD">
+      <column name="bloodTest_id_temp" type="BIGINT" afterColumn="bloodTest_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE BloodTest 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="bloodtest_id_temp_index" tableName="BloodTest" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE BloodTest_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_AUD 
+      SET bloodTest_id_temp = bloodTest_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_BloodTest_AUD 
+      SET pendingBloodTests_id_temp = pendingBloodTests_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult_AUD 
+      SET bloodTest_id_temp = bloodTest_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule 
+      SET bloodTest_id_temp = bloodTest_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_BloodTest 
+      SET pendingBloodTests_id_temp = pendingBloodTests_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult 
+      SET bloodTest_id_temp = bloodTest_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="BloodTest"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="BloodTest"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="BloodTest_AUD"/>
+
+    <modifyDataType columnName="bloodTest_id" newDataType="BINARY(16)" tableName="BloodTestingRule"/>
+    <modifyDataType columnName="pendingBloodTests_id" newDataType="BINARY(16)" tableName="BloodTestingRule_BloodTest"/>
+    <modifyDataType columnName="bloodTest_id" newDataType="BINARY(16)" tableName="BloodTestResult"/>
+
+    <modifyDataType columnName="bloodTest_id" newDataType="BINARY(16)" tableName="BloodTestingRule_AUD"/>
+    <modifyDataType columnName="pendingBloodTests_id" newDataType="BINARY(16)" tableName="BloodTestingRule_BloodTest_AUD"/>
+    <modifyDataType columnName="bloodTest_id" newDataType="BINARY(16)" tableName="BloodTestResult_AUD"/>
+
+    <sql>
+      UPDATE BloodTest SET id = UNHEX("11e868b0911721578826e4a471449260") WHERE id_temp = 1;
+      UPDATE BloodTest SET id = UNHEX("11e868b0911727318826e4a471449260") WHERE id_temp = 2;
+      UPDATE BloodTest SET id = UNHEX("11e868b091172aa78826e4a471449260") WHERE id_temp = 3;
+      UPDATE BloodTest SET id = UNHEX("11e868b091172e468826e4a471449260") WHERE id_temp = 17;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117325d8826e4a471449260") WHERE id_temp = 18;
+      UPDATE BloodTest SET id = UNHEX("11e868b091178dbc8826e4a471449260") WHERE id_temp = 19;
+      UPDATE BloodTest SET id = UNHEX("11e868b0911792758826e4a471449260") WHERE id_temp = 20;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117960c8826e4a471449260") WHERE id_temp = 21;
+      UPDATE BloodTest SET id = UNHEX("11e868b0911799228826e4a471449260") WHERE id_temp = 22;
+      UPDATE BloodTest SET id = UNHEX("11e868b091179bfa8826e4a471449260") WHERE id_temp = 23;
+      UPDATE BloodTest SET id = UNHEX("11e868b091179ed08826e4a471449260") WHERE id_temp = 24;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117a19f8826e4a471449260") WHERE id_temp = 25;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117a4788826e4a471449260") WHERE id_temp = 26;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117a7418826e4a471449260") WHERE id_temp = 27;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117aa0f8826e4a471449260") WHERE id_temp = 28;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117ace68826e4a471449260") WHERE id_temp = 29;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117afbe8826e4a471449260") WHERE id_temp = 30;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117b2968826e4a471449260") WHERE id_temp = 31;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117b56f8826e4a471449260") WHERE id_temp = 32;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117b8418826e4a471449260") WHERE id_temp = 33;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117bb1b8826e4a471449260") WHERE id_temp = 34;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117be058826e4a471449260") WHERE id_temp = 35;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE BloodTest ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE BloodTest_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTest_AUD AS updateTable
+        LEFT JOIN BloodTest AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE BloodTest_AUD
+      FROM BloodTest_AUD
+        LEFT JOIN BloodTest AS joinTable ON (BloodTest_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule AS updateTable
+        LEFT JOIN BloodTest AS joinedTable ON (updateTable.bloodTest_id_temp = joinedTable.id_temp)
+      SET updateTable.bloodTest_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_BloodTest AS updateTable
+        LEFT JOIN BloodTest AS joinedTable ON (updateTable.pendingBloodTests_id_temp = joinedTable.id_temp)
+      SET updateTable.pendingBloodTests_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult AS updateTable
+        LEFT JOIN BloodTest AS joinedTable ON (updateTable.bloodTest_id_temp = joinedTable.id_temp)
+      SET updateTable.bloodTest_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_AUD AS updateTable
+        LEFT JOIN BloodTest AS joinedTable ON (updateTable.bloodTest_id_temp = joinedTable.id_temp)
+      SET updateTable.bloodTest_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_BloodTest_AUD AS updateTable
+        LEFT JOIN BloodTest AS joinedTable ON (updateTable.pendingBloodTests_id_temp = joinedTable.id_temp)
+      SET updateTable.pendingBloodTests_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult_AUD AS updateTable
+        LEFT JOIN BloodTest AS joinedTable ON (updateTable.bloodTest_id_temp = joinedTable.id_temp)
+      SET updateTable.bloodTest_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="BloodTest"/>
+
+    <dropColumn columnName="id_temp" tableName="BloodTest_AUD"/>
+
+    <dropColumn columnName="bloodTest_id_temp" tableName="BloodTestingRule"/>
+
+    <dropColumn columnName="pendingBloodTests_id_temp" tableName="BloodTestingRule_BloodTest"/>
+
+    <dropColumn columnName="bloodTest_id_temp" tableName="BloodTestResult"/>
+
+    <dropColumn columnName="bloodTest_id_temp" tableName="BloodTestingRule_AUD"/>
+
+    <dropColumn columnName="pendingBloodTests_id_temp" tableName="BloodTestingRule_BloodTest_AUD"/>
+
+    <dropColumn columnName="bloodTest_id_temp" tableName="BloodTestResult_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="bloodTest_id" baseTableName="BloodTestingRule" constraintName="fk_BloodTestingRule_BloodTest"
+      referencedColumnNames="id" referencedTableName="BloodTest"/>
+
+    <addForeignKeyConstraint baseColumnNames="pendingBloodTests_id" baseTableName="BloodTestingRule_BloodTest" constraintName="fk_BloodTestingRule_BloodTest_BloodTest"
+      referencedColumnNames="id" referencedTableName="BloodTest"/>
+
+    <addForeignKeyConstraint baseColumnNames="bloodTest_id" baseTableName="BloodTestResult" constraintName="fk_BloodTestResult_BloodTest"
+      referencedColumnNames="id" referencedTableName="BloodTest"/>
+
+  </changeSet>
+
+</databaseChangeLog>

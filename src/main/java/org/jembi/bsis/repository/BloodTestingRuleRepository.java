@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.TypedQuery;
 
@@ -20,7 +21,7 @@ public class BloodTestingRuleRepository extends AbstractRepository<BloodTestingR
     return query.getResultList();
   }
 
-  public BloodTestingRule findBloodTestingRuleById(Long bloodTestingRuleId) {
+  public BloodTestingRule findBloodTestingRuleById(UUID bloodTestingRuleId) {
     return entityManager.createNamedQuery(BloodTestingRuleNamedQueryConstants.NAME_FIND_BLOOD_TESTING_RULE_BY_ID, BloodTestingRule.class)
         .setParameter("bloodTestingRuleId", bloodTestingRuleId)
         .getSingleResult();

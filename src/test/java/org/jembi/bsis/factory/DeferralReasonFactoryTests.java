@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.matchers.DeferralReasonMatcher.hasSameState
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DurationType;
@@ -22,15 +23,16 @@ public class DeferralReasonFactoryTests extends UnitTestSuite {
 
   @Test
   public void testConvertEntityToViewModel_shouldReturnExpectedViewModel() {
+    UUID deferralReasonId = UUID.randomUUID();
     DeferralReason deferralReason = aDeferralReason()
-        .withId(1L)
+        .withId(deferralReasonId)
         .withReason("reason")
         .withDefaultDuration(90)
         .withDurationType(DurationType.PERMANENT)
         .build();
         
     DeferralReasonViewModel expectedViewModel = aDeferralReasonViewModel()
-        .withId(1L)
+        .withId(deferralReasonId)
         .withReason("reason")
         .withDefaultDuration(90)
         .withDurationType(DurationType.PERMANENT)
@@ -43,14 +45,17 @@ public class DeferralReasonFactoryTests extends UnitTestSuite {
   
   @Test
   public void testConvertEntitiesToViewModels_shouldReturnExpectedViewModels() {
+    UUID deferralReasonId1 = UUID.randomUUID();
+    UUID deferralReasonId2 = UUID.randomUUID();
+    
     List<DeferralReason> deferralReasons = Arrays.asList(
-        aDeferralReason().withId(1L).thatIsNotDeleted().build(),
-        aDeferralReason().withId(2L).thatIsNotDeleted().build()
+        aDeferralReason().withId(deferralReasonId1).thatIsNotDeleted().build(),
+        aDeferralReason().withId(deferralReasonId2).thatIsNotDeleted().build()
     );
         
     List<DeferralReasonViewModel> expectedViewModels = Arrays.asList(
-        aDeferralReasonViewModel().withId(1L).build(),
-        aDeferralReasonViewModel().withId(2L).build()
+        aDeferralReasonViewModel().withId(deferralReasonId1).build(),
+        aDeferralReasonViewModel().withId(deferralReasonId2).build()
     );
     
     List<DeferralReasonViewModel> viewModels = deferralReasonFactory.createViewModels(deferralReasons);

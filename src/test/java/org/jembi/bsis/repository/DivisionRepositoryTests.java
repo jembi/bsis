@@ -6,6 +6,7 @@ import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
 import static org.jembi.bsis.helpers.matchers.DivisionMatcher.hasSameStateAsDivision;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -275,9 +276,9 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
   @Test
   public void testFindDivisionById_shouldReturnCorrectDivision() {
     // Set up fixture
-    aDivision().buildAndPersist(entityManager);
-    Division expectedDivision = aDivision().buildAndPersist(entityManager);
-    aDivision().buildAndPersist(entityManager);
+    aDivision().withName("name1").buildAndPersist(entityManager);
+    Division expectedDivision = aDivision().withName("name2").buildAndPersist(entityManager);
+    aDivision().withName("name3").buildAndPersist(entityManager);
     
     // Exercise SUT
     Division returnedDivision = divisionRepository.findDivisionById(expectedDivision.getId());
@@ -289,21 +290,21 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
   @Test(expected = NoResultException.class)
   public void testFindDivisionByIdWithMissingDivision_shouldThrow() {
     // Exercise SUT
-    divisionRepository.findDivisionById(1L);
+    divisionRepository.findDivisionById(UUID.randomUUID());
   }
   
   @Test
   public void testCountDivisionsWithParent_shouldReturnCorrectCount() {
-    Division parent = aDivision().buildAndPersist(entityManager);
+    Division parent = aDivision().withName("parentName1").buildAndPersist(entityManager);
     
     // Expected
-    aDivision().withParent(parent).buildAndPersist(entityManager);
+    aDivision().withName("name2").withParent(parent).buildAndPersist(entityManager);
     // Excluded by parent
-    aDivision().withParent(aDivision().build()).buildAndPersist(entityManager);
+    aDivision().withName("name3").withParent(aDivision().withName("parentName2").build()).buildAndPersist(entityManager);
     // Expected
-    aDivision().withParent(parent).buildAndPersist(entityManager);
+    aDivision().withName("name4").withParent(parent).buildAndPersist(entityManager);
     // Excluded by no parent
-    aDivision().withParent(null).buildAndPersist(entityManager);
+    aDivision().withName("name5").withParent(null).buildAndPersist(entityManager);
     
     long returnedCount = divisionRepository.countDivisionsWithParent(parent);
     

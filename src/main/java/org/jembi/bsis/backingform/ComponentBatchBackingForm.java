@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.componentbatch.ComponentBatchStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class ComponentBatchBackingForm {
   
-  private Long id;
+  private UUID id;
   private ComponentBatchStatus status;
   private DonationBatchBackingForm donationBatch;
   private List<BloodTransportBoxBackingForm> bloodTransportBoxes = new ArrayList<>();
@@ -22,11 +23,11 @@ public class ComponentBatchBackingForm {
     super();
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

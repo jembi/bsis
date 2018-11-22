@@ -21,6 +21,7 @@ public class BloodTestViewModelMatcher extends TypeSafeMatcher<BloodTestViewMode
         .appendText("\nTest name short: ").appendValue(expected.getTestNameShort())
         .appendText("\nCategory: ").appendValue(expected.getCategory())
         .appendText("\nBlood test type: ").appendValue(expected.getBloodTestType())
+        .appendText("\nRank in category: ").appendValue(expected.getRankInCategory())
         .appendText("\nActive: ").appendValue(expected.getIsActive())
         .appendText("\nDeleted: ").appendValue(expected.getIsDeleted());
   }
@@ -31,6 +32,7 @@ public class BloodTestViewModelMatcher extends TypeSafeMatcher<BloodTestViewMode
         && Objects.equals(actual.getTestNameShort(), expected.getTestNameShort())
         && Objects.equals(actual.getCategory(), expected.getCategory())
         && Objects.equals(actual.getBloodTestType(), expected.getBloodTestType())
+        && Objects.equals(actual.getRankInCategory(), expected.getRankInCategory())
         && Objects.equals(actual.getIsActive(), expected.getIsActive())
         && Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
   }

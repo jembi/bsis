@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
@@ -8,7 +9,7 @@ import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTestingRuleBackingForm> {
 
-  private Long id;
+  private UUID id;
   private BloodTestBackingForm bloodTest;
   private String pattern;
   private DonationField donationFieldChanged;
@@ -16,7 +17,7 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
   private Set<BloodTestBackingForm> pendingTests;
   private boolean isDeleted = false;
 
-  public BloodTestingRuleBackingFormBuilder withId(Long id) {
+  public BloodTestingRuleBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

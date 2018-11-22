@@ -1,0 +1,141 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170330-1023" author="timler">
+      <comment>Drop foreign key constraint in AdverseEventType_AUD table</comment>
+      <dropForeignKeyConstraint baseTableName="AdverseEvent_AUD" constraintName="FK_ADVERSE_EVENT_AUD_ADVERSE_EVENT_TYPE_ID"/>
+  </changeSet>
+
+  <changeSet id="20170330-1030" author="timler">
+    <dropForeignKeyConstraint baseTableName="AdverseEvent" constraintName="FK_ADVERSE_EVENT_ADVERSE_EVENT_TYPE_ID"/>
+
+    <addColumn tableName="AdverseEventType">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="AdverseEventType_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="AdverseEvent">
+      <column name="type_id_temp" type="BIGINT" afterColumn="type_id"/>
+    </addColumn>
+
+    <addColumn tableName="AdverseEvent_AUD">
+      <column name="type_id_temp" type="BIGINT" afterColumn="type_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE AdverseEventType 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="adverseeventtype_id_temp_index" tableName="AdverseEventType" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE AdverseEventType_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE AdverseEvent_AUD 
+      SET type_id_temp = type_id;
+    </sql>
+
+    <sql>
+      UPDATE AdverseEvent 
+      SET type_id_temp = type_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="AdverseEventType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="AdverseEventType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="AdverseEventType_AUD"/>
+
+    <modifyDataType columnName="type_id" newDataType="BINARY(16)" tableName="AdverseEvent"/>
+
+    <modifyDataType columnName="type_id" newDataType="BINARY(16)" tableName="AdverseEvent_AUD"/>
+
+    <sql>
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc4075f8826e4a471449260") WHERE id_temp = 1;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc40a828826e4a471449260") WHERE id_temp = 2;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc40c3e8826e4a471449260") WHERE id_temp = 3;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc40dc48826e4a471449260") WHERE id_temp = 4;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc40f368826e4a471449260") WHERE id_temp = 5;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc410a68826e4a471449260") WHERE id_temp = 6;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc4120e8826e4a471449260") WHERE id_temp = 7;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc413788826e4a471449260") WHERE id_temp = 8;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc414ec8826e4a471449260") WHERE id_temp = 9;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc416548826e4a471449260") WHERE id_temp = 10;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc417bb8826e4a471449260") WHERE id_temp = 11;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE AdverseEventType ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE AdverseEventType_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE AdverseEventType_AUD AS updateTable
+        LEFT JOIN AdverseEventType AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE AdverseEventType_AUD
+      FROM AdverseEventType_AUD
+        LEFT JOIN AdverseEventType AS joinTable ON (AdverseEventType_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE AdverseEvent AS updateTable
+        LEFT JOIN AdverseEventType AS joinedTable ON (updateTable.type_id_temp = joinedTable.id_temp)
+      SET updateTable.type_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE AdverseEvent_AUD AS updateTable
+        LEFT JOIN AdverseEventType AS joinedTable ON (updateTable.type_id_temp = joinedTable.id_temp)
+      SET updateTable.type_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="AdverseEventType"/>
+
+    <dropColumn columnName="id_temp" tableName="AdverseEventType_AUD"/>
+
+    <dropColumn columnName="type_id_temp" tableName="AdverseEvent"/>
+
+    <dropColumn columnName="type_id_temp" tableName="AdverseEvent_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="type_id" baseTableName="AdverseEvent" constraintName="FK_ADVERSE_EVENT_ADVERSE_EVENT_TYPE_ID"
+      referencedColumnNames="id" referencedTableName="AdverseEventType"/>
+
+  </changeSet>
+
+</databaseChangeLog>

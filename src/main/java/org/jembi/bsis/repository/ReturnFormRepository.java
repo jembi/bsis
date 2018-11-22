@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.TypedQuery;
 
@@ -12,15 +13,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ReturnFormRepository extends AbstractRepository<ReturnForm> {
 
-  public ReturnForm findById(Long id) {
+  public ReturnForm findById(UUID id) {
     TypedQuery<ReturnForm> query = entityManager.createNamedQuery(ReturnFormNamedQueryConstants.NAME_FIND_BY_ID, ReturnForm.class);
     query.setParameter("id", id);
     query.setParameter("isDeleted", false);
     return query.getSingleResult();
   }
 
-  public List<ReturnForm> findReturnForms(Date returnDateFrom, Date returnDateTo, Long returnedFromId,
-      Long returnedToId, ReturnStatus status) {
+  public List<ReturnForm> findReturnForms(Date returnDateFrom, Date returnDateTo, UUID returnedFromId,
+      UUID returnedToId, ReturnStatus status) {
     String queryString = "SELECT r FROM ReturnForm r WHERE r.isDeleted = :isDeleted ";
 
     if (returnDateFrom != null) {

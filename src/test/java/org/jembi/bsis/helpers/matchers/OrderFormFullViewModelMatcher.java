@@ -3,27 +3,24 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 
-public class OrderFormFullViewModelMatcher extends TypeSafeMatcher<OrderFormFullViewModel> {
-
-  private OrderFormFullViewModel expected;
+public class OrderFormFullViewModelMatcher extends AbstractTypeSafeMatcher<OrderFormFullViewModel> {
 
   public OrderFormFullViewModelMatcher(OrderFormFullViewModel expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("An order form view model with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nOrder Date: ").appendValue(expected.getOrderDate())
-        .appendText("\nDispatched From: ").appendValue(expected.getDispatchedFrom())
-        .appendText("\nDispatched To: ").appendValue(expected.getDispatchedTo())
-        .appendText("\nOrder items: ").appendValue(expected.getItems())
-        .appendText("\nComponents: ").appendValue(expected.getComponents())
-        .appendText("\nPermissions: ").appendValue(expected.getPermissions());        ;
+  public void appendDescription(Description description, OrderFormFullViewModel orderFormFullViewModel) {
+    description.appendText("An OrderFormFullViewModel with the following state:")
+        .appendText("\nId: ").appendValue(orderFormFullViewModel.getId())
+        .appendText("\nOrder Date: ").appendValue(orderFormFullViewModel.getOrderDate())
+        .appendText("\nDispatched From: ").appendValue(orderFormFullViewModel.getDispatchedFrom())
+        .appendText("\nDispatched To: ").appendValue(orderFormFullViewModel.getDispatchedTo())
+        .appendText("\nOrder items: ").appendValue(orderFormFullViewModel.getItems())
+        .appendText("\nComponents: ").appendValue(orderFormFullViewModel.getComponents())
+        .appendText("\nPermissions: ").appendValue(orderFormFullViewModel.getPermissions());        ;
   }
 
   @Override

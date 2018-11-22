@@ -1,6 +1,8 @@
 
 package org.jembi.bsis.backingform;
 
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.jembi.bsis.model.donordeferral.DeferralReason;
@@ -27,7 +29,7 @@ public class DeferralReasonBackingForm {
     return deferralReason.getReason();
   }
 
-  public Long getId() {
+  public UUID getId() {
     return deferralReason.getId();
   }
 
@@ -35,7 +37,7 @@ public class DeferralReasonBackingForm {
     this.deferralReason = deferralReason;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     deferralReason.setId(id);
   }
 

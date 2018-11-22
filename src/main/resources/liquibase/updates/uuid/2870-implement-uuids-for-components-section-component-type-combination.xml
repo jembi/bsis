@@ -1,0 +1,141 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170411-1113"  author="tumijacob">
+    <comment>This change set migrates the ComponentTypeCombination table from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+
+    <dropForeignKeyConstraint baseTableName="ComponentTypeCombination_ComponentType" constraintName="fk_ComponentTypeCombination_ComponentType_ComponentTypeComb"/>
+    <dropForeignKeyConstraint baseTableName="ComponentType_ComponentTypeCombination" constraintName="fk_ComponentType_ComponentTypeCombination_ComponentTypeComb"/>
+
+    <addColumn tableName="ComponentTypeCombination">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentTypeCombination_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id_temp" type="BIGINT" afterColumn="componentTypeCombinations_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentType_ComponentTypeCombination">
+      <column name="producedComponentTypeCombinations_id_temp" type="BIGINT" afterColumn="producedComponentTypeCombinations_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE ComponentTypeCombination 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="componenttypecombination_id_temp_index" tableName="ComponentTypeCombination" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE ComponentTypeCombination_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination_ComponentType 
+      SET componentTypeCombinations_id_temp = componentTypeCombinations_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_ComponentTypeCombination 
+      SET producedComponentTypeCombinations_id_temp = producedComponentTypeCombinations_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="ComponentTypeCombination"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentTypeCombination"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentTypeCombination_AUD"/>
+
+    <modifyDataType columnName="componentTypeCombinations_id" newDataType="BINARY(16)" tableName="ComponentTypeCombination_ComponentType"/>
+    <modifyDataType columnName="producedComponentTypeCombinations_id" newDataType="BINARY(16)" tableName="ComponentType_ComponentTypeCombination"/>
+
+
+    <sql>
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b083160d6f8826e4a471449260") WHERE id_temp = 1;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08316136f8826e4a471449260") WHERE id_temp = 2;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831615798826e4a471449260") WHERE id_temp = 3;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831617828826e4a471449260") WHERE id_temp = 4;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08317f64d8826e4a471449260") WHERE id_temp = 5;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08317fb548826e4a471449260") WHERE id_temp = 6;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08317fe9d8826e4a471449260") WHERE id_temp = 7;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831801578826e4a471449260") WHERE id_temp = 8;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831804708826e4a471449260") WHERE id_temp = 9;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08318071a8826e4a471449260") WHERE id_temp = 10;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ComponentTypeCombination ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ComponentTypeCombination_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination_AUD AS updateTable
+        LEFT JOIN ComponentTypeCombination AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE ComponentTypeCombination_AUD
+      FROM ComponentTypeCombination_AUD
+        LEFT JOIN ComponentTypeCombination AS joinTable ON (ComponentTypeCombination_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination_ComponentType AS updateTable
+        LEFT JOIN ComponentTypeCombination AS joinedTable ON (updateTable.componentTypeCombinations_id_temp = joinedTable.id_temp)
+      SET updateTable.componentTypeCombinations_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_ComponentTypeCombination AS updateTable
+        LEFT JOIN ComponentTypeCombination AS joinedTable ON (updateTable.producedComponentTypeCombinations_id_temp = joinedTable.id_temp)
+      SET updateTable.producedComponentTypeCombinations_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="ComponentTypeCombination"/>
+
+    <dropColumn columnName="id_temp" tableName="ComponentTypeCombination_AUD"/>
+
+    <dropColumn columnName="componentTypeCombinations_id_temp" tableName="ComponentTypeCombination_ComponentType"/>
+
+    <dropColumn columnName="producedComponentTypeCombinations_id_temp" tableName="ComponentType_ComponentTypeCombination"/>
+
+    <addForeignKeyConstraint baseColumnNames="componentTypeCombinations_id" baseTableName="ComponentTypeCombination_ComponentType" constraintName="fk_ComponentTypeCombination_ComponentType_ComponentTypeComb"
+      referencedColumnNames="id" referencedTableName="ComponentTypeCombination"/>
+
+    <addForeignKeyConstraint baseColumnNames="producedComponentTypeCombinations_id" baseTableName="ComponentType_ComponentTypeCombination" constraintName="fk_ComponentType_ComponentTypeCombination_ComponentTypeComb"
+      referencedColumnNames="id" referencedTableName="ComponentTypeCombination"/>
+   
+  </changeSet>
+</databaseChangeLog>

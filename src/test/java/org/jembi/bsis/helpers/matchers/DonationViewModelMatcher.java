@@ -3,23 +3,30 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 
-public class DonationViewModelMatcher extends TypeSafeMatcher<DonationViewModel> {
-
-  private DonationViewModel expected;
+public class DonationViewModelMatcher extends AbstractTypeSafeMatcher<DonationViewModel> {
 
   public DonationViewModelMatcher(DonationViewModel expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("A donation view model with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nPermissions: ").appendValue(expected.getPermissions())
-        .appendText("\nAdverse Event: ").appendValue(expected.getAdverseEvent());
+  public void appendDescription(Description description, DonationViewModel donationViewModel) {
+    description.appendText("An DonationViewModel with the following state:")
+    .appendText("\nId: ").appendValue(donationViewModel.getId())
+    .appendText("\ndonationDate: ").appendValue(donationViewModel.getDonationDate())
+    .appendText("\ndonationIdentificationNumber: ").appendValue(donationViewModel.getDonationIdentificationNumber())
+    .appendText("\ndonationType: ").appendValue(donationViewModel.getDonationType())
+    .appendText("\npackType: ").appendValue(donationViewModel.getPackType())
+    .appendText("\ndonorNumber: ").appendValue(donationViewModel.getDonorNumber())
+    .appendText("\nTTIStatus: ").appendValue(donationViewModel.getTTIStatus())
+    .appendText("\nbloodTypingStatus: ").appendValue(donationViewModel.getBloodTypingStatus())
+    .appendText("\nbloodTypingMatchStatus: ").appendValue(donationViewModel.getBloodTypingMatchStatus())
+    .appendText("\nbloodABO: ").appendValue(donationViewModel.getBloodAbo())
+    .appendText("\nbloodRh: ").appendValue(donationViewModel.getBloodRh())
+    .appendText("\nvenue: ").appendValue(donationViewModel.getVenue())
+    .appendText("\nreleased: ").appendValue(donationViewModel.isReleased());
   }
 
   @Override
@@ -29,31 +36,17 @@ public class DonationViewModelMatcher extends TypeSafeMatcher<DonationViewModel>
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getDonationType(), expected.getDonationType()) &&
         Objects.equals(actual.getPackType(), expected.getPackType()) &&
-        Objects.equals(actual.getNotes(), expected.getNotes()) &&
         Objects.equals(actual.getDonorNumber(), expected.getDonorNumber()) &&
         Objects.equals(actual.getTTIStatus(), expected.getTTIStatus()) &&
-        Objects.equals(actual.getPermissions(), expected.getPermissions()) &&
-        Objects.equals(actual.getDonationBatchNumber(), expected.getDonationBatchNumber()) &&
         Objects.equals(actual.getBloodTypingStatus(), expected.getBloodTypingStatus()) &&
         Objects.equals(actual.getBloodTypingMatchStatus(), expected.getBloodTypingMatchStatus()) &&
         Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
         Objects.equals(actual.getBloodRh(), expected.getBloodRh()) &&
-        Objects.equals(actual.getHaemoglobinCount(), expected.getHaemoglobinCount()) &&
-        Objects.equals(actual.getHaemoglobinLevel(), expected.getHaemoglobinLevel()) &&
-        Objects.equals(actual.getDonorWeight(), expected.getDonorWeight()) &&
-        Objects.equals(actual.getDonorPulse(), expected.getDonorPulse()) &&
-        Objects.equals(actual.getBloodPressureSystolic(), expected.getBloodPressureSystolic()) &&
-        Objects.equals(actual.getBloodPressureDiastolic(), expected.getBloodPressureDiastolic()) &&
-        Objects.equals(actual.getBleedStartTime(), expected.getBleedStartTime()) &&
-        Objects.equals(actual.getBleedEndTime(), expected.getBleedEndTime()) &&
         Objects.equals(actual.getVenue(), expected.getVenue()) &&
-        Objects.equals(actual.isReleased(), expected.isReleased()) &&
-        Objects.equals(actual.getPermissions(), expected.getPermissions()) &&
-        Objects.equals(actual.getAdverseEvent(), expected.getAdverseEvent());
+        Objects.equals(actual.isReleased(), expected.isReleased());
   }
 
   public static DonationViewModelMatcher hasSameStateAsDonationViewModel(DonationViewModel expected) {
     return new DonationViewModelMatcher(expected);
   }
-
 }

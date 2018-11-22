@@ -5,6 +5,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.model.user.Permission;
 import org.jembi.bsis.model.user.Role;
@@ -59,7 +60,7 @@ public class RoleControllerTest extends ContextDependentTestSuite  {
     role.setPermissions(permissions);
     role.setName("Update role");
     role.setDescription("Update Role For Test");
-    role.setId(1l);
+    role.setId(UUID.randomUUID());
     roleRepository.updateRole(role);
   }
 

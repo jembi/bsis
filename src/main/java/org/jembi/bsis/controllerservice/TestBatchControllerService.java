@@ -1,36 +1,37 @@
 package org.jembi.bsis.controllerservice;
 
-import java.util.Date;
-import java.util.List;
-
 import org.jembi.bsis.backingform.TestBatchBackingForm;
-import org.jembi.bsis.factory.DonationBatchViewModelFactory;
+import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
+import org.jembi.bsis.backingform.TestBatchDonationsBackingForm;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.testbatch.DonationAdditionResult;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.DonationBatchRepository;
+import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
-import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.service.TestBatchCRUDService;
-import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.utils.PermissionUtils;
-import org.jembi.bsis.viewmodel.DonationBatchViewModel;
-import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.TestBatchFullDonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class TestBatchControllerService {
-  
+
   @Autowired
   private TestBatchCRUDService testBatchCRUDService;
   @Autowired
@@ -39,23 +40,15 @@ public class TestBatchControllerService {
   private LocationRepository locationRepository;
   @Autowired
   private LocationFactory locationFactory;
-  
   @Autowired
   private TestBatchRepository testBatchRepository;
-
   @Autowired
-  private DonationBatchRepository donationBatchRepository;
-
-  @Autowired
-  private SequenceNumberRepository sequenceNumberRepository;
-
-  @Autowired
-  private DonationBatchViewModelFactory donationBatchViewModelFactory;
+  private DonationRepository donationRepository;
 
   public TestBatchFullViewModel updateTestBatch(TestBatchBackingForm backingForm) {
     TestBatch testBatch = testBatchFactory.createEntity(backingForm);
     testBatch = testBatchCRUDService.updateTestBatch(testBatch);
-    return testBatchFactory.createTestBatchFullViewModel(testBatch, true);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch);
   }
 
   public List<LocationViewModel> getTestingSites() {
@@ -63,39 +56,49 @@ public class TestBatchControllerService {
     return locationFactory.createViewModels(locations);
   }
 
-  public List<DonationBatchViewModel> getUnnasignedDonationBatches() {
-    return donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatchRepository.findUnassignedDonationBatches());
-  }
-  
-  public TestBatchFullViewModel saveTestBatch(TestBatchBackingForm form) {
-    TestBatch testBatch = testBatchRepository.saveTestBatch(testBatchFactory.createEntity(form), sequenceNumberRepository.getNextTestBatchNumber());
-    boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
+  public TestBatchFullViewModel addTestBatch(TestBatchBackingForm form) {
+    TestBatch testBatch = testBatchFactory.createEntity(form);
+    testBatch = testBatchCRUDService.createTestBatch(testBatch);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch);
   }
 
-  public TestBatchFullViewModel getTestBatchById(long id) {
+  public TestBatchFullViewModel getTestBatchById(UUID id) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch);
   }
 
-  public List<TestBatchViewModel> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate) {
-    List<TestBatch> testBatches = testBatchRepository.findTestBatches(statuses, startDate, endDate);
+  public List<TestBatchViewModel> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate, UUID locationId) {
+    List<TestBatch> testBatches = testBatchRepository.findTestBatches(statuses, startDate, endDate, locationId);
     return testBatchFactory.createTestBatchBasicViewModels(testBatches);
   }
 
-  public void deleteTestBatch(long id) {
+  public void deleteTestBatch(UUID id) {
     testBatchCRUDService.deleteTestBatch(id);
   }
 
-  public List<DonationViewModel> getDonations(long id, BloodTypingMatchStatus bloodTypingMatchStatus) {
+  public TestBatchFullDonationViewModel getTestBatchByIdAndBloodTypingMatchStatus(UUID id, BloodTypingMatchStatus bloodTypingMatchStatus) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    return testBatchFactory.createDonationViewModels(testBatch, bloodTypingMatchStatus);
+    return testBatchFactory.createTestBatchFullDonationViewModel(testBatch, bloodTypingMatchStatus);
   }
 
-  public Date getTestBatchCreatedDate(long id) {
-    TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    return testBatch.getCreatedDate();
+  public TestBatchFullViewModel addDonationsToTestBatch(
+      TestBatchDonationRangeBackingForm backingForm) {
+    TestBatch testBatch = testBatchRepository.findTestBatchById(backingForm.getTestBatchId());
+    List<Donation> donationsInRange = donationRepository
+        .findDonationsBetweenTwoDins(backingForm.getFromDIN(), backingForm.getToDIN());
+    DonationAdditionResult result = testBatchCRUDService
+        .addDonationsToTestBatch(testBatch, donationsInRange);
+    return testBatchFactory
+        .createTestBatchFullViewModel(result.getTestBatch(), result.getDinsWithoutTestSamples(),
+            result.getDinsInOtherTestBatches(), result.getDinsInOpenDonationBatch());
   }
 
+  public TestBatchFullViewModel removeDonationsFromBatch(TestBatchDonationsBackingForm backingForm) {
+    List<Donation> donationsToRemove = backingForm.getDonationIds().stream()
+        .map(uuid -> donationRepository.findDonationById(uuid))
+        .collect(Collectors.toList());
+    TestBatch testBatch = testBatchRepository.findTestBatchById(backingForm.getTestBatchId());
+    testBatch = testBatchCRUDService.removeDonationsFromTestBatch(donationsToRemove, testBatch);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch);
+  }
 }

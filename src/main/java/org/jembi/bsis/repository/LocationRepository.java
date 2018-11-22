@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -81,7 +82,7 @@ public class LocationRepository extends AbstractRepository<Location>{
         .getResultList();
   }
 
-  public Location getLocation(Long selectedLocationId) {
+  public Location getLocation(UUID selectedLocationId) {
     TypedQuery<Location> query = em.createQuery(
         "SELECT l FROM Location l where l.id= :locationId",
         Location.class);
@@ -97,7 +98,7 @@ public class LocationRepository extends AbstractRepository<Location>{
     return existingLocation;
   }
 
-  public void deleteLocation(Long locationId) {
+  public void deleteLocation(UUID locationId) {
     Location existingLocation = em.find(Location.class, locationId);
     existingLocation.setIsDeleted(Boolean.TRUE);
     em.merge(existingLocation);
@@ -117,7 +118,7 @@ public class LocationRepository extends AbstractRepository<Location>{
     return location;
   }
   
-  public boolean verifyLocationExists(Long id) {
+  public boolean verifyLocationExists(UUID id) {
     Long count = em.createNamedQuery(LocationNamedQueryConstants.NAME_COUNT_LOCATION_WITH_ID, Long.class)
         .setParameter("id", id)
         .getSingleResult();

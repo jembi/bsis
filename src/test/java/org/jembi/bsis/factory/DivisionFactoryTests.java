@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DivisionBackingForm;
 import org.jembi.bsis.model.location.Division;
@@ -41,11 +42,11 @@ public class DivisionFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDivisionViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    long divisionId = 769L;
+    UUID divisionId = UUID.randomUUID();
     String divisionName = "Some Location Division";
     int divisionLevel = 2;
 
-    long parentDivisionId = 7L;
+    UUID parentDivisionId = UUID.randomUUID();
     String parentDivisionName = "Parent Division";
     int parentDivisionLevel = 1;
     
@@ -82,11 +83,11 @@ public class DivisionFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDivisionFullViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    long divisionId = 769L;
+    UUID divisionId = UUID.randomUUID();
     String divisionName = "Some Location Division";
     int divisionLevel = 2;
 
-    long parentDivisionId = 7L;
+    UUID parentDivisionId = UUID.randomUUID();
     String parentDivisionName = "Parent Division";
     int parentDivisionLevel = 1;
     
@@ -126,7 +127,7 @@ public class DivisionFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDivisionViewModelWithNullParent_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    long divisionId = 769L;
+    UUID divisionId = UUID.randomUUID();
     String name = "Some Location Division";
     int level = 1;
     
@@ -155,7 +156,7 @@ public class DivisionFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDivisionViewModelExcludeParent_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    long divisionId = 769L;
+    UUID divisionId = UUID.randomUUID();
     String divisionName = "Some Location Division";
     int divisionLevel = 2;
     
@@ -164,7 +165,7 @@ public class DivisionFactoryTests extends UnitTestSuite {
         .withName(divisionName)
         .withLevel(divisionLevel)
         .withParent(aDivision()
-            .withId(9L)
+            .withId(UUID.randomUUID())
             .withName("Excluded parent")
             .withLevel(1)
             .build())
@@ -188,13 +189,15 @@ public class DivisionFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDivisionViewModels_shouldReturnExpectedViewModels() {
     // Set up fixture
-    Division firstDivision = aDivision().withId(1L).withName("First").withLevel(1).build();
-    Division secondDivision = aDivision().withId(3L).withName("Second").withLevel(2).build();
+    UUID divisionId1 = UUID.randomUUID();
+    UUID divisionId2 = UUID.randomUUID();
+    Division firstDivision = aDivision().withId(divisionId1).withName("First").withLevel(1).build();
+    Division secondDivision = aDivision().withId(divisionId2).withName("Second").withLevel(2).build();
     List<Division> divisions = Arrays.asList(firstDivision, secondDivision);
     
     // Set up expectations
-    DivisionViewModel firstViewModel = aDivisionViewModel().withId(1L).withName("First").withLevel(1).build();
-    DivisionViewModel secondViewModel = aDivisionViewModel().withId(3L).withName("Second").withLevel(2).build();
+    DivisionViewModel firstViewModel = aDivisionViewModel().withId(divisionId1).withName("First").withLevel(1).build();
+    DivisionViewModel secondViewModel = aDivisionViewModel().withId(divisionId2).withName("Second").withLevel(2).build();
     List<DivisionViewModel> expectedViewModels = Arrays.asList(firstViewModel, secondViewModel);
     
     doReturn(firstViewModel).when(divisionFactory).createDivisionViewModel(firstDivision);
@@ -209,18 +212,18 @@ public class DivisionFactoryTests extends UnitTestSuite {
 
   @Test
   public void testConvertDivisionBackingFormToDivisionEntity_shouldReturnExpectedEntity() {
-    long id = 5L;
+    UUID divisionId = UUID.randomUUID();
     String name = "aDiv";
     Integer level = 1;
 
     Division expectedEntity = aDivision()
-        .withId(id)
+        .withId(divisionId)
         .withLevel(level)
         .withName(name)
         .build();
 
     DivisionBackingForm form = aDivisionBackingForm()
-        .withId(id)
+        .withId(divisionId)
         .withName(name)
         .withLevel(level)
         .build();
@@ -233,8 +236,8 @@ public class DivisionFactoryTests extends UnitTestSuite {
 
   @Test
   public void testConvertDivisionBackingFormWithParentToDivisionEntityWithParent_shouldReturnExpectedEntity() {
-    long parentId = 4L;
-    long id = 5L;
+    UUID parentId = UUID.randomUUID();
+    UUID id = UUID.randomUUID();
 
     String parentName = "parentName";
     String name = "aDiv";
@@ -267,7 +270,7 @@ public class DivisionFactoryTests extends UnitTestSuite {
         .withParent(parentForm)
         .build();
 
-    when(divisionRepository.findDivisionById(4L)).thenReturn(parent);
+    when(divisionRepository.findDivisionById(parentId)).thenReturn(parent);
 
     Division convertedEntity = divisionFactory.createEntity(form);
 

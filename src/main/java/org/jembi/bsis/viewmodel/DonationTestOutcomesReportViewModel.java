@@ -79,14 +79,4 @@ public class DonationTestOutcomesReportViewModel {
   public void setReleased(boolean released) {
     this.released = released;
   }
-
-  @Override
-  public String toString() {
-    return "DonationTestOutcomesReportViewModel [donationIdentificationNumber=" + donationIdentificationNumber
-        + ", bloodTypingStatus=" + bloodTypingStatus + ", ttiStatus=" + ttiStatus + ", previousDonationAboRhOutcome="
-        + previousDonationAboRhOutcome + ", bloodTestOutcomes=" + bloodTestOutcomes + "]";
-  }
-
-
-
 }

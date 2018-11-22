@@ -1,13 +1,14 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ComponentViewModel extends BaseViewModel {
+public class ComponentViewModel extends BaseViewModel<UUID> {
 
   private ComponentTypeViewModel componentType;
   private Date createdOn;
@@ -15,7 +16,7 @@ public class ComponentViewModel extends BaseViewModel {
   private String donationIdentificationNumber;
   private String donationFlagCharacters;
   private ComponentStatus status;
-  private String expiryStatus;
+  private int daysToExpire;
   private String componentCode;
   private LocationViewModel location;
 
@@ -76,12 +77,12 @@ public class ComponentViewModel extends BaseViewModel {
   public void setStatus(ComponentStatus status) {
     this.status = status;
   }
-  public String getExpiryStatus() {
-    return expiryStatus;
+  public int getDaysToExpire() {
+    return daysToExpire;
   }
 
-  public void setExpiryStatus(String expiryStatus) {
-    this.expiryStatus = expiryStatus;
+  public void setDaysToExpire(int daysToExpire) {
+    this.daysToExpire = daysToExpire;
   }
 
   public String getComponentCode() {

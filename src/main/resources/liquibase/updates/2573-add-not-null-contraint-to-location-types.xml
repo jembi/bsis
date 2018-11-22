@@ -1,0 +1,12 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="2018-07-27-1303" author="trevorgowing">
+    <comment>Add not null constraint to Location: isVenue, isMobileSite, isUsageSite</comment>
+    <addNotNullConstraint tableName="Location" columnName="isVenue" columnDataType="TINYINT(1)" defaultNullValue="0"/>
+    <addNotNullConstraint tableName="Location" columnName="isMobileSite" columnDataType="TINYINT(1)" defaultNullValue="0"/>
+    <addNotNullConstraint tableName="Location" columnName="isUsageSite" columnDataType="TINYINT(1)" defaultNullValue="0"/>
+    <addNotNullConstraint tableName="Location" columnName="isDeleted" columnDataType="TINYINT(1)" defaultNullValue="0"/>
+  </changeSet>
+</databaseChangeLog>

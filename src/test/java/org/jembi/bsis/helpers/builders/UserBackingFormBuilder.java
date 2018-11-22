@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.RoleBackingForm;
 import org.jembi.bsis.backingform.UserBackingForm;
@@ -12,7 +13,7 @@ public class UserBackingFormBuilder extends AbstractBuilder<UserBackingForm> {
   private String emailId;
   private String username;
   private boolean isAdmin = true;
-  private Long id;
+  private UUID id;
   private String firstName;
   private String lastName;
   private String password;
@@ -24,7 +25,7 @@ public class UserBackingFormBuilder extends AbstractBuilder<UserBackingForm> {
   private Date lastLogin;
   private boolean isPasswordReset = false;
 
-  public UserBackingFormBuilder withId(Long id) {
+  public UserBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

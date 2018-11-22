@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.BloodUnitsOrderDTO;
@@ -21,7 +22,6 @@ import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
@@ -48,7 +48,8 @@ public class BloodUnitsIssuedReportGeneratorTests extends UnitTestSuite {
   public void testGenerateUnitsIssuedReport() {
 
     // Set up data
-    Location distributionSite = aDistributionSite().withId(1L).withName("Central").build();
+    UUID locationId = UUID.randomUUID();
+    Location distributionSite = aDistributionSite().withId(locationId).withName("Central").build();
     Date startDate = new Date();
     Date endDate = new Date();
     ComponentType componentType1 = ComponentTypeBuilder.aComponentType().withComponentTypeName("comp1").build();
@@ -80,7 +81,7 @@ public class BloodUnitsIssuedReportGeneratorTests extends UnitTestSuite {
         aBloodUnitsOrderDTO().withComponentType(componentType2).withDistributionSite(distributionSite).withOrderType(OrderType.PATIENT_REQUEST).withCount(2).build()
     );
 
-    LocationViewModel expectedLocation = aLocationViewModel().withId(1L).withName("Central").build();
+    LocationViewModel expectedLocation = aLocationViewModel().withId(locationId).withName("Central").build();
 
     List<DataValue> expectedDataValues = Arrays.asList(
         aDataValue()

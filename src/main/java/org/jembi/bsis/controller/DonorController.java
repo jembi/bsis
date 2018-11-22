@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +41,7 @@ import org.jembi.bsis.service.DuplicateDonorService;
 import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.DonorDeferralViewModel;
 import org.jembi.bsis.viewmodel.DonorSummaryViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
@@ -128,7 +129,7 @@ public class DonorController {
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
   public ResponseEntity<Map<String, Object>> donorSummaryGenerator(HttpServletRequest request,
-                                                                   @PathVariable Long id) {
+                                                                   @PathVariable UUID id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
@@ -148,12 +149,13 @@ public class DonorController {
   @RequestMapping(value = "/{id}/overview", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
   public ResponseEntity<Map<String, Object>> viewDonorOverview(HttpServletRequest request,
-                                                               @PathVariable Long id) {
+                                                               @PathVariable UUID id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
     List<Donation> donations = donor.getDonations();
 
+   
     boolean flaggedForCounselling = postDonationCounsellingRepository
         .countFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
 
@@ -169,7 +171,7 @@ public class DonorController {
     map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
     map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
     if (donations.size() > 0) {
-      map.put("lastDonation", donationFactory.createDonationViewModelWithoutPermissions(donations.get(donations.size() - 1)));
+      map.put("lastDonation", donationFactory.createDonationFullViewModelWithoutPermissions(donations.get(donations.size() - 1)));
       map.put("dateOfFirstDonation", CustomDateFormatter.getDateTimeString(donations.get(0).getDonationDate()));
       map.put("totalDonations", getNumberOfDonations(donations));
       map.put("dueToDonate", CustomDateFormatter.getDateTimeString(donor.getDueToDonate()));
@@ -201,7 +203,7 @@ public class DonorController {
   @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONATION + "')")
   public ResponseEntity<Map<String, Object>> viewDonorHistory(HttpServletRequest request,
-                                                              @PathVariable Long id) {
+                                                              @PathVariable UUID id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("allDonations", donorControllerService.findDonationsForDonor(id));
@@ -258,7 +260,7 @@ public class DonorController {
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONOR + "')")
   public ResponseEntity<Map<String, Object>>
-  updateDonor(@Valid @RequestBody DonorBackingForm form, @PathVariable Long id) {
+  updateDonor(@Valid @RequestBody DonorBackingForm form, @PathVariable UUID id) {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
@@ -280,13 +282,13 @@ public class DonorController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONOR + "')")
-  public void deleteDonor(@PathVariable Long id) {
+  public void deleteDonor(@PathVariable UUID id) {
     donorCRUDService.deleteDonor(id);
   }
 
   @RequestMapping(value = "{id}/print", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
-  public Map<String, Object> printDonorLabel(@PathVariable Long id) {
+  public Map<String, Object> printDonorLabel(@PathVariable UUID id) {
 
     String donorNumber = donorRepository.findDonorById(id).getDonorNumber();
 
@@ -308,7 +310,7 @@ public class DonorController {
 
   @RequestMapping(value = "{id}/deferrals", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
-  public Map<String, Object> viewDonorDeferrals(@PathVariable("id") Long donorId) {
+  public Map<String, Object> viewDonorDeferrals(@PathVariable("id") UUID donorId) {
     List<DonorDeferral> donorDeferrals = donorRepository.getDonorDeferrals(donorId);
     Map<String, Object> map = new HashMap<>();
     map.put("allDonorDeferrals", donorDeferralFactory.createDonorDeferralViewModels(donorDeferrals));
@@ -390,8 +392,8 @@ public class DonorController {
 
     // Get all the Donations, process the Test Results and update necessary newDonor and Donation fields
     List<Donation> donations = duplicateDonorService.getAllDonationsToMerge(newDonor, donorNumbers);
-    List<DonationViewModel> donationViewModels = donationFactory
-        .createDonationViewModelsWithoutPermissions(donations);
+    List<DonationFullViewModel> donationFullViewModels = donationFactory
+        .createDonationFullViewModelsWithoutPermissions(donations);
 
     // gather all Deferrals
     List<DonorDeferral> donorDeferrals = duplicateDonorService.getAllDeferralsToMerge(newDonor, donorNumbers);
@@ -402,7 +404,7 @@ public class DonorController {
     form.setContact(newDonor.getContact());
     form.setAddress(newDonor.getAddress());
 
-    map.put("allDonations", donationViewModels);
+    map.put("allDonations", donationFullViewModels);
     map.put("allDeferrals", donorDeferralViewModels);
     map.put("mergedDonor", form);
 
@@ -434,7 +436,7 @@ public class DonorController {
   @RequestMapping(value = "{id}/postdonationcounselling", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING + "')")
   public PostDonationCounsellingViewModel getPostDonationCounsellingForDonor(
-      @PathVariable("id") Long donorId) {
+      @PathVariable("id") UUID donorId) {
 
     PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
         .findPostDonationCounsellingForDonor(donorId);

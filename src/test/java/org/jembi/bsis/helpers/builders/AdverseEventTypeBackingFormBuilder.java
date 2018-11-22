@@ -1,15 +1,17 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.AdverseEventTypeBackingForm;
 
 public class AdverseEventTypeBackingFormBuilder {
 
-  private Long id;
+  private UUID id;
   private String name;
   private String description;
   private boolean deleted;
 
-  public AdverseEventTypeBackingFormBuilder withId(Long id) {
+  public AdverseEventTypeBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

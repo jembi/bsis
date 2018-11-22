@@ -7,6 +7,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
@@ -77,7 +78,7 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
     // Set up data
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination()
         .withComponentType(ComponentTypeBuilder.aComponentType().build())
-        .withSourceComponentType(ComponentTypeBuilder.aComponentType().build())
+        .withSourceComponentType(ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager))
         .buildAndPersist(entityManager);
 
     // Run test
@@ -148,7 +149,8 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
 
   @Test
   public void testVerifyComponentTypeCombinationExistsWithNonExistent_shouldReturnFalse() {
-    boolean exists = componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L);
+    UUID componentTypeCombinationId = UUID.randomUUID();
+    boolean exists = componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId);
     assertThat(exists, is(false));
   }
 

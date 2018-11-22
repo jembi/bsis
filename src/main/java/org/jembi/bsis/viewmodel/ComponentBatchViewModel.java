@@ -1,6 +1,7 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.utils.DateTimeSerialiser;
@@ -9,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class ComponentBatchViewModel {
 
-  private Long id;
+  private UUID id;
   private String status;
   private Date deliveryDate;
   private Location location;
@@ -22,11 +23,11 @@ public class ComponentBatchViewModel {
     super();
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

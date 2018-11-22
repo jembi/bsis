@@ -1,9 +1,10 @@
 package org.jembi.bsis.service;
 
+import java.util.UUID;
+
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.model.donationbatch.DonationBatch;
-import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class DonationBatchConstraintChecker {
   private DonationBatchRepository donationBatchRepository;
 
 
-  public boolean canDeleteDonationBatch(Long donationBatchId) throws NoResultException {
+  public boolean canDeleteDonationBatch(UUID donationBatchId) throws NoResultException {
     DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
     if (donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0) {
@@ -29,7 +30,7 @@ public class DonationBatchConstraintChecker {
     return false;
   }
 
-  public boolean canEditDonationBatch(Long donationBatchId) throws NoResultException {
+  public boolean canEditDonationBatch(UUID donationBatchId) throws NoResultException {
     DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
     if (donationBatch.getIsClosed() || donationBatch.getIsDeleted()) {
@@ -40,7 +41,7 @@ public class DonationBatchConstraintChecker {
     return true;
   }
 
-  public boolean canEditDonationBatchDate(Long donationBatchId) throws NoResultException {
+  public boolean canEditDonationBatchDate(UUID donationBatchId) throws NoResultException {
 
     DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
@@ -52,7 +53,7 @@ public class DonationBatchConstraintChecker {
     return true;
   }
 
-  public boolean canCloseDonationBatch(Long donationBatchId) {
+  public boolean canCloseDonationBatch(UUID donationBatchId) {
     DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
     if (donationBatch.getIsClosed()) {
@@ -68,17 +69,11 @@ public class DonationBatchConstraintChecker {
     return true;
   }
 
-  public boolean canReopenDonationBatch(Long donationBatchId) {
+  public boolean canReopenDonationBatch(UUID donationBatchId) {
     DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
     if (!donationBatch.getIsClosed()) {
       // can't reopen if it's not closed already
-      return false;
-    }
-
-    TestBatch testBatch = donationBatch.getTestBatch();
-    if (testBatch != null) {
-      // can't re-open a donation batch if it has a test batch
       return false;
     }
 

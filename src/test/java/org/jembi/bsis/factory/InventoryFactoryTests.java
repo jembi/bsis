@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
@@ -25,10 +26,10 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.repository.OrderFormRepository;
+import org.jembi.bsis.service.ComponentStatusCalculator;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 import org.jembi.bsis.viewmodel.InventoryViewModel;
-import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
 import org.joda.time.DateTime;
@@ -57,30 +58,42 @@ public class InventoryFactoryTests {
   @Mock
   private OrderFormFactory orderFormFactory;
 
+  @Mock
+  private ComponentStatusCalculator componentStatusCalculator;
+
+
+  private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
+
   @Test
   public void testCreateInventoryViewModel_shouldReturnViewModelWithTheCorrectStateAndNoExpiryStatus() {
 
     // Setup
     Date createdOn = new Date();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    Date expiresOn = new DateTime().minusDays(2).toDate();
+    ComponentType aComponentType = aComponentType().withId(componentTypeId).build();
     Component component = aComponent()
         .withComponentType(aComponentType)
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
-        .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
+        .withLocation(LocationBuilder.aDistributionSite().withId(locationId).build())
         .withCreatedOn(createdOn)
         .withStatus(ComponentStatus.ISSUED)
+        .withExpiresOn(expiresOn)
         .build();   
     
     // Setup mocks
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
 
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
-    
+    when(componentStatusCalculator.getDaysToExpire(component)).thenReturn(-1);
+
     InventoryViewModel expectedInventoryViewModel =
         anInventoryViewModel()
           .withLocation(locationViewModel)
@@ -90,7 +103,8 @@ public class InventoryFactoryTests {
           .withComponentCode(component.getComponentCode())
           .withCreatedOn(createdOn)
           .withComponentType(componentTypeViewModel)
-          .withExpiryStatus("")
+          .withExpiresOn(expiresOn)
+          .withDaysToExpire(-1)
           .withBloodGroup("A+")
           .withComponentStatus(ComponentStatus.ISSUED)
           .build();
@@ -134,22 +148,26 @@ public class InventoryFactoryTests {
 
     // Setup
     Date createdOn = new Date();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    Date expiresOn = new DateTime().minusDays(2).toDate();
+    ComponentType aComponentType = aComponentType().withId(componentTypeId).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withComponentType(aComponentType)
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
-        .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
+        .withLocation(LocationBuilder.aDistributionSite().withId(locationId).build())
         .withCreatedOn(createdOn)
         .withStatus(ComponentStatus.ISSUED)
+        .withExpiresOn(expiresOn)
         .build();
 
     // Setup mocks
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
 
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
 
     OrderForm orderForm = anOrderForm().withComponents(Arrays.asList(component)).build();
     List<OrderForm> orderForms = Arrays.asList(orderForm);
@@ -165,7 +183,8 @@ public class InventoryFactoryTests {
             .withComponentCode(component.getComponentCode())
             .withCreatedOn(createdOn)
             .withComponentType(componentTypeViewModel)
-            .withExpiryStatus("")
+            .withExpiresOn(expiresOn)
+            .withDaysToExpire(-1)
             .withBloodGroup("A+")
             .withOrderForms(orderFormViewModels)
             .withComponentStatus(ComponentStatus.ISSUED)
@@ -176,6 +195,7 @@ public class InventoryFactoryTests {
         .thenReturn(componentTypeViewModel);
     when(orderFormRepository.findByComponent(component.getId())).thenReturn(orderForms);
     when(orderFormFactory.createViewModels(orderForms)).thenReturn(orderFormViewModels);
+    when(componentStatusCalculator.getDaysToExpire(component)).thenReturn(-1);
 
     // Run test
     InventoryFullViewModel createdFullViewModel = inventoryFactory.createFullViewModel(component);
@@ -189,20 +209,22 @@ public class InventoryFactoryTests {
 
     // Setup
     Date createdOn = new Date();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentType aComponentType = aComponentType().withId(componentTypeId).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withComponentType(aComponentType)
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
-        .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
+        .withLocation(LocationBuilder.aDistributionSite().withId(locationId).build())
         .withCreatedOn(createdOn)
         .withStatus(ComponentStatus.ISSUED)
         .build();
 
     // Setup mocks
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
 
     InventoryFullViewModel expectedFullViewModel =
@@ -214,7 +236,7 @@ public class InventoryFactoryTests {
             .withComponentCode(component.getComponentCode())
             .withCreatedOn(createdOn)
             .withComponentType(componentTypeViewModel)
-            .withExpiryStatus("")
+            .withDaysToExpire(-1)
             .withOrderForms(new ArrayList<OrderFormViewModel>())
             .withBloodGroup("A+")
             .withComponentStatus(ComponentStatus.ISSUED)
@@ -224,6 +246,7 @@ public class InventoryFactoryTests {
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
     when(orderFormRepository.findByComponent(component.getId())).thenReturn(new ArrayList<OrderForm>());
+    when(componentStatusCalculator.getDaysToExpire(component)).thenReturn(-1);
 
     // Run test
     InventoryFullViewModel createdFullViewModel = inventoryFactory.createFullViewModel(component);
@@ -232,14 +255,15 @@ public class InventoryFactoryTests {
     assertThat(createdFullViewModel, hasSameStateAsInventoryFullViewModel(expectedFullViewModel));
   }
 
+  @Test
   public void testCreateFullViewModels_shouldCreateFullViewModels() {
 
     // Setup
     Component component1 = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .build();
     Component component2 = aComponent()
-        .withId(2L)
+        .withId(COMPONENT_ID_2)
         .build();
 
     // Run test
@@ -261,48 +285,26 @@ public class InventoryFactoryTests {
   }
 
   @Test
-  public void testExpiryStatusWithNoExpiryDate_shouldBeEmpty() {
-
-    // Setup
-    Component component = aComponent()
-        .withDonation(DonationBuilder.aDonation().build())
-        .withExpiresOn(null).build();
-
-    // Setup mocks
-    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
-    when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
-    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .build();
-    when(componentTypeFactory.createViewModel(component.getComponentType()))
-        .thenReturn(componentTypeViewModel);
-    
-    // Run test
-    InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
-
-    // Verify
-    Assert.assertEquals("correct expiry status", "", viewModel.getExpiryStatus());
-
-  }
-
-  @Test
   public void testExpiryStatusWithFutureExpiryDate_shouldReturnDaysUntilExpiry() {
     // Setup
     Date expiresOn = new DateTime().plusHours(99).toDate();
     Component component = aComponent().withExpiresOn(expiresOn).withStatus(ComponentStatus.ISSUED).build();
 
     // Setup mocks
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
-    
+    when(componentStatusCalculator.getDaysToExpire(component)).thenReturn(4);
+
     InventoryViewModel expectedInventoryViewModel =
         anInventoryViewModel()
           .withInventoryStatus(component.getInventoryStatus())
           .withExpiresOn(expiresOn)
-          .withExpiryStatus("4 days to expire")
+          .withDaysToExpire(4)
           .withComponentType(componentTypeViewModel)
           .withLocation(locationViewModel)
           .withBloodGroup("")
@@ -323,18 +325,20 @@ public class InventoryFactoryTests {
     Component component = aComponent().withExpiresOn(expiresOn).withStatus(ComponentStatus.ISSUED).build();
 
     // Setup mocks.
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
-    
+    when(componentStatusCalculator.getDaysToExpire(component)).thenReturn(-1);
+
     InventoryViewModel expectedInventoryViewModel =
         anInventoryViewModel()
           .withInventoryStatus(component.getInventoryStatus())
           .withExpiresOn(expiresOn)
-          .withExpiryStatus("Already expired")
+          .withDaysToExpire(-1)
           .withComponentType(componentTypeViewModel)
           .withLocation(locationViewModel)
           .withBloodGroup("")

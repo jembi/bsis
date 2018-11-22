@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -114,7 +115,7 @@ public class ComponentController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
-  public Map<String, Object> componentSummaryGenerator(@PathVariable Long id) {
+  public Map<String, Object> componentSummaryGenerator(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", componentControllerService.getComponentTypes());
     map.put("component", componentControllerService.findComponentById(id));
@@ -139,11 +140,11 @@ public class ComponentController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
   public Map<String, Object> findComponentPagination(HttpServletRequest request,
       @RequestParam(value = "donationIdentificationNumber", required = false, defaultValue = "") String donationIdentificationNumber,
-      @RequestParam(value = "componentTypes", required = false) List<Long> componentTypeIds,
+      @RequestParam(value = "componentTypes", required = false) List<UUID> componentTypeIds,
       @RequestParam(value = "status", required = false) ComponentStatus status,
       @RequestParam(value = "donationDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateFrom,
       @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo,
-      @RequestParam(value = "locationId", required = false) Long locationId) {
+      @RequestParam(value = "locationId", required = false) UUID locationId) {
 
     List<ComponentViewModel> components;
     
@@ -184,7 +185,7 @@ public class ComponentController {
   @RequestMapping(value = "{id}/preprocess ", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> preProcessComponent(
-      @PathVariable("id") long componentId,
+      @PathVariable("id") UUID componentId,
       @RequestBody @Valid ComponentPreProcessingBackingForm componentPreProcessingBackingForm) {
 
     componentPreProcessingBackingForm.setId(componentId); // Use the id parameter from the path
@@ -197,7 +198,7 @@ public class ComponentController {
   @RequestMapping(value = "{id}/unprocess", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> unprocessComponent(
-      @PathVariable("id") Long componentId) {
+      @PathVariable("id") UUID componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("component", componentControllerService.unprocessComponent(componentId));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -205,7 +206,7 @@ public class ComponentController {
 
   @RequestMapping(value = "{id}/recordchildweight ", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> recordChildWeight(@PathVariable("id") long componentId,
+  public ResponseEntity<Map<String, Object>> recordChildWeight(@PathVariable("id") UUID componentId,
       @RequestBody @Valid ComponentBackingForm componentBackingForm) {
 
     componentBackingForm.setId(componentId); // Use the id parameter from the path

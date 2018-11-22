@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.user.User;
 
@@ -8,17 +9,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RecordComponentBackingForm {
 
-  private Long parentComponentId;
+  private UUID parentComponentId;
 
   private ComponentTypeCombinationBackingForm componentTypeCombination;
 
   private Date processedOn;
 
-  public Long getParentComponentId() {
+  public UUID getParentComponentId() {
     return parentComponentId;
   }
 
-  public void setParentComponentId(Long parentComponentId) {
+  public void setParentComponentId(UUID parentComponentId) {
     this.parentComponentId = parentComponentId;
   }
 

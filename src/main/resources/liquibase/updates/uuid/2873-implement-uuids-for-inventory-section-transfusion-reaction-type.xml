@@ -1,0 +1,143 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170328-1516"  author="jmuzinda">
+	<comment>Migrate the TransfusionReactionType table from an integer id primary key
+	to a UUID of type BINARY(16). </comment>
+	
+    <dropForeignKeyConstraint baseTableName="Transfusion" constraintName="fk_Transfusion_transfusionReactionType"/>
+
+    <addColumn tableName="TransfusionReactionType">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="TransfusionReactionType_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Transfusion">
+      <column name="transfusionReactionType_id_temp" type="BIGINT" afterColumn="transfusionReactionType_id"/>
+    </addColumn>
+
+    <addColumn tableName="Transfusion_AUD">
+      <column name="transfusionReactionType_id_temp" type="BIGINT" afterColumn="transfusionReactionType_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE TransfusionReactionType 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="transfusionreactiontype_id_temp_index" tableName="TransfusionReactionType" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE TransfusionReactionType_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD 
+      SET transfusionReactionType_id_temp = transfusionReactionType_id;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion 
+      SET transfusionReactionType_id_temp = transfusionReactionType_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="TransfusionReactionType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="TransfusionReactionType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="TransfusionReactionType_AUD"/>
+
+    <modifyDataType columnName="transfusionReactionType_id" newDataType="BINARY(16)" tableName="Transfusion"/>
+
+    <modifyDataType columnName="transfusionReactionType_id" newDataType="BINARY(16)" tableName="Transfusion_AUD"/>
+
+    <sql>
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c0e34e8826e4a471449260") WHERE id_temp = 1;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c0e98d8826e4a471449260") WHERE id_temp = 2;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c0ed5b8826e4a471449260") WHERE id_temp = 3;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c0f0cc8826e4a471449260") WHERE id_temp = 4;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c0f4208826e4a471449260") WHERE id_temp = 5;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c0f7678826e4a471449260") WHERE id_temp = 6;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c0faa28826e4a471449260") WHERE id_temp = 7;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c0fdbe8826e4a471449260") WHERE id_temp = 8;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c100e88826e4a471449260") WHERE id_temp = 9;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c1041c8826e4a471449260") WHERE id_temp = 10;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c107418826e4a471449260") WHERE id_temp = 11;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c10a6a8826e4a471449260") WHERE id_temp = 12;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c10d898826e4a471449260") WHERE id_temp = 13;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c110af8826e4a471449260") WHERE id_temp = 14;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c113d88826e4a471449260") WHERE id_temp = 15;
+      UPDATE TransfusionReactionType SET id = UNHEX("11e868b048c117008826e4a471449260") WHERE id_temp = 16;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE TransfusionReactionType ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE TransfusionReactionType_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE TransfusionReactionType_AUD AS updateTable
+        LEFT JOIN TransfusionReactionType AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE TransfusionReactionType_AUD
+      FROM TransfusionReactionType_AUD
+        LEFT JOIN TransfusionReactionType AS joinTable ON (TransfusionReactionType_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE Transfusion AS updateTable
+        LEFT JOIN TransfusionReactionType AS joinedTable ON (updateTable.transfusionReactionType_id_temp = joinedTable.id_temp)
+      SET updateTable.transfusionReactionType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD AS updateTable
+        LEFT JOIN TransfusionReactionType AS joinedTable ON (updateTable.transfusionReactionType_id_temp = joinedTable.id_temp)
+      SET updateTable.transfusionReactionType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="TransfusionReactionType"/>
+
+    <dropColumn columnName="id_temp" tableName="TransfusionReactionType_AUD"/>
+
+    <dropColumn columnName="transfusionReactionType_id_temp" tableName="Transfusion"/>
+
+    <dropColumn columnName="transfusionReactionType_id_temp" tableName="Transfusion_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="transfusionReactionType_id" baseTableName="Transfusion" constraintName="fk_Transfusion_transfusionReactionType"
+      referencedColumnNames="id" referencedTableName="TransfusionReactionType"/>
+  
+  </changeSet>
+</databaseChangeLog>

@@ -1,9 +1,11 @@
 package org.jembi.bsis.backingform;
 
 
+import java.util.UUID;
+
 public class OrderFormItemBackingForm {
 
-  private Long id;
+  private UUID id;
   
   private ComponentTypeBackingForm componentType;
   
@@ -11,11 +13,11 @@ public class OrderFormItemBackingForm {
   
   private int numberOfUnits;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

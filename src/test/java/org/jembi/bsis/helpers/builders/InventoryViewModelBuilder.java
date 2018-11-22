@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -10,19 +11,19 @@ import org.jembi.bsis.viewmodel.LocationViewModel;
 
 public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewModel> {
 
-  private Long id;
+  private UUID id;
   private ComponentTypeViewModel componentType;
   private Date createdOn;
   private String donationIdentificationNumber;
   private InventoryStatus inventoryStatus;
-  private String expiryStatus;
+  private int daysToExpire;
   private String componentCode;
   private Date expiresOn;
   private LocationViewModel location;
   private String bloodGroup;
   private ComponentStatus componentStatus;
 
-  public InventoryViewModelBuilder withId(Long id) {
+  public InventoryViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
@@ -47,8 +48,8 @@ public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewMode
     return this;
   }
 
-  public InventoryViewModelBuilder withExpiryStatus(String expiryStatus) {
-    this.expiryStatus = expiryStatus;
+  public InventoryViewModelBuilder withDaysToExpire(int daysToExpire) {
+    this.daysToExpire = daysToExpire;
     return this;
   }
 
@@ -86,7 +87,7 @@ public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewMode
     viewModel.setCreatedOn(createdOn);
     viewModel.setDonationIdentificationNumber(donationIdentificationNumber);
     viewModel.setComponentCode(componentCode);
-    viewModel.setExpiryStatus(expiryStatus);
+    viewModel.setDaysToExpire(daysToExpire);
     viewModel.setExpiresOn(expiresOn);
     viewModel.setLocation(location);
     viewModel.setBloodGroup(bloodGroup);

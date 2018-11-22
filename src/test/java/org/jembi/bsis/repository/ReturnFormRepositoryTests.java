@@ -8,6 +8,7 @@ import static org.jembi.bsis.helpers.builders.ReturnFormBuilder.aReturnForm;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
@@ -64,7 +65,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindById_shouldThrowException() throws Exception {
-    returnFormRepository.findById(123L);
+    returnFormRepository.findById(UUID.randomUUID());
   }
   
   public void testFindReturnForms_shouldReturnReturnFormsInDateRange() throws Exception {

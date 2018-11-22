@@ -1,9 +1,11 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
-public class BloodTestingRuleViewModel extends BaseViewModel {
+public class BloodTestingRuleViewModel extends BaseViewModel<UUID> {
 
   private String testNameShort;
   private DonationField donationFieldChanged;

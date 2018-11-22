@@ -1,0 +1,312 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170419-1500"  author="rowanpi">
+    <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Component_ComponentType"/>
+    <dropForeignKeyConstraint baseTableName="ComponentType" constraintName="fk_ComponentType_ComponentType"/>
+    <dropForeignKeyConstraint baseTableName="ComponentTypeCombination_ComponentType" constraintName="fk_ComponentTypeCombination_ComponentType_ComponentType"/>
+    <dropForeignKeyConstraint baseTableName="ComponentType_ComponentTypeCombination" constraintName="fk_ComponentType_ComponentTypeCombination_ComponentType"/>
+    <dropForeignKeyConstraint baseTableName="OrderFormItem" constraintName="fk_OrderFormItem_componentType"/>
+    <dropForeignKeyConstraint baseTableName="PackType" constraintName="fk_packType_componentType"/>
+
+    <addColumn tableName="ComponentType">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentType_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Component">
+      <column name="componentType_id_temp" type="BIGINT" afterColumn="componentType_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentType">
+      <column name="pediComponentType_id_temp" type="BIGINT" afterColumn="pediComponentType_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypes_id_temp" type="BIGINT" afterColumn="componentTypes_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id_temp" type="BIGINT" afterColumn="sourceComponentTypes_id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderFormItem">
+      <column name="componentType_id_temp" type="BIGINT" afterColumn="componentType_id"/>
+    </addColumn>
+
+    <addColumn tableName="PackType">
+      <column name="componentType_id_temp" type="BIGINT" afterColumn="componentType_id"/>
+    </addColumn>
+
+    <addColumn tableName="Component_AUD">
+      <column name="componentType_id_temp" type="BIGINT" afterColumn="componentType_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentType_AUD">
+      <column name="pediComponentType_id_temp" type="BIGINT" afterColumn="pediComponentType_id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderFormItem_AUD">
+      <column name="componentType_id_temp" type="BIGINT" afterColumn="componentType_id"/>
+    </addColumn>
+
+    <addColumn tableName="PackType_AUD">
+      <column name="componentType_id_temp" type="BIGINT" afterColumn="componentType_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE ComponentType 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="componenttype_id_temp_index" tableName="ComponentType" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE ComponentType_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD 
+      SET componentType_id_temp = componentType_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_AUD 
+      SET pediComponentType_id_temp = pediComponentType_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderFormItem_AUD 
+      SET componentType_id_temp = componentType_id;
+    </sql>
+
+    <sql>
+      UPDATE PackType_AUD 
+      SET componentType_id_temp = componentType_id;
+    </sql>
+
+    <sql>
+      UPDATE Component 
+      SET componentType_id_temp = componentType_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentType 
+      SET pediComponentType_id_temp = pediComponentType_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination_ComponentType 
+      SET componentTypes_id_temp = componentTypes_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_ComponentTypeCombination 
+      SET sourceComponentTypes_id_temp = sourceComponentTypes_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderFormItem 
+      SET componentType_id_temp = componentType_id;
+    </sql>
+
+    <sql>
+      UPDATE PackType 
+      SET componentType_id_temp = componentType_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="ComponentType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentType_AUD"/>
+
+    <modifyDataType columnName="componentType_id" newDataType="BINARY(16)" tableName="Component"/>
+    <modifyDataType columnName="pediComponentType_id" newDataType="BINARY(16)" tableName="ComponentType"/>
+    <modifyDataType columnName="componentTypes_id" newDataType="BINARY(16)" tableName="ComponentTypeCombination_ComponentType"/>
+    <modifyDataType columnName="sourceComponentTypes_id" newDataType="BINARY(16)" tableName="ComponentType_ComponentTypeCombination"/>
+    <modifyDataType columnName="componentType_id" newDataType="BINARY(16)" tableName="OrderFormItem"/>
+    <modifyDataType columnName="componentType_id" newDataType="BINARY(16)" tableName="PackType"/>
+
+    <modifyDataType columnName="componentType_id" newDataType="BINARY(16)" tableName="Component_AUD"/>
+    <modifyDataType columnName="pediComponentType_id" newDataType="BINARY(16)" tableName="ComponentType_AUD"/>
+    <modifyDataType columnName="componentType_id" newDataType="BINARY(16)" tableName="OrderFormItem_AUD"/>
+    <modifyDataType columnName="componentType_id" newDataType="BINARY(16)" tableName="PackType_AUD"/>
+
+    <sql>
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d38d98826e4a471449260") WHERE id_temp = 1;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d4cfa8826e4a471449260") WHERE id_temp = 2;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d599e8826e4a471449260") WHERE id_temp = 3;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d66778826e4a471449260") WHERE id_temp = 4;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f19428826e4a471449260") WHERE id_temp = 5;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f2ca48826e4a471449260") WHERE id_temp = 6;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f3d5b8826e4a471449260") WHERE id_temp = 7;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f4ff58826e4a471449260") WHERE id_temp = 8;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f5c148826e4a471449260") WHERE id_temp = 9;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f67828826e4a471449260") WHERE id_temp = 10;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f73028826e4a471449260") WHERE id_temp = 11;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f7f2d8826e4a471449260") WHERE id_temp = 12;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f8a3b8826e4a471449260") WHERE id_temp = 13;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f95858826e4a471449260") WHERE id_temp = 14;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7fa0c38826e4a471449260") WHERE id_temp = 15;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7fabcf8826e4a471449260") WHERE id_temp = 16;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ComponentType ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ComponentType_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_AUD AS updateTable
+        LEFT JOIN ComponentType AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE ComponentType_AUD
+      FROM ComponentType_AUD
+        LEFT JOIN ComponentType AS joinTable ON (ComponentType_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE Component AS updateTable
+        LEFT JOIN ComponentType AS joinedTable ON (updateTable.componentType_id_temp = joinedTable.id_temp)
+      SET updateTable.componentType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentType AS updateTable
+        LEFT JOIN ComponentType AS joinedTable ON (updateTable.pediComponentType_id_temp = joinedTable.id_temp)
+      SET updateTable.pediComponentType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination_ComponentType AS updateTable
+        LEFT JOIN ComponentType AS joinedTable ON (updateTable.componentTypes_id_temp = joinedTable.id_temp)
+      SET updateTable.componentTypes_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_ComponentTypeCombination AS updateTable
+        LEFT JOIN ComponentType AS joinedTable ON (updateTable.sourceComponentTypes_id_temp = joinedTable.id_temp)
+      SET updateTable.sourceComponentTypes_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderFormItem AS updateTable
+        LEFT JOIN ComponentType AS joinedTable ON (updateTable.componentType_id_temp = joinedTable.id_temp)
+      SET updateTable.componentType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PackType AS updateTable
+        LEFT JOIN ComponentType AS joinedTable ON (updateTable.componentType_id_temp = joinedTable.id_temp)
+      SET updateTable.componentType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD AS updateTable
+        LEFT JOIN ComponentType AS joinedTable ON (updateTable.componentType_id_temp = joinedTable.id_temp)
+      SET updateTable.componentType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_AUD AS updateTable
+        LEFT JOIN ComponentType AS joinedTable ON (updateTable.pediComponentType_id_temp = joinedTable.id_temp)
+      SET updateTable.pediComponentType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderFormItem_AUD AS updateTable
+        LEFT JOIN ComponentType AS joinedTable ON (updateTable.componentType_id_temp = joinedTable.id_temp)
+      SET updateTable.componentType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PackType_AUD AS updateTable
+        LEFT JOIN ComponentType AS joinedTable ON (updateTable.componentType_id_temp = joinedTable.id_temp)
+      SET updateTable.componentType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="ComponentType"/>
+
+    <dropColumn columnName="id_temp" tableName="ComponentType_AUD"/>
+
+    <dropColumn columnName="componentType_id_temp" tableName="Component"/>
+
+    <dropColumn columnName="pediComponentType_id_temp" tableName="ComponentType"/>
+
+    <dropColumn columnName="componentTypes_id_temp" tableName="ComponentTypeCombination_ComponentType"/>
+
+    <dropColumn columnName="sourceComponentTypes_id_temp" tableName="ComponentType_ComponentTypeCombination"/>
+
+    <dropColumn columnName="componentType_id_temp" tableName="OrderFormItem"/>
+
+    <dropColumn columnName="componentType_id_temp" tableName="PackType"/>
+
+    <dropColumn columnName="componentType_id_temp" tableName="Component_AUD"/>
+
+    <dropColumn columnName="pediComponentType_id_temp" tableName="ComponentType_AUD"/>
+
+    <dropColumn columnName="componentType_id_temp" tableName="OrderFormItem_AUD"/>
+
+    <dropColumn columnName="componentType_id_temp" tableName="PackType_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="componentType_id" baseTableName="Component" constraintName="fk_Component_ComponentType"
+      referencedColumnNames="id" referencedTableName="ComponentType"/>
+
+    <addForeignKeyConstraint baseColumnNames="pediComponentType_id" baseTableName="ComponentType" constraintName="fk_ComponentType_ComponentType"
+      referencedColumnNames="id" referencedTableName="ComponentType"/>
+
+    <addForeignKeyConstraint baseColumnNames="componentTypes_id" baseTableName="ComponentTypeCombination_ComponentType" constraintName="fk_ComponentTypeCombination_ComponentType_ComponentType"
+      referencedColumnNames="id" referencedTableName="ComponentType"/>
+
+    <addForeignKeyConstraint baseColumnNames="sourceComponentTypes_id" baseTableName="ComponentType_ComponentTypeCombination" constraintName="fk_ComponentType_ComponentTypeCombination_ComponentType"
+      referencedColumnNames="id" referencedTableName="ComponentType"/>
+
+    <addForeignKeyConstraint baseColumnNames="componentType_id" baseTableName="OrderFormItem" constraintName="fk_OrderFormItem_componentType"
+      referencedColumnNames="id" referencedTableName="ComponentType"/>
+
+    <addForeignKeyConstraint baseColumnNames="componentType_id" baseTableName="PackType" constraintName="fk_packType_componentType"
+      referencedColumnNames="id" referencedTableName="ComponentType"/>
+
+  </changeSet>
+</databaseChangeLog>

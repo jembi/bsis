@@ -3,7 +3,10 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet id="20170217-1139" author="jmuzinda">
+	<changeSet id="20170320-1334" author="jmuzinda">
+	    <preConditions onFail="MARK_RAN">
+		    <not><tableExists tableName="Transfusion" /></not>
+		</preConditions>
 		<!-- Add Transfusion and Transfusion_AUD tables  -->
 		<createTable tableName="Transfusion">
 			<column name="id" type="BIGINT(20)" autoIncrement="true">
@@ -34,13 +37,13 @@
 			<column name="isDeleted" type="tinyint(1)" defaultValue="false">
 				<constraints nullable="false" />
 			</column>
-			<column name="createdDate" type="TIMESTAMP">
+			<column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
 				<constraints nullable="false" />
 			</column>
 			<column name="createdBy_id" type="BIGINT(20)">
 				<constraints foreignKeyName="fk_Transfusion_createdBy" references="User(id)" nullable="false" />
 			</column>
-			<column name="lastUpdated" type="TIMESTAMP">
+			<column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
 				<constraints nullable="false" />
 			</column>
 			<column name="lastUpdatedBy_id" type="BIGINT(20)">
@@ -65,12 +68,13 @@
 			<column name="dateTransfused" type="DATE" />
 			<column name="notes" type="LONGTEXT" />
 			<column name="isDeleted" type="tinyint(1)"/>
-			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
 			<column name="createdBy_id" type="BIGINT(20)" />
-			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
 			<column name="lastUpdatedBy_id" type="BIGINT(20)" />
         </createTable>
   </changeSet>
+
   <changeSet id="20170220-1457" author="tumijacob">
     <!-- Add Add, Edit, View and Void Transfusion permissions-->
       <insert tableName="Permission">

@@ -1,0 +1,172 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170330-1608"  author="tumijacob">
+    <comment>This change set migrates the Donor table from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+        
+    <dropForeignKeyConstraint baseTableName="Donation" constraintName="FKF0658A3359FAB30D"/>
+    <dropForeignKeyConstraint baseTableName="DonorDeferral" constraintName="FKC7E323D193E6BEC"/>
+
+    <addColumn tableName="Donor">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Donation">
+      <column name="donor_id_temp" type="BIGINT" afterColumn="donor_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonorDeferral">
+      <column name="deferredDonor_id_temp" type="BIGINT" afterColumn="deferredDonor_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donation_AUD">
+      <column name="donor_id_temp" type="BIGINT" afterColumn="donor_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonorDeferral_AUD">
+      <column name="deferredDonor_id_temp" type="BIGINT" afterColumn="deferredDonor_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE Donor 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="donor_id_temp_index" tableName="Donor" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD 
+      SET donor_id_temp = donor_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD 
+      SET deferredDonor_id_temp = deferredDonor_id;
+    </sql>
+
+    <sql>
+      UPDATE Donation 
+      SET donor_id_temp = donor_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral 
+      SET deferredDonor_id_temp = deferredDonor_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="Donor"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Donor"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
+
+    <modifyDataType columnName="donor_id" newDataType="BINARY(16)" tableName="Donation"/>
+    <modifyDataType columnName="deferredDonor_id" newDataType="BINARY(16)" tableName="DonorDeferral"/>
+
+    <modifyDataType columnName="donor_id" newDataType="BINARY(16)" tableName="Donation_AUD"/>
+    <modifyDataType columnName="deferredDonor_id" newDataType="BINARY(16)" tableName="DonorDeferral_AUD"/>
+
+    <sql>
+      UPDATE Donor 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Donor ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Donor_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+        LEFT JOIN Donor AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE Donor_AUD
+      FROM Donor_AUD
+        LEFT JOIN Donor AS joinTable ON (Donor_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE Donation AS updateTable
+        LEFT JOIN Donor AS joinedTable ON (updateTable.donor_id_temp = joinedTable.id_temp)
+      SET updateTable.donor_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral AS updateTable
+        LEFT JOIN Donor AS joinedTable ON (updateTable.deferredDonor_id_temp = joinedTable.id_temp)
+      SET updateTable.deferredDonor_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD AS updateTable
+        LEFT JOIN Donor AS joinedTable ON (updateTable.donor_id_temp = joinedTable.id_temp)
+      SET updateTable.donor_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD AS updateTable
+        LEFT JOIN Donor AS joinedTable ON (updateTable.deferredDonor_id_temp = joinedTable.id_temp)
+      SET updateTable.deferredDonor_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="Donor"/>
+
+    <dropColumn columnName="id_temp" tableName="Donor_AUD"/>
+
+    <dropColumn columnName="donor_id_temp" tableName="Donation"/>
+
+    <dropColumn columnName="deferredDonor_id_temp" tableName="DonorDeferral"/>
+
+    <dropColumn columnName="donor_id_temp" tableName="Donation_AUD"/>
+
+    <dropColumn columnName="deferredDonor_id_temp" tableName="DonorDeferral_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="donor_id" baseTableName="Donation" constraintName="FKF0658A3359FAB30D"
+      referencedColumnNames="id" referencedTableName="Donor"/>
+
+    <addForeignKeyConstraint baseColumnNames="deferredDonor_id" baseTableName="DonorDeferral" constraintName="fk_Donor_DonorDeferral_deferredDonor_id"
+      referencedColumnNames="id" referencedTableName="Donor"/>
+
+  </changeSet>
+</databaseChangeLog>

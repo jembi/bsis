@@ -1,21 +1,5 @@
 package org.jembi.bsis.controllerservice;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.ComponentPreProcessingBackingFormBuilder.aComponentBackingForm;
-import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
-import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBackingFormBuilder.aComponentTypeCombinationBackingForm;
-import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.factory.ComponentFactory;
@@ -23,9 +7,7 @@ import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
-import org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
-import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
@@ -43,7 +25,24 @@ import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentPreProcessingBackingFormBuilder.aComponentBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBackingFormBuilder.aComponentTypeCombinationBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ComponentControllerServiceTests extends UnitTestSuite {
   
@@ -64,92 +63,96 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
   @Mock
   private ComponentStatusChangeReasonFactory componentStatusChangeReasonFactory;
+  
+  private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
 
   @Test
-  public void testFindComponentById_shouldCallRepositoryAndFactory() throws Exception {
+  public void testFindComponentById_shouldCallRepositoryAndFactory() {
     // setup data
-    Long componentId = 1L;
-    Component component = ComponentBuilder.aComponent().withId(componentId).build();
+    Component component = ComponentBuilder.aComponent().withId(COMPONENT_ID_1).build();
     ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().build();
     
     // setup mocks
-    Mockito.when(componentRepository.findComponentById(componentId)).thenReturn(component);
-    Mockito.when(componentFactory.createComponentFullViewModel(component)).thenReturn(componentFullViewModel);
+    when(componentRepository.findComponentById(COMPONENT_ID_1)).thenReturn(component);
+    when(componentFactory.createComponentFullViewModel(component)).thenReturn(componentFullViewModel);
     
     // SUT
-    componentControllerService.findComponentById(1L);
+    componentControllerService.findComponentById(COMPONENT_ID_1);
     
     // verify
-    Mockito.verify(componentRepository).findComponentById(componentId);
-    Mockito.verify(componentFactory).createComponentFullViewModel(component);
+    verify(componentRepository).findComponentById(COMPONENT_ID_1);
+    verify(componentFactory).createComponentFullViewModel(component);
   }
   
   @Test
-  public void testFindComponentByCodeAndDIN_shouldCallRepositoryAndFactory() throws Exception {
+  public void testFindComponentByCodeAndDIN_shouldCallRepositoryAndFactory() {
     // setup data
-    Long componentId = 1L;
     String componentCode = "1234-01";
     String donationIdentificationNumber = "1234567";
-    Component component = ComponentBuilder.aComponent().withId(componentId).build();
+    Component component = ComponentBuilder.aComponent().withId(COMPONENT_ID_1).build();
     ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().build();
     
     // setup mocks
-    Mockito.when(componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber)).thenReturn(component);
-    Mockito.when(componentFactory.createComponentFullViewModel(component)).thenReturn(componentFullViewModel);
+    when(componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber))
+        .thenReturn(component);
+    when(componentFactory.createComponentFullViewModel(component)).thenReturn(componentFullViewModel);
     
     // SUT
     componentControllerService.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
     
     // verify
-    Mockito.verify(componentRepository).findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
-    Mockito.verify(componentFactory).createComponentFullViewModel(component);
+    verify(componentRepository).findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
+    verify(componentFactory).createComponentFullViewModel(component);
   }
   
   @Test
-  public void testFindManagementComponentsByDonationIdentificationNumber_shouldCallRepositoryAndFactory() throws Exception {
+  public void testFindManagementComponentsByDonationIdentificationNumber_shouldCallRepositoryAndFactory() {
     // setup data
     String donationIdentificationNumber = "1234567";
+    
     List<Component> components = Arrays.asList(
-        ComponentBuilder.aComponent().withId(1L).build(),
-        ComponentBuilder.aComponent().withId(2L).build()
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_1).build(),
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_2).build()
     );
     List<ComponentManagementViewModel> componentViewModels = Arrays.asList(
-        ComponentManagementViewModelBuilder.aComponentManagementViewModel().build(),
-        ComponentManagementViewModelBuilder.aComponentManagementViewModel().build()
-    );
+        ComponentManagementViewModel.builder().build(),
+        ComponentManagementViewModel.builder().build());
     
     // setup mocks
-    Mockito.when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
-    Mockito.when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
+    when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber))
+        .thenReturn(components);
+    when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.findManagementComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     
     // verify
-    Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    Mockito.verify(componentFactory).createManagementViewModels(components);
+    verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    verify(componentFactory).createManagementViewModels(components);
   }
   
   @Test
-  public void testFindComponentsByDonationIdentificationNumber_shouldCallRepositoryAndFactory() throws Exception {
+  public void testFindComponentsByDonationIdentificationNumber_shouldCallRepositoryAndFactory() {
     // setup data
     String donationIdentificationNumber = "1234567";
     List<Component> components = Arrays.asList(
-        aComponent().withId(1L).build(),
-        aComponent().withId(2L).build()
+        aComponent().withId(COMPONENT_ID_1).build(),
+        aComponent().withId(COMPONENT_ID_2).build()
     );
     List<ComponentViewModel> componentViewModels = Arrays.asList(
-        aComponentViewModel().withId(1L).build(), 
-        aComponentViewModel().withId(2L).build()
+        aComponentViewModel().withId(COMPONENT_ID_1).build(), 
+        aComponentViewModel().withId(COMPONENT_ID_2).build()
     );
     
     // setup mocks
-    when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
+    when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber))
+        .thenReturn(components);
     when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
-    List<ComponentViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumber(
-        donationIdentificationNumber);
+    List<ComponentViewModel> returnedViewModels = componentControllerService
+        .findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     
     // verify
     verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
@@ -158,41 +161,42 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testFindComponentsByDonationIdentificationNumberAndStatus_shouldCallRepositoryAndFactory() throws Exception {
+  public void testFindComponentsByDonationIdentificationNumberAndStatus_shouldCallRepositoryAndFactory() {
     // setup data
     String donationIdentificationNumber = "1234567";
     ComponentStatus status = ComponentStatus.DISCARDED;
     List<Component> components = Arrays.asList(
-        aComponent().withId(1L).withStatus(status).build(),
-        aComponent().withId(2L).withStatus(status).build()
+        aComponent().withId(COMPONENT_ID_1).withStatus(status).build(),
+        aComponent().withId(COMPONENT_ID_2).withStatus(status).build()
     );
     List<ComponentViewModel> componentViewModels = Arrays.asList(
-        aComponentViewModel().withId(1L).withStatus(status).build(),
-        aComponentViewModel().withId(2L).withStatus(status).build()
+        aComponentViewModel().withId(COMPONENT_ID_1).withStatus(status).build(),
+        aComponentViewModel().withId(COMPONENT_ID_2).withStatus(status).build()
     );
     
     // setup mocks
-    when(componentRepository.findComponentsByDonationIdentificationNumberAndStatus(donationIdentificationNumber, status))
+    when(componentRepository
+        .findComponentsByDonationIdentificationNumberAndStatus(donationIdentificationNumber, status))
         .thenReturn(components);
     when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
-    List<ComponentViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
-        donationIdentificationNumber, status);
+    List<ComponentViewModel> returnedViewModels = componentControllerService
+        .findComponentsByDonationIdentificationNumberAndStatus(donationIdentificationNumber, status);
     // verify
     assertThat(returnedViewModels, is(componentViewModels));
   }
   
   @Test
-  public void testFindAnyComponent_shouldCallRepositoryAndFactory() throws Exception {
+  public void testFindAnyComponent_shouldCallRepositoryAndFactory() {
     // setup data
-    List<Long> componentTypeIds = Arrays.asList(1L, 2L);
+    List<UUID> componentTypeIds = Arrays.asList(UUID.randomUUID(), UUID.randomUUID());
     ComponentStatus status = ComponentStatus.AVAILABLE;
     Date dateFrom = new Date();
     Date dateTo = new Date();
     List<Component> components = Arrays.asList(
-        ComponentBuilder.aComponent().withId(1L).build(),
-        ComponentBuilder.aComponent().withId(2L).build()
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_1).build(),
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_2).build()
     );
     List<ComponentViewModel> componentViewModels = Arrays.asList(
         aComponentViewModel().build(),
@@ -200,42 +204,44 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     );
     
     // setup mocks
-    Mockito.when(componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, null)).thenReturn(components);
-    Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
+    when(componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, null))
+        .thenReturn(components);
+    when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, null);
     
     // verify
-    Mockito.verify(componentRepository).findAnyComponent(componentTypeIds, status, dateFrom,
+    verify(componentRepository).findAnyComponent(componentTypeIds, status, dateFrom,
         dateTo, null);
-    Mockito.verify(componentFactory).createComponentViewModels(components);
+    verify(componentFactory).createComponentViewModels(components);
   }
   
   @Test
-  public void testProcessComponent_shouldCallServiceRepositoryAndFactory() throws Exception {
+  public void testProcessComponent_shouldCallServiceRepositoryAndFactory() {
     // setup data
     String donationIdentificationNumber = "1234567";
     Date processedOn = new Date();
     List<Component> components = Arrays.asList(
-        ComponentBuilder.aComponent().withId(1L)
-          .withDonation(DonationBuilder.aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_1)
+          .withDonation(aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
           .build(),
-        ComponentBuilder.aComponent().withId(2L).build()
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_2).build()
     );
     List<ComponentManagementViewModel> componentViewModels = Arrays.asList(
-        ComponentManagementViewModelBuilder.aComponentManagementViewModel().build(),
-        ComponentManagementViewModelBuilder.aComponentManagementViewModel().build()
+        ComponentManagementViewModel.builder().build(),
+        ComponentManagementViewModel.builder().build()
     );
     RecordComponentBackingForm form = new RecordComponentBackingForm();
-    form.setParentComponentId(1L);
-    form.setComponentTypeCombination(aComponentTypeCombinationBackingForm().withId(1L).build());
+    form.setParentComponentId(COMPONENT_ID_1);
+    form.setComponentTypeCombination(aComponentTypeCombinationBackingForm().withId(UUID.randomUUID()).build());
     form.setProcessedOn(processedOn);
     
     // setup mocks   
     when(componentCRUDService.processComponent(form.getParentComponentId(), form.getComponentTypeCombination().getId(),
         processedOn)).thenReturn(components.get(0));
-    when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
+    when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber))
+        .thenReturn(components);
     when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
@@ -249,48 +255,52 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testGetComponentTypes_shouldCallRepositoryAndFactory() throws Exception {
+  public void testGetComponentTypes_shouldCallRepositoryAndFactory() {
     // setup data
+    UUID componentTypeId1 = UUID.randomUUID();
+    UUID componentTypeId2 = UUID.randomUUID();
     List<ComponentType> componentTypes = Arrays.asList(
-        ComponentTypeBuilder.aComponentType().withId(1L).build(),
-        ComponentTypeBuilder.aComponentType().withId(2L).build()
+        ComponentTypeBuilder.aComponentType().withId(componentTypeId1).build(),
+        ComponentTypeBuilder.aComponentType().withId(componentTypeId2).build()
     );
     List<ComponentTypeViewModel> componentTypeViewModels = Arrays.asList(
-        aComponentTypeViewModel().withId(1L).build(),
-        aComponentTypeViewModel().withId(2L).build()
+        aComponentTypeViewModel().withId(componentTypeId1).build(),
+        aComponentTypeViewModel().withId(componentTypeId2).build()
     );
     
     // setup mocks
-    Mockito.when(componentTypeRepository.getAllComponentTypes()).thenReturn(componentTypes);
-    Mockito.when(componentTypeFactory.createViewModels(componentTypes)).thenReturn(componentTypeViewModels);
+    when(componentTypeRepository.getAllComponentTypes()).thenReturn(componentTypes);
+    when(componentTypeFactory.createViewModels(componentTypes)).thenReturn(componentTypeViewModels);
     
     // SUT
     componentControllerService.getComponentTypes();
     
     // verify
-    Mockito.verify(componentTypeRepository).getAllComponentTypes();
-    Mockito.verify(componentTypeFactory).createViewModels(componentTypes);
+    verify(componentTypeRepository).getAllComponentTypes();
+    verify(componentTypeFactory).createViewModels(componentTypes);
   }
   
   @Test
-  public void testGetDiscardReasons_shouldCallRepositoryAndFactory() throws Exception {
+  public void testGetDiscardReasons_shouldCallRepositoryAndFactory() {
     // setup data
     ComponentStatusChangeReason reason = new ComponentStatusChangeReason();
     List<ComponentStatusChangeReason> reasons = Arrays.asList(reason, reason);
     
     // setup mocks
-    when(componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED)).thenReturn(reasons);
+    when(componentStatusChangeReasonRepository
+        .getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED)).thenReturn(reasons);
     
     // SUT
     componentControllerService.getDiscardReasons();
     
     // verify
-    Mockito.verify(componentStatusChangeReasonRepository).getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED);
-    Mockito.verify(componentStatusChangeReasonFactory).createDiscardReasonViewModels(reasons);
+    verify(componentStatusChangeReasonRepository)
+        .getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED);
+    verify(componentStatusChangeReasonFactory).createDiscardReasonViewModels(reasons);
   }
   
   @Test
-  public void testGetReturnReasons_shouldCallRepository() throws Exception {
+  public void testGetReturnReasons_shouldCallRepository() {
     // setup data
     List<ComponentStatusChangeReason> reasons = Arrays.asList(
         new ComponentStatusChangeReason(),
@@ -298,21 +308,23 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     );
     
     // setup mocks
-    Mockito.when(componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED)).thenReturn(reasons);
+    when(componentStatusChangeReasonRepository
+        .getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED)).thenReturn(reasons);
     
     // SUT
     componentControllerService.getReturnReasons();
     
     // verify
-    Mockito.verify(componentStatusChangeReasonRepository).getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED);
+    verify(componentStatusChangeReasonRepository)
+        .getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED);
   }
   
   @Test
-  public void testRecordComponentWeight_shouldCallServiceRepositoryAndFactory() throws Exception {
+  public void testRecordComponentWeight_shouldCallServiceRepositoryAndFactory() throws ParseException {
     // setup data
-    Long componentId = Long.valueOf(1);
+    UUID componentId = UUID.randomUUID();
     final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    Integer componentWeight = Integer.valueOf(123);
+    Integer componentWeight = 123;
     ComponentPreProcessingBackingForm backingForm = aComponentBackingForm()
         .withId(componentId)
         .withWeight(componentWeight)
@@ -322,34 +334,41 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     Component component = aComponent().withId(componentId).withWeight(componentWeight).build();
     
     // setup mocks
-    Mockito.when(componentCRUDService.preProcessComponent(componentId, componentWeight, backingForm.getBleedStartTime(), backingForm.getBleedEndTime())).thenReturn(component);
-    Mockito.when(componentFactory.createManagementViewModel(component))
-    .thenReturn(ComponentManagementViewModelBuilder.aComponentManagementViewModel().build());
+    when(componentCRUDService
+        .preProcessComponent(componentId, componentWeight, backingForm.getBleedStartTime(),
+            backingForm.getBleedEndTime())).thenReturn(component);
+    when(componentFactory.createManagementViewModel(component))
+    .thenReturn(ComponentManagementViewModel.builder().build());
     
     // SUT
     componentControllerService.preProcessComponent(backingForm);
     
     // verify
-    Mockito.verify(componentCRUDService).preProcessComponent(componentId, componentWeight, backingForm.getBleedStartTime(), backingForm.getBleedEndTime());
-    Mockito.verify(componentFactory).createManagementViewModel(component);
+    verify(componentCRUDService)
+        .preProcessComponent(componentId, componentWeight, backingForm.getBleedStartTime(),
+            backingForm.getBleedEndTime());
+    verify(componentFactory).createManagementViewModel(component);
   }
   
   @Test
   public void testUndiscardComponents_shouldUndiscardAndReturnComponents() {
     // Set up fixture
-    long firstComponentId = 1L;
-    long secondComponentId = 3L;
+    UUID firstComponentId = UUID.randomUUID();
+    UUID secondComponentId = UUID.randomUUID();
     
     Component firstComponent = aComponent().withId(firstComponentId).build();
     Component secondComponent = aComponent().withId(secondComponentId).build();
     
-    ComponentManagementViewModel firstComponentFullViewModel = aComponentManagementViewModel().withId(firstComponentId).build();
-    ComponentManagementViewModel secondComponentFullViewModel = aComponentManagementViewModel().withId(secondComponentId).build();
+    ComponentManagementViewModel firstComponentFullViewModel = ComponentManagementViewModel.builder()
+        .id(firstComponentId).build();
+    ComponentManagementViewModel secondComponentFullViewModel = ComponentManagementViewModel.builder()
+        .id(secondComponentId).build();
 
-    List<Long> componentIds = Arrays.asList(firstComponentId, secondComponentId);
+    List<UUID> componentIds = Arrays.asList(firstComponentId, secondComponentId);
     
     // Set up expectations
-    List<ComponentManagementViewModel> expectedViewModels = Arrays.asList(firstComponentFullViewModel, secondComponentFullViewModel);
+    List<ComponentManagementViewModel> expectedViewModels = Arrays.asList(firstComponentFullViewModel, 
+        secondComponentFullViewModel);
     
     when(componentCRUDService.undiscardComponent(firstComponentId)).thenReturn(firstComponent);
     when(componentCRUDService.undiscardComponent(secondComponentId)).thenReturn(secondComponent);
@@ -357,7 +376,8 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     when(componentFactory.createManagementViewModel(secondComponent)).thenReturn(secondComponentFullViewModel);
     
     // Exercise SUT
-    List<ComponentManagementViewModel> returnedViewModels = componentControllerService.undiscardComponents(componentIds);
+    List<ComponentManagementViewModel> returnedViewModels = componentControllerService
+        .undiscardComponents(componentIds);
     
     // Verify
     assertThat(returnedViewModels, is(expectedViewModels));

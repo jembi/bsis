@@ -1,0 +1,33 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170626-1535" author="tumijacob">
+    <comment>This change set: 1) Adds a foreign key testBatch_id to Donation 2) Updates the foreign key testBatch_id on Donation with the right values</comment>
+        <addColumn tableName="Donation">
+            <column name="testBatch_id" type="binary(16)">
+                <constraints nullable="true" foreignKeyName="fk_Donation_TestBatch" references="TestBatch(id)"/>
+            </column>
+        </addColumn>
+         <!-- Set the new foreign key in Donation with the correct testBatch_id. -->
+        <sql>
+          UPDATE Donation d
+          LEFT JOIN DonationBatch db ON (d.donationBatch_id = db.id)
+          SET d.testBatch_id = db.testBatch_id
+        </sql>
+  </changeSet>
+
+  <changeSet id="20170704-1329" author="timler">
+    <comment>Adds testBatch_id to Donation_AUD</comment>
+    <addColumn tableName="Donation_AUD">
+        <column name="testBatch_id" type="binary(16)" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20170704-1535" author="timler">
+    <comment>Deletes the foreign key column from DonationBatch to TestBatch</comment>
+    <dropForeignKeyConstraint constraintName="fk_DonationBatch_TestBatch" baseTableName="DonationBatch" />
+    <dropColumn columnName="testBatch_id" tableName="DonationBatch" />
+  </changeSet>
+
+</databaseChangeLog>

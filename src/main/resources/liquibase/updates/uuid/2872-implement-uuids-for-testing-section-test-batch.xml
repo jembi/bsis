@@ -1,0 +1,130 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170508-1455"  author="tmvumbi2">
+    <comment>This change set migrates the TestBatch table from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+
+    <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="fk_DonationBatch_TestBatch"/>
+
+    <addColumn tableName="TestBatch">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="TestBatch_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationBatch">
+      <column name="testBatch_id_temp" type="BIGINT" afterColumn="testBatch_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationBatch_AUD">
+      <column name="testBatch_id_temp" type="BIGINT" afterColumn="testBatch_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE TestBatch 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="testbatch_id_temp_index" tableName="TestBatch" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE TestBatch_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD 
+      SET testBatch_id_temp = testBatch_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch 
+      SET testBatch_id_temp = testBatch_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="TestBatch"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="TestBatch"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="TestBatch_AUD"/>
+
+    <modifyDataType columnName="testBatch_id" newDataType="BINARY(16)" tableName="DonationBatch"/>
+
+    <modifyDataType columnName="testBatch_id" newDataType="BINARY(16)" tableName="DonationBatch_AUD"/>
+
+    <sql>
+      UPDATE TestBatch 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE TestBatch ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE TestBatch_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE TestBatch_AUD AS updateTable
+        LEFT JOIN TestBatch AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE TestBatch_AUD
+      FROM TestBatch_AUD
+        LEFT JOIN TestBatch AS joinTable ON (TestBatch_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch AS updateTable
+        LEFT JOIN TestBatch AS joinedTable ON (updateTable.testBatch_id_temp = joinedTable.id_temp)
+      SET updateTable.testBatch_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD AS updateTable
+        LEFT JOIN TestBatch AS joinedTable ON (updateTable.testBatch_id_temp = joinedTable.id_temp)
+      SET updateTable.testBatch_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="TestBatch"/>
+
+    <dropColumn columnName="id_temp" tableName="TestBatch_AUD"/>
+
+    <dropColumn columnName="testBatch_id_temp" tableName="DonationBatch"/>
+
+    <dropColumn columnName="testBatch_id_temp" tableName="DonationBatch_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="testBatch_id" baseTableName="DonationBatch" constraintName="fk_DonationBatch_TestBatch"
+      referencedColumnNames="id" referencedTableName="TestBatch"/>
+
+  </changeSet>
+</databaseChangeLog>

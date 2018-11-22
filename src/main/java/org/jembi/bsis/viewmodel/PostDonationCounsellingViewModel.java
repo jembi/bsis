@@ -2,6 +2,7 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class PostDonationCounsellingViewModel {
 
-  private long id;
+  private UUID id;
 
   private boolean flaggedForCounselling;
 
@@ -20,7 +21,7 @@ public class PostDonationCounsellingViewModel {
 
   private Map<String, Boolean> permissions;
 
-  private DonationViewModel donation;
+  private DonationFullViewModel donation;
 
   private DonorViewModel donor;
 
@@ -30,11 +31,11 @@ public class PostDonationCounsellingViewModel {
 
   private LocationViewModel referralSite;
 
-  public long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
@@ -71,11 +72,11 @@ public class PostDonationCounsellingViewModel {
     this.notes = notes;
   }
 
-  public void setDonation(DonationViewModel donation) {
+  public void setDonation(DonationFullViewModel donation) {
     this.donation = donation;
   }
 
-  public DonationViewModel getDonation() {
+  public DonationFullViewModel getDonation() {
     return donation;
   }
 

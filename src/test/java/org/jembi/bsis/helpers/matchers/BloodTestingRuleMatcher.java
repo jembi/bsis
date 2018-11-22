@@ -3,27 +3,24 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 
-public class BloodTestingRuleMatcher extends TypeSafeMatcher<BloodTestingRule> {
-
-  private BloodTestingRule expected;
+public class BloodTestingRuleMatcher extends AbstractTypeSafeMatcher<BloodTestingRule> {
 
   public BloodTestingRuleMatcher(BloodTestingRule expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, BloodTestingRule entity) {
     description.appendText("A BloodTestingRule with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nBlood test id: ").appendValue(expected.getBloodTest().getId())
-        .appendText("\nDonation field changed: ").appendValue(expected.getDonationFieldChanged())
-        .appendText("\nNew information: ").appendValue(expected.getNewInformation())
-        .appendText("\nPattern: ").appendValue(expected.getPattern())
-        .appendText("\nPending tests ids: ").appendValue(expected.getPendingTestsIdsSet())
-        .appendText("\nIs deleted: ").appendValue(expected.getIsDeleted());
+        .appendText("\nId: ").appendValue(entity.getId())
+        .appendText("\nBlood test id: ").appendValue(entity.getBloodTest().getId())
+        .appendText("\nDonation field changed: ").appendValue(entity.getDonationFieldChanged())
+        .appendText("\nNew information: ").appendValue(entity.getNewInformation())
+        .appendText("\nPattern: ").appendValue(entity.getPattern())
+        .appendText("\nPending tests ids: ").appendValue(entity.getPendingTestsIdsSet())
+        .appendText("\nIs deleted: ").appendValue(entity.getIsDeleted());
   }
 
   @Override

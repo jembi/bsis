@@ -10,6 +10,8 @@ import static org.jembi.bsis.helpers.matchers.PackTypeFullViewModelMatcher.hasSa
 import static org.jembi.bsis.helpers.matchers.PackTypeMatcher.hasSameStateAsPackType;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
@@ -33,7 +35,9 @@ public class PackTypeFactoryTests extends UnitTestSuite {
 
   @Test
   public void testConvertEntityToPackTypeFullViewModel_shouldReturnExpectedViewModel() {
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().withId(1L).build();
+    UUID packTypeId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().withId(componentTypeId).build();
     
     ComponentTypeViewModel componentTypeViewModel = ComponentTypeViewModelBuilder.aComponentTypeViewModel()
         .withId(componentType.getId())
@@ -48,7 +52,8 @@ public class PackTypeFactoryTests extends UnitTestSuite {
         .withMinWeight(222)
         .withMaxWeight(999)
         .withLowVolumeWeight(555)
-        .withId(1L).build();
+        .withId(packTypeId)
+        .build();
 
     PackType packType = PackTypeBuilder.aPackType()
         .withComponentType(componentType)
@@ -59,7 +64,8 @@ public class PackTypeFactoryTests extends UnitTestSuite {
         .withMinWeight(222)
         .withMaxWeight(999)
         .withLowVolumeWeight(555)
-        .withId(1L).build();
+        .withId(packTypeId)
+        .build();
 
     // Setup mocks
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
@@ -72,9 +78,9 @@ public class PackTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntity_shouldReturnEntityWithTheCorrectState() {
     // Set up fixture
-    Long packTypeId = 7L;
+    UUID packTypeId = UUID.randomUUID();
     String packTypeName = "Name";
-    Long componentTypeId = 98L;
+    UUID componentTypeId = UUID.randomUUID();
     Boolean canPool = true;
     Boolean canSplit = true;
     Boolean isDeleted = false;

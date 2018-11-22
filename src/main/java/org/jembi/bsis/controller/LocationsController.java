@@ -3,6 +3,7 @@ package org.jembi.bsis.controller;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -59,7 +60,7 @@ public class LocationsController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
-  public ResponseEntity<Map<String, Object>> updateLocation(@PathVariable long id,
+  public ResponseEntity<Map<String, Object>> updateLocation(@PathVariable UUID id,
       @RequestBody @Valid LocationBackingForm form) {
     Map<String, Object> map = new HashMap<String, Object>();
     form.setId(id);
@@ -70,7 +71,7 @@ public class LocationsController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
-  public ResponseEntity<Map<String, Object>> getLocationById(@PathVariable long id) {
+  public ResponseEntity<Map<String, Object>> getLocationById(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("location", locationControllerService.getLocationById(id));
     return new ResponseEntity<>(map, HttpStatus.OK);
@@ -80,7 +81,7 @@ public class LocationsController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteLocation(@PathVariable long id) {
+  public void deleteLocation(@PathVariable UUID id) {
     locationControllerService.deleteLocation(id);
   }
   

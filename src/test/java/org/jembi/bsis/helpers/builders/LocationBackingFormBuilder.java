@@ -1,11 +1,13 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.DivisionBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 
 public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingForm> {
 
-  private Long id;
+  private UUID id;
   private boolean venue;
   private String name;
   private boolean usageSite;
@@ -18,7 +20,7 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
   private boolean testingSite;
   private DivisionBackingForm divisionLevel3;
 
-  public LocationBackingFormBuilder withId(long id) {
+  public LocationBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
@@ -84,14 +86,14 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
     location.setId(id);
     location.setName(name);
     location.setNotes(notes);
-    location.setIsVenue(venue);
-    location.setIsUsageSite(usageSite);
-    location.setIsProcessingSite(processingSite);
-    location.setIsMobileSite(mobileSite);
-    location.setIsDistributionSite(distributionSite);
-    location.setIsDeleted(deleted);
-    location.setIsTestingSite(testingSite);
-    location.setIsReferralSite(referralSite);
+    location.setVenue(venue);
+    location.setDeleted(deleted);
+    location.setUsageSite(usageSite);
+    location.setMobileSite(mobileSite);
+    location.setTestingSite(testingSite);
+    location.setReferralSite(referralSite);
+    location.setProcessingSite(processingSite);
+    location.setDistributionSite(distributionSite);
     location.setDivisionLevel3(divisionLevel3);
     return location;
   }

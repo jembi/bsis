@@ -1,13 +1,14 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.returnform.ReturnStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ReturnFormViewModel extends BaseViewModel {
+public class ReturnFormViewModel extends BaseViewModel<UUID> {
 
   private Date returnDate;
 

@@ -1,6 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 import org.jembi.bsis.factory.TransfusionReactionTypeFactory;
@@ -37,7 +38,7 @@ public class TransfusionReactionTypeControllerService {
      return transfusionReactionTypeFactory.createTransfusionReactionTypeManagementViewModel(transfusionReactionType);
   }
   
-  public TransfusionReactionTypeManagementViewModel getTransfusionReactionType(Long id) {
+  public TransfusionReactionTypeManagementViewModel getTransfusionReactionType(UUID id) {
      TransfusionReactionType transfusionReactionType = transfusionReactionTypeRepository.findById(id);
      return transfusionReactionTypeFactory.createTransfusionReactionTypeManagementViewModel(transfusionReactionType);
   }

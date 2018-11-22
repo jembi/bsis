@@ -50,13 +50,13 @@ public class BloodTestFactory {
     viewModel.setBloodTestType(bloodTest.getBloodTestType());
     viewModel.setIsActive(bloodTest.getIsActive());
     viewModel.setIsDeleted(bloodTest.getIsDeleted());
+    viewModel.setRankInCategory(bloodTest.getRankInCategory());
   }
 
   private void populateFullViewModelFields(BloodTest bloodTest, BloodTestFullViewModel viewModel) {
     viewModel.setValidResults(bloodTest.getValidResultsSet());
     viewModel.setPositiveResults(bloodTest.getPositiveResultsSet());
     viewModel.setNegativeResults(bloodTest.getNegativeResultsSet());
-    viewModel.setRankInCategory(bloodTest.getRankInCategory());
     viewModel.setFlagComponentsForDiscard(bloodTest.isFlagComponentsForDiscard());
     viewModel.setFlagComponentsContainingPlasmaForDiscard(bloodTest.getFlagComponentsContainingPlasmaForDiscard());
   }
@@ -76,6 +76,7 @@ public class BloodTestFactory {
     bloodTest.setIsDeleted(bloodTestBackingForm.getIsDeleted());
     bloodTest.setFlagComponentsContainingPlasmaForDiscard(bloodTestBackingForm.getFlagComponentsContainingPlasmaForDiscard());
     bloodTest.setFlagComponentsForDiscard(bloodTestBackingForm.getFlagComponentsForDiscard());
+    bloodTest.setRankInCategory(bloodTestBackingForm.getRankInCategory());
     
     return bloodTest;
   }

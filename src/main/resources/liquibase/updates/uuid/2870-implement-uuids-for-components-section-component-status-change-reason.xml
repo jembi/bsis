@@ -1,0 +1,145 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170419-0913"  author="timler">
+    <comment>This change set migrates the ComponentStatusChangeReason table from an long primary key to a UUID of type BINARY(16).</comment>
+
+    <dropForeignKeyConstraint baseTableName="ComponentStatusChange" constraintName="fk_ComponentStatusChange_ComponentStatusChangeReason"/>
+
+    <addColumn tableName="ComponentStatusChangeReason">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentStatusChangeReason_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentStatusChange">
+      <column name="statusChangeReason_id_temp" type="BIGINT" afterColumn="statusChangeReason_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentStatusChange_AUD">
+      <column name="statusChangeReason_id_temp" type="BIGINT" afterColumn="statusChangeReason_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE ComponentStatusChangeReason 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="componentstatuschangereason_id_temp_index" tableName="ComponentStatusChangeReason" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE ComponentStatusChangeReason_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChange_AUD 
+      SET statusChangeReason_id_temp = statusChangeReason_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChange 
+      SET statusChangeReason_id_temp = statusChangeReason_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="ComponentStatusChangeReason"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentStatusChangeReason"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentStatusChangeReason_AUD"/>
+
+    <modifyDataType columnName="statusChangeReason_id" newDataType="BINARY(16)" tableName="ComponentStatusChange"/>
+
+    <modifyDataType columnName="statusChangeReason_id" newDataType="BINARY(16)" tableName="ComponentStatusChange_AUD"/>
+
+    <sql>
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08ce9cc188826e4a471449260") WHERE id_temp = 1;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08ce9f6318826e4a471449260") WHERE id_temp = 2;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea02dc8826e4a471449260") WHERE id_temp = 3;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea0b288826e4a471449260") WHERE id_temp = 4;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea12f08826e4a471449260") WHERE id_temp = 5;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea1c548826e4a471449260") WHERE id_temp = 6;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea32dc8826e4a471449260") WHERE id_temp = 7;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea39c88826e4a471449260") WHERE id_temp = 8;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea3fa68826e4a471449260") WHERE id_temp = 9;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea45988826e4a471449260") WHERE id_temp = 10;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea4b578826e4a471449260") WHERE id_temp = 11;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea511f8826e4a471449260") WHERE id_temp = 12;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea56d38826e4a471449260") WHERE id_temp = 13;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea5cb28826e4a471449260") WHERE id_temp = 14;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea62628826e4a471449260") WHERE id_temp = 15;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea68188826e4a471449260") WHERE id_temp = 16;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea6db08826e4a471449260") WHERE id_temp = 17;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea737f8826e4a471449260") WHERE id_temp = 18;
+      UPDATE ComponentStatusChangeReason SET id = UNHEX("11e868b08cea79508826e4a471449260") WHERE id_temp = 19;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ComponentStatusChangeReason ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ComponentStatusChangeReason_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChangeReason_AUD AS updateTable
+        LEFT JOIN ComponentStatusChangeReason AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE ComponentStatusChangeReason_AUD
+      FROM ComponentStatusChangeReason_AUD
+        LEFT JOIN ComponentStatusChangeReason AS joinTable ON (ComponentStatusChangeReason_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChange AS updateTable
+        LEFT JOIN ComponentStatusChangeReason AS joinedTable ON (updateTable.statusChangeReason_id_temp = joinedTable.id_temp)
+      SET updateTable.statusChangeReason_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChange_AUD AS updateTable
+        LEFT JOIN ComponentStatusChangeReason AS joinedTable ON (updateTable.statusChangeReason_id_temp = joinedTable.id_temp)
+      SET updateTable.statusChangeReason_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="ComponentStatusChangeReason"/>
+
+    <dropColumn columnName="id_temp" tableName="ComponentStatusChangeReason_AUD"/>
+
+    <dropColumn columnName="statusChangeReason_id_temp" tableName="ComponentStatusChange"/>
+
+    <dropColumn columnName="statusChangeReason_id_temp" tableName="ComponentStatusChange_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="statusChangeReason_id" baseTableName="ComponentStatusChange" constraintName="fk_ComponentStatusChange_ComponentStatusChangeReason"
+      referencedColumnNames="id" referencedTableName="ComponentStatusChangeReason"/>
+
+  </changeSet>
+</databaseChangeLog>

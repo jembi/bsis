@@ -1,0 +1,1142 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <!--  Add Foreign Key References only to ensure that creating foreign key references in the following changeset is valid. 
+  This will force any data issues to fail early before the following script executes. -->
+  <changeSet id="20170512-1200" author="rowanpi">
+    <addForeignKeyConstraint baseColumnNames="auditRevision_id" baseTableName="EntityModification"
+     constraintName="FK_ENTITYMODIFICATION_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="AdverseEventType_AUD"
+     constraintName="FK_ADVERSEEVENTTYPE_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="AdverseEvent_AUD"
+     constraintName="FK_ADVERSEEVENT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="BloodTestingRule_BloodTest_AUD"
+     constraintName="FK_BLOODTESTINGRULE_BLOODTEST_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="BloodTestResult_AUD"
+     constraintName="FK_BLOODTESTRESULT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="BloodTransportBox_AUD"
+     constraintName="FK_BLOODTRANSPORTBOX_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="ComponentBatch_AUD"
+     constraintName="FK_COMPONENTBATCH_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="Division_AUD"
+     constraintName="FK_DIVISION_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="GeneralConfig_AUD"
+     constraintName="FK_GENERALCONFIG_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OrderFormItem_AUD"
+     constraintName="FK_ORDERFORMITEM_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OrderForm_AUD"
+     constraintName="FK_ORDERFORM_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OrderForm_Component_AUD"
+     constraintName="FK_ORDERFORM_COMPONENT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="Patient_AUD"
+     constraintName="FK_PATIENT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="PostDonationCounselling_AUD"
+     constraintName="FK_POSTDONATIONCOUNSELLING_AUD_AUDIT_REVISION_ID_SERVER_UUID" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="ReturnForm_AUD"
+     constraintName="FK_RETURNFORM_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="ReturnForm_Component_AUD"
+     constraintName="FK_RETURNFORM_COMPONENT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="TestBatch_AUD"
+     constraintName="FK_TESTBATCH_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="TransfusionReactionType_AUD"
+     constraintName="FK_TRANSFUSIONREACTIONTYPE_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="Transfusion_AUD"
+     constraintName="FK_TRANSFUSION_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+  </changeSet>
+
+  <changeSet id="20170512-1300" author="rowanpi">
+    <dropForeignKeyConstraint baseTableName="EntityModification" constraintName="FK_ENTITYMODIFICATION_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="AdverseEventType_AUD" constraintName="FK_ADVERSEEVENTTYPE_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="AdverseEvent_AUD" constraintName="FK_ADVERSEEVENT_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestingRule_AUD" constraintName="FK_BLOOD_TESTING_RULE_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestingRule_BloodTest_AUD" constraintName="FK_BLOODTESTINGRULE_BLOODTEST_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestResult_AUD" constraintName="FK_BLOODTESTRESULT_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="BloodTest_AUD" constraintName="FK_BLOOD_TEST_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="BloodTransportBox_AUD" constraintName="FK_BLOODTRANSPORTBOX_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="ComponentBatch_AUD" constraintName="FK_COMPONENTBATCH_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="ComponentStatusChangeReason_AUD" constraintName="FK_COMPONENT_STATUS_CHANGE_REASON_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="ComponentStatusChange_AUD" constraintName="FK_COMPONENT_STATUS_CHANGE_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="ComponentTypeCombination_AUD" constraintName="FK_COMPONENT_TYPE_COMBINATION_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="ComponentType_AUD" constraintName="FK_COMPONENT_TYPE_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Component_AUD" constraintName="FK_COMPONENT_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="ContactMethodType_AUD" constraintName="FK_CONTACT_METHOD_TYPE_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="DeferralReason_AUD" constraintName="FK_DEFERRAL_REASON_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Division_AUD" constraintName="FK_DIVISION_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="DonationBatch_AUD" constraintName="FK_DONATION_BATCH_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="DonationType_AUD" constraintName="FK_DONATION_TYPE_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Donation_AUD" constraintName="FK_DONATION_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="DonorDeferral_AUD" constraintName="FK_DONOR_DEFERRAL_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Donor_AUD" constraintName="FK_DONOR_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="GeneralConfig_AUD" constraintName="FK_GENERALCONFIG_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Location_AUD" constraintName="FK_LOCATION_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="OrderFormItem_AUD" constraintName="FK_ORDERFORMITEM_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="OrderForm_AUD" constraintName="FK_ORDERFORM_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="OrderForm_Component_AUD" constraintName="FK_ORDERFORM_COMPONENT_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="PackType_AUD" constraintName="FK_PACK_TYPE_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Patient_AUD" constraintName="FK_PATIENT_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Permission_AUD" constraintName="FK_PERMISSION_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Permission_Role_AUD" constraintName="FK_PERMISSION_ROLE_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="PostDonationCounselling_AUD" constraintName="FK_POSTDONATIONCOUNSELLING_AUD_AUDIT_REVISION_ID_SERVER_UUID"/>
+    <dropForeignKeyConstraint baseTableName="ReturnForm_AUD" constraintName="FK_RETURNFORM_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="ReturnForm_Component_AUD" constraintName="FK_RETURNFORM_COMPONENT_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Role_AUD" constraintName="FK_ROLE_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="TestBatch_AUD" constraintName="FK_TESTBATCH_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="TransfusionReactionType_AUD" constraintName="FK_TRANSFUSIONREACTIONTYPE_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Transfusion_AUD" constraintName="FK_TRANSFUSION_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="User_AUD" constraintName="FK_USER_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="User_Role_AUD" constraintName="FK_USER_ROLE_AUDIT_REVISION"/>
+
+    <addColumn tableName="AuditRevision">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="EntityModification">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="auditRevision_id"/>
+    </addColumn>
+
+    <addColumn tableName="AdverseEventType_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="AdverseEvent_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestingRule_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestingRule_BloodTest_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestResult_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTest_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTransportBox_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentBatch_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentStatusChangeReason_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentStatusChange_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentTypeCombination_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentType_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="Component_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="ContactMethodType_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="DeferralReason_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="Division_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="DonationBatch_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="DonationType_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="Donation_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="DonorDeferral_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="Donor_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="GeneralConfig_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="Location_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="OrderFormItem_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm_Component_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="PackType_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="Patient_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="Permission_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="Permission_Role_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="PostDonationCounselling_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="ReturnForm_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="ReturnForm_Component_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="Role_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="TestBatch_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="TransfusionReactionType_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="Transfusion_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="User_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="User_Role_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <sql>
+      UPDATE AuditRevision 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE EntityModification 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE AdverseEventType_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE AdverseEvent_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_BloodTest_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestResult_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE BloodTest_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE BloodTransportBox_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChangeReason_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChange_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE ComponentTypeCombination_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE ComponentType_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE ContactMethodType_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE DeferralReason_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE DonationType_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE GeneralConfig_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE OrderFormItem_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_Component_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE PackType_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE Patient_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE Permission_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE Permission_Role_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm_Component_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE Role_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE TestBatch_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE TransfusionReactionType_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE User_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE User_Role_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      ALTER TABLE AuditRevision 
+      CHANGE COLUMN id id BIGINT(20) NOT NULL AUTO_INCREMENT;
+    </sql>
+
+    <modifyDataType columnName="auditRevision_id" newDataType="BIGINT(20)" tableName="EntityModification"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="AdverseEventType_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="AdverseEvent_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="BloodTestResult_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="BloodTest_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="BloodTestingRule_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="BloodTestingRule_BloodTest_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="BloodTransportBox_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="ComponentBatch_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="ComponentStatusChangeReason_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="ComponentStatusChange_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="ComponentTypeCombination_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="ComponentType_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Component_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="ContactMethodType_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="DeferralReason_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Division_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="DonationBatch_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="DonationType_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Donation_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="DonorDeferral_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Donor_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="GeneralConfig_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Location_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="OrderFormItem_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="OrderForm_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="OrderForm_Component_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="PackType_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Patient_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Permission_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Permission_Role_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="PostDonationCounselling_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="ReturnForm_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="ReturnForm_Component_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Role_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="TestBatch_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="TransfusionReactionType_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Transfusion_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="User_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="User_Role_AUD"/>
+
+    <sql>
+      ALTER TABLE AuditRevision 
+      DROP PRIMARY KEY,
+      ADD PRIMARY KEY (`id`, `server_uuid`);
+    </sql>
+
+    <addForeignKeyConstraint baseColumnNames="auditRevision_id,server_uuid" baseTableName="EntityModification" constraintName="FK_ENTITYMODIFICATION_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="AdverseEventType_AUD" constraintName="FK_ADVERSEEVENTTYPE_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="AdverseEvent_AUD" constraintName="FK_ADVERSEEVENT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTestingRule_AUD" constraintName="FK_BLOOD_TESTING_RULE_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTestingRule_BloodTest_AUD" constraintName="FK_BLOODTESTINGRULE_BLOODTEST_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTestResult_AUD" constraintName="FK_BLOODTESTRESULT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTest_AUD" constraintName="FK_BLOOD_TEST_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTransportBox_AUD" constraintName="FK_BLOODTRANSPORTBOX_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ComponentBatch_AUD" constraintName="FK_COMPONENTBATCH_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ComponentStatusChangeReason_AUD" constraintName="FK_COMPONENT_STATUS_CHANGE_REASON_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ComponentStatusChange_AUD" constraintName="FK_COMPONENT_STATUS_CHANGE_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ComponentTypeCombination_AUD" constraintName="FK_COMPONENT_TYPE_COMBINATION_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ComponentType_AUD" constraintName="FK_COMPONENT_TYPE_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Component_AUD" constraintName="FK_COMPONENT_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ContactMethodType_AUD" constraintName="FK_CONTACT_METHOD_TYPE_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="DeferralReason_AUD" constraintName="FK_DEFERRAL_REASON_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Division_AUD" constraintName="FK_DIVISION_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="DonationBatch_AUD" constraintName="FK_DONATION_BATCH_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="DonationType_AUD" constraintName="FK_DONATION_TYPE_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Donation_AUD" constraintName="FK_DONATION_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="DonorDeferral_AUD" constraintName="FK_DONOR_DEFERRAL_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Donor_AUD" constraintName="FK_DONOR_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="GeneralConfig_AUD" constraintName="FK_GENERALCONFIG_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Location_AUD" constraintName="FK_LOCATION_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="OrderFormItem_AUD" constraintName="FK_ORDERFORMITEM_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="OrderForm_AUD" constraintName="FK_ORDERFORM_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="OrderForm_Component_AUD" constraintName="FK_ORDERFORM_COMPONENT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="PackType_AUD" constraintName="FK_PACK_TYPE_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Patient_AUD" constraintName="FK_PATIENT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Permission_AUD" constraintName="FK_PERMISSION_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Permission_Role_AUD" constraintName="FK_PERMISSION_ROLE_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="PostDonationCounselling_AUD" constraintName="FK_POSTDONATIONCOUNSELLING_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ReturnForm_AUD" constraintName="FK_RETURNFORM_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ReturnForm_Component_AUD" constraintName="FK_RETURNFORM_COMPONENT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Role_AUD" constraintName="FK_ROLE_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="TestBatch_AUD" constraintName="FK_TESTBATCH_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="TransfusionReactionType_AUD" constraintName="FK_TRANSFUSIONREACTIONTYPE_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Transfusion_AUD" constraintName="FK_TRANSFUSION_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="User_AUD" constraintName="FK_USER_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="User_Role_AUD" constraintName="FK_USER_ROLE_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+  </changeSet>
+
+  <changeSet id="20170512-1330" author="rowanpi">
+    <sql endDelimiter="/">
+      DROP TRIGGER IF EXISTS AuditRevision_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER AuditRevision_BEFORE_INSERT BEFORE INSERT ON AuditRevision FOR EACH ROW
+      BEGIN
+      	IF ISNULL(NEW.server_uuid) THEN
+      		SET NEW.server_uuid = @@server_uuid;
+      	END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS EntityModification_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER EntityModification_AUD_BEFORE_INSERT BEFORE INSERT ON EntityModification FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS AdverseEventType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER AdverseEventType_AUD_BEFORE_INSERT BEFORE INSERT ON AdverseEventType_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS AdverseEvent_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER AdverseEvent_AUD_BEFORE_INSERT BEFORE INSERT ON AdverseEvent_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS BloodTestResult_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER BloodTestResult_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestResult_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS BloodTest_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER BloodTest_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTest_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS BloodTestingRule_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER BloodTestingRule_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestingRule_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS BloodTestingRule_BloodTest_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER BloodTestingRule_BloodTest_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestingRule_BloodTest_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS BloodTransportBox_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER BloodTransportBox_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTransportBox_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS ComponentBatch_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ComponentBatch_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentBatch_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS ComponentStatusChangeReason_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ComponentStatusChangeReason_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentStatusChangeReason_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS ComponentStatusChange_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ComponentStatusChange_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentStatusChange_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS ComponentTypeCombination_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ComponentTypeCombination_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentTypeCombination_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS ComponentType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ComponentType_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentType_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS Component_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Component_AUD_BEFORE_INSERT BEFORE INSERT ON Component_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS ContactMethodType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ContactMethodType_AUD_BEFORE_INSERT BEFORE INSERT ON ContactMethodType_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS DeferralReason_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER DeferralReason_AUD_BEFORE_INSERT BEFORE INSERT ON DeferralReason_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS Division_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Division_AUD_BEFORE_INSERT BEFORE INSERT ON Division_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS DonationBatch_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER DonationBatch_AUD_BEFORE_INSERT BEFORE INSERT ON DonationBatch_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS DonationType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER DonationType_AUD_BEFORE_INSERT BEFORE INSERT ON DonationType_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS Donation_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Donation_AUD_BEFORE_INSERT BEFORE INSERT ON Donation_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS DonorDeferral_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER DonorDeferral_AUD_BEFORE_INSERT BEFORE INSERT ON DonorDeferral_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS Donor_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Donor_AUD_BEFORE_INSERT BEFORE INSERT ON Donor_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS GeneralConfig_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER GeneralConfig_AUD_BEFORE_INSERT BEFORE INSERT ON GeneralConfig_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS Location_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Location_AUD_BEFORE_INSERT BEFORE INSERT ON Location_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS OrderFormItem_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER OrderFormItem_AUD_BEFORE_INSERT BEFORE INSERT ON OrderFormItem_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS OrderForm_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER OrderForm_AUD_BEFORE_INSERT BEFORE INSERT ON OrderForm_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS OrderForm_Component_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER OrderForm_Component_AUD_BEFORE_INSERT BEFORE INSERT ON OrderForm_Component_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS PackType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER PackType_AUD_BEFORE_INSERT BEFORE INSERT ON PackType_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS Patient_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Patient_AUD_BEFORE_INSERT BEFORE INSERT ON Patient_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS Permission_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Permission_AUD_BEFORE_INSERT BEFORE INSERT ON Permission_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS Permission_Role_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Permission_Role_AUD_BEFORE_INSERT BEFORE INSERT ON Permission_Role_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS PostDonationCounselling_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER PostDonationCounselling_AUD_BEFORE_INSERT BEFORE INSERT ON PostDonationCounselling_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS ReturnForm_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ReturnForm_AUD_BEFORE_INSERT BEFORE INSERT ON ReturnForm_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS ReturnForm_Component_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ReturnForm_Component_AUD_BEFORE_INSERT BEFORE INSERT ON ReturnForm_Component_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS Role_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Role_AUD_BEFORE_INSERT BEFORE INSERT ON Role_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS TestBatch_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER TestBatch_AUD_BEFORE_INSERT BEFORE INSERT ON TestBatch_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS TransfusionReactionType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER TransfusionReactionType_AUD_BEFORE_INSERT BEFORE INSERT ON TransfusionReactionType_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS Transfusion_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Transfusion_AUD_BEFORE_INSERT BEFORE INSERT ON Transfusion_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS User_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER User_AUD_BEFORE_INSERT BEFORE INSERT ON User_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS User_Role_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER User_Role_AUD_BEFORE_INSERT BEFORE INSERT ON User_Role_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170516-1358" author="rowanpi">
+    <sql>
+      ALTER TABLE AdverseEventType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE AdverseEvent_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE BloodTestResult_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE BloodTest_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE BloodTestingRule_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE BloodTestingRule_BloodTest_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (bloodTestingRule_id, pendingBloodTests_id, REV, server_uuid);
+
+      ALTER TABLE BloodTransportBox_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ComponentBatch_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ComponentStatusChangeReason_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ComponentStatusChange_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ComponentTypeCombination_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ComponentType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Component_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ContactMethodType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE DeferralReason_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Division_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE DonationBatch_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE DonationType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Donation_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE DonorDeferral_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Donor_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE GeneralConfig_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Location_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE OrderFormItem_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE OrderForm_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE OrderForm_Component_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (orderForm_id, component_id, REV, server_uuid);
+
+      ALTER TABLE PackType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Patient_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Permission_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Permission_Role_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (permissions_id, roles_id, REV, server_uuid);
+
+      ALTER TABLE PostDonationCounselling_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ReturnForm_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ReturnForm_Component_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (returnForm_id, component_id, REV, server_uuid);
+
+      ALTER TABLE Role_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE TestBatch_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE TransfusionReactionType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Transfusion_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE User_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE User_Role_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (users_id, roles_id, REV, server_uuid);
+    </sql>
+  </changeSet>
+</databaseChangeLog>

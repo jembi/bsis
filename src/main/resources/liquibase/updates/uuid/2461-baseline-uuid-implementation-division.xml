@@ -1,0 +1,291 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170315-1214" author="lauravignoli">
+     <sqlFile encoding="utf8" path="../functions/GENERATEBINARYUUID.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+  </changeSet>
+
+  <changeSet id="20170317-0942"  author="rowanpi">
+    <dropForeignKeyConstraint baseTableName="Division" constraintName="fk_Division_parent"/>
+    <dropForeignKeyConstraint baseTableName="Location" constraintName="fk_Location_divisionLevel1"/>
+    <dropForeignKeyConstraint baseTableName="Location" constraintName="fk_Location_divisionLevel2"/>
+    <dropForeignKeyConstraint baseTableName="Location" constraintName="fk_Location_divisionLevel3"/>
+
+    <addColumn tableName="Division">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Division_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Division">
+      <column name="parent_id_temp" type="BIGINT" afterColumn="parent_id"/>
+    </addColumn>
+
+    <addColumn tableName="Location">
+      <column name="divisionLevel1_id_temp" type="BIGINT" afterColumn="divisionLevel1_id"/>
+      <column name="divisionLevel2_id_temp" type="BIGINT" afterColumn="divisionLevel2_id"/>
+      <column name="divisionLevel3_id_temp" type="BIGINT" afterColumn="divisionLevel3_id"/>
+    </addColumn>
+
+    <addColumn tableName="Division_AUD">
+      <column name="parent_id_temp" type="BIGINT" afterColumn="parent_id"/>
+    </addColumn>
+
+    <addColumn tableName="Location_AUD">
+      <column name="divisionLevel1_id_temp" type="BIGINT" afterColumn="divisionLevel1_id"/>
+      <column name="divisionLevel2_id_temp" type="BIGINT" afterColumn="divisionLevel2_id"/>
+      <column name="divisionLevel3_id_temp" type="BIGINT" afterColumn="divisionLevel3_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE Division 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="division_id_temp_index" tableName="Division" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE Division_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD 
+      SET parent_id_temp = parent_id;
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD 
+      SET divisionLevel1_id_temp = divisionLevel1_id;
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD 
+      SET divisionLevel2_id_temp = divisionLevel2_id;
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD 
+      SET divisionLevel3_id_temp = divisionLevel3_id;
+    </sql>
+
+    <sql>
+      UPDATE Division 
+      SET parent_id_temp = parent_id;
+    </sql>
+
+    <sql>
+      UPDATE Location 
+      SET divisionLevel1_id_temp = divisionLevel1_id;
+    </sql>
+
+    <sql>
+      UPDATE Location 
+      SET divisionLevel2_id_temp = divisionLevel2_id;
+    </sql>
+
+    <sql>
+      UPDATE Location 
+      SET divisionLevel3_id_temp = divisionLevel3_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType
+            columnName="id"
+            newDataType="BIGINT(20)"
+            tableName="Division"/>
+
+    <modifyDataType columnName="id"
+            newDataType="BINARY(16)"
+            tableName="Division"/>
+
+    <modifyDataType columnName="id"
+            newDataType="BINARY(16)"
+            tableName="Division_AUD"/>
+
+    <modifyDataType columnName="parent_id"
+            newDataType="BINARY(16)"
+            tableName="Division"/>
+    <modifyDataType columnName="divisionLevel1_id"
+            newDataType="BINARY(16)"
+            tableName="Location"/>
+    <modifyDataType columnName="divisionLevel2_id"
+            newDataType="BINARY(16)"
+            tableName="Location"/>
+    <modifyDataType columnName="divisionLevel3_id"
+            newDataType="BINARY(16)"
+            tableName="Location"/>
+
+    <modifyDataType columnName="parent_id"
+            newDataType="BINARY(16)"
+            tableName="Division_AUD"/>
+    <modifyDataType columnName="divisionLevel1_id"
+            newDataType="BINARY(16)"
+            tableName="Location_AUD"/>
+    <modifyDataType columnName="divisionLevel2_id"
+            newDataType="BINARY(16)"
+            tableName="Location_AUD"/>
+    <modifyDataType columnName="divisionLevel3_id"
+            newDataType="BINARY(16)"
+            tableName="Location_AUD"/>
+
+    <sql>
+      UPDATE Division 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Division ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Division_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD AS updateTable
+        LEFT JOIN Division AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE Division_AUD
+      FROM Division_AUD
+        LEFT JOIN Division AS joinTable ON (Division_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE Division AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.parent_id_temp = joinedTable.id_temp)
+      SET updateTable.parent_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Location AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel1_id_temp = joinedTable.id_temp)
+      SET updateTable.divisionLevel1_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Location AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel2_id_temp = joinedTable.id_temp)
+      SET updateTable.divisionLevel2_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Location AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel3_id_temp = joinedTable.id_temp)
+      SET updateTable.divisionLevel3_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.parent_id_temp = joinedTable.id_temp)
+      SET updateTable.parent_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel1_id_temp = joinedTable.id_temp)
+      SET updateTable.divisionLevel1_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel2_id_temp = joinedTable.id_temp)
+      SET updateTable.divisionLevel2_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel3_id_temp = joinedTable.id_temp)
+      SET updateTable.divisionLevel3_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp"
+            tableName="Division"/>
+
+    <dropColumn columnName="id_temp"
+            tableName="Division_AUD"/>
+
+    <dropColumn columnName="parent_id_temp"
+            tableName="Division"/>
+
+    <dropColumn columnName="divisionLevel1_id_temp"
+            tableName="Location"/>
+
+    <dropColumn columnName="divisionLevel2_id_temp"
+            tableName="Location"/>
+
+    <dropColumn columnName="divisionLevel3_id_temp"
+            tableName="Location"/>
+
+    <dropColumn columnName="parent_id_temp"
+            tableName="Division_AUD"/>
+
+    <dropColumn columnName="divisionLevel1_id_temp"
+            tableName="Location_AUD"/>
+
+    <dropColumn columnName="divisionLevel2_id_temp"
+            tableName="Location_AUD"/>
+
+    <dropColumn columnName="divisionLevel3_id_temp"
+            tableName="Location_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="parent_id"
+            baseTableName="Division"
+            constraintName="fk_Division_parent"
+            referencedColumnNames="id"
+            referencedTableName="Division"/>
+
+    <addForeignKeyConstraint baseColumnNames="divisionLevel1_id"
+            baseTableName="Location"
+            constraintName="fk_Location_divisionLevel1"
+            referencedColumnNames="id"
+            referencedTableName="Division"/>
+
+    <addForeignKeyConstraint baseColumnNames="divisionLevel2_id"
+            baseTableName="Location"
+            constraintName="fk_Location_divisionLevel2"
+            referencedColumnNames="id"
+            referencedTableName="Division"/>
+
+    <addForeignKeyConstraint baseColumnNames="divisionLevel3_id"
+            baseTableName="Location"
+            constraintName="fk_Location_divisionLevel3"
+            referencedColumnNames="id"
+            referencedTableName="Division"/>
+
+
+  </changeSet>
+</databaseChangeLog>

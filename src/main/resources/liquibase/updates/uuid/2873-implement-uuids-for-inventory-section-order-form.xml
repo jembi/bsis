@@ -1,0 +1,199 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170324-1130"  author="tmvumbi2">
+
+    <dropForeignKeyConstraint baseTableName="OrderFormItem" constraintName="fk_OrderFormItem_orderForm"/>
+    <dropForeignKeyConstraint baseTableName="OrderForm_Component" constraintName="fk_OrderForm_Component_OrderForm"/>
+
+    <addColumn tableName="OrderForm">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderFormItem">
+      <column name="orderForm_id_temp" type="BIGINT" afterColumn="orderForm_id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm_Component">
+      <column name="orderForm_id_temp" type="BIGINT" afterColumn="orderForm_id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderFormItem_AUD">
+      <column name="orderForm_id_temp" type="BIGINT" afterColumn="orderForm_id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm_Component_AUD">
+      <column name="orderForm_id_temp" type="BIGINT" afterColumn="orderForm_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE OrderForm 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="orderform_id_temp_index" tableName="OrderForm" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE OrderForm_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE OrderFormItem_AUD 
+      SET orderForm_id_temp = orderForm_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_Component_AUD 
+      SET orderForm_id_temp = orderForm_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderFormItem 
+      SET orderForm_id_temp = orderForm_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_Component 
+      SET orderForm_id_temp = orderForm_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType
+            columnName="id"
+            newDataType="BIGINT(20)"
+            tableName="OrderForm"/>
+
+    <modifyDataType columnName="id"
+            newDataType="BINARY(16)"
+            tableName="OrderForm"/>
+
+    <modifyDataType columnName="id"
+            newDataType="BINARY(16)"
+            tableName="OrderForm_AUD"/>
+
+    <modifyDataType columnName="orderForm_id"
+            newDataType="BINARY(16)"
+            tableName="OrderFormItem"/>
+    <modifyDataType columnName="orderForm_id"
+            newDataType="BINARY(16)"
+            tableName="OrderForm_Component"/>
+
+    <modifyDataType columnName="orderForm_id"
+            newDataType="BINARY(16)"
+            tableName="OrderFormItem_AUD"/>
+    <modifyDataType columnName="orderForm_id"
+            newDataType="BINARY(16)"
+            tableName="OrderForm_Component_AUD"/>
+
+    <sql>
+      UPDATE OrderForm 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE OrderForm ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE OrderForm_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD AS updateTable
+        LEFT JOIN OrderForm AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE OrderForm_AUD
+      FROM OrderForm_AUD
+        LEFT JOIN OrderForm AS joinTable ON (OrderForm_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE OrderFormItem AS updateTable
+        LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
+      SET updateTable.orderForm_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_Component AS updateTable
+        LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
+      SET updateTable.orderForm_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderFormItem_AUD AS updateTable
+        LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
+      SET updateTable.orderForm_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_Component_AUD AS updateTable
+        LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
+      SET updateTable.orderForm_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp"
+            tableName="OrderForm"/>
+
+    <dropColumn columnName="id_temp"
+            tableName="OrderForm_AUD"/>
+
+    <dropColumn columnName="orderForm_id_temp"
+            tableName="OrderFormItem"/>
+
+    <dropColumn columnName="orderForm_id_temp"
+            tableName="OrderForm_Component"/>
+
+    <dropColumn columnName="orderForm_id_temp"
+            tableName="OrderFormItem_AUD"/>
+
+    <dropColumn columnName="orderForm_id_temp"
+            tableName="OrderForm_Component_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="orderForm_id"
+            baseTableName="OrderFormItem"
+            constraintName="fk_OrderFormItem_orderForm"
+            referencedColumnNames="id"
+            referencedTableName="OrderForm"/>
+
+    <addForeignKeyConstraint baseColumnNames="orderForm_id"
+            baseTableName="OrderForm_Component"
+            constraintName="fk_OrderForm_Component_OrderForm"
+            referencedColumnNames="id"
+            referencedTableName="OrderForm"/>
+
+    </changeSet>
+
+</databaseChangeLog>
+

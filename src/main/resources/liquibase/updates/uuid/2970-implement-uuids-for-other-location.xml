@@ -1,0 +1,618 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170411-0115" author="rowanpi">
+    <dropForeignKeyConstraint baseTableName="Component" constraintName="FK_COMPONENT_LOCATION_ID"/>
+    <dropForeignKeyConstraint baseTableName="ComponentBatch" constraintName="fk_ComponentBatch_Location"/>
+    <dropForeignKeyConstraint baseTableName="Donation" constraintName="FK_donation_Location"/>
+    <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK_DonationBatch_Location"/>
+    <dropForeignKeyConstraint baseTableName="Donor" constraintName="fk_donor_venue"/>
+    <dropForeignKeyConstraint baseTableName="DonorDeferral" constraintName="fk_DonorDeferral_Location"/>
+    <dropForeignKeyConstraint baseTableName="OrderForm" constraintName="fk_OrderForm_dispatchedFrom"/>
+    <dropForeignKeyConstraint baseTableName="OrderForm" constraintName="fk_OrderForm_dispatchedTo"/>
+    <dropForeignKeyConstraint baseTableName="PostDonationCounselling" constraintName="fk_PostDonationCounselling_Location_referralSite_id"/>
+    <dropForeignKeyConstraint baseTableName="ReturnForm" constraintName="fk_ReturnForm_returnedFrom"/>
+    <dropForeignKeyConstraint baseTableName="ReturnForm" constraintName="fk_ReturnForm_returnedTo"/>
+    <dropForeignKeyConstraint baseTableName="TestBatch" constraintName="FK_TESTBATCH_LOCATION_ID"/>
+    <dropForeignKeyConstraint baseTableName="Transfusion" constraintName="fk_Transfusion_location"/>
+
+    <addColumn tableName="Location">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Location_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Component">
+      <column name="location_id_temp" type="BIGINT" afterColumn="location_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentBatch">
+      <column name="location_id_temp" type="BIGINT" afterColumn="location_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donation">
+      <column name="venue_id_temp" type="BIGINT" afterColumn="venue_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationBatch">
+      <column name="venue_id_temp" type="BIGINT" afterColumn="venue_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor">
+      <column name="venue_id_temp" type="BIGINT" afterColumn="venue_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonorDeferral">
+      <column name="venue_id_temp" type="BIGINT" afterColumn="venue_id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm">
+      <column name="dispatchedFrom_id_temp" type="BIGINT" afterColumn="dispatchedFrom_id"/>
+      <column name="dispatchedTo_id_temp" type="BIGINT" afterColumn="dispatchedTo_id"/>
+    </addColumn>
+
+    <addColumn tableName="PostDonationCounselling">
+      <column name="referralSite_id_temp" type="BIGINT" afterColumn="referralSite_id"/>
+    </addColumn>
+
+    <addColumn tableName="ReturnForm">
+      <column name="returnedFrom_id_temp" type="BIGINT" afterColumn="returnedFrom_id"/>
+      <column name="returnedTo_id_temp" type="BIGINT" afterColumn="returnedTo_id"/>
+    </addColumn>
+
+    <addColumn tableName="TestBatch">
+      <column name="location_id_temp" type="BIGINT" afterColumn="location_id"/>
+    </addColumn>
+
+    <addColumn tableName="Transfusion">
+      <column name="receivedFrom_id_temp" type="BIGINT" afterColumn="receivedFrom_id"/>
+    </addColumn>
+
+    <addColumn tableName="Component_AUD">
+      <column name="location_id_temp" type="BIGINT" afterColumn="location_id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentBatch_AUD">
+      <column name="location_id_temp" type="BIGINT" afterColumn="location_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donation_AUD">
+      <column name="venue_id_temp" type="BIGINT" afterColumn="venue_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationBatch_AUD">
+      <column name="venue_id_temp" type="BIGINT" afterColumn="venue_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor_AUD">
+      <column name="venue_id_temp" type="BIGINT" afterColumn="venue_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonorDeferral_AUD">
+      <column name="venue_id_temp" type="BIGINT" afterColumn="venue_id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm_AUD">
+      <column name="dispatchedFrom_id_temp" type="BIGINT" afterColumn="dispatchedFrom_id"/>
+      <column name="dispatchedTo_id_temp" type="BIGINT" afterColumn="dispatchedTo_id"/>
+    </addColumn>
+
+    <addColumn tableName="PostDonationCounselling_AUD">
+      <column name="referralSite_id_temp" type="BIGINT" afterColumn="referralSite_id"/>
+    </addColumn>
+
+    <addColumn tableName="ReturnForm_AUD">
+      <column name="returnedFrom_id_temp" type="BIGINT" afterColumn="returnedFrom_id"/>
+      <column name="returnedTo_id_temp" type="BIGINT" afterColumn="returnedTo_id"/>
+    </addColumn>
+
+    <addColumn tableName="TestBatch_AUD">
+      <column name="location_id_temp" type="BIGINT" afterColumn="location_id"/>
+    </addColumn>
+
+    <addColumn tableName="Transfusion_AUD">
+      <column name="receivedFrom_id_temp" type="BIGINT" afterColumn="receivedFrom_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE Location 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="location_id_temp_index" tableName="Location" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE Location_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD 
+      SET location_id_temp = location_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch_AUD 
+      SET location_id_temp = location_id;
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD 
+      SET venue_id_temp = venue_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD 
+      SET venue_id_temp = venue_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET venue_id_temp = venue_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD 
+      SET venue_id_temp = venue_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD 
+      SET dispatchedFrom_id_temp = dispatchedFrom_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD 
+      SET dispatchedTo_id_temp = dispatchedTo_id;
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling_AUD 
+      SET referralSite_id_temp = referralSite_id;
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm_AUD 
+      SET returnedFrom_id_temp = returnedFrom_id;
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm_AUD 
+      SET returnedTo_id_temp = returnedTo_id;
+    </sql>
+
+    <sql>
+      UPDATE TestBatch_AUD 
+      SET location_id_temp = location_id;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD 
+      SET receivedFrom_id_temp = receivedFrom_id;
+    </sql>
+
+    <sql>
+      UPDATE Component 
+      SET location_id_temp = location_id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch 
+      SET location_id_temp = location_id;
+    </sql>
+
+    <sql>
+      UPDATE Donation 
+      SET venue_id_temp = venue_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch 
+      SET venue_id_temp = venue_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor 
+      SET venue_id_temp = venue_id;
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral 
+      SET venue_id_temp = venue_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm 
+      SET dispatchedFrom_id_temp = dispatchedFrom_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm 
+      SET dispatchedTo_id_temp = dispatchedTo_id;
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling 
+      SET referralSite_id_temp = referralSite_id;
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm 
+      SET returnedFrom_id_temp = returnedFrom_id;
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm 
+      SET returnedTo_id_temp = returnedTo_id;
+    </sql>
+
+    <sql>
+      UPDATE TestBatch 
+      SET location_id_temp = location_id;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion 
+      SET receivedFrom_id_temp = receivedFrom_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="Location"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Location"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Location_AUD"/>
+
+    <modifyDataType columnName="location_id" newDataType="BINARY(16)" tableName="Component"/>
+    <modifyDataType columnName="location_id" newDataType="BINARY(16)" tableName="ComponentBatch"/>
+    <modifyDataType columnName="venue_id" newDataType="BINARY(16)" tableName="Donation"/>
+    <modifyDataType columnName="venue_id" newDataType="BINARY(16)" tableName="DonationBatch"/>
+    <modifyDataType columnName="venue_id" newDataType="BINARY(16)" tableName="Donor"/>
+    <modifyDataType columnName="venue_id" newDataType="BINARY(16)" tableName="DonorDeferral"/>
+    <modifyDataType columnName="dispatchedFrom_id" newDataType="BINARY(16)" tableName="OrderForm"/>
+    <modifyDataType columnName="dispatchedTo_id" newDataType="BINARY(16)" tableName="OrderForm"/>
+    <modifyDataType columnName="referralSite_id" newDataType="BINARY(16)" tableName="PostDonationCounselling"/>
+    <modifyDataType columnName="returnedFrom_id" newDataType="BINARY(16)" tableName="ReturnForm"/>
+    <modifyDataType columnName="returnedTo_id" newDataType="BINARY(16)" tableName="ReturnForm"/>
+    <modifyDataType columnName="location_id" newDataType="BINARY(16)" tableName="TestBatch"/>
+    <modifyDataType columnName="receivedFrom_id" newDataType="BINARY(16)" tableName="Transfusion"/>
+
+    <modifyDataType columnName="location_id" newDataType="BINARY(16)" tableName="Component_AUD"/>
+    <modifyDataType columnName="location_id" newDataType="BINARY(16)" tableName="ComponentBatch_AUD"/>
+    <modifyDataType columnName="venue_id" newDataType="BINARY(16)" tableName="Donation_AUD"/>
+    <modifyDataType columnName="venue_id" newDataType="BINARY(16)" tableName="DonationBatch_AUD"/>
+    <modifyDataType columnName="venue_id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
+    <modifyDataType columnName="venue_id" newDataType="BINARY(16)" tableName="DonorDeferral_AUD"/>
+    <modifyDataType columnName="dispatchedFrom_id" newDataType="BINARY(16)" tableName="OrderForm_AUD"/>
+    <modifyDataType columnName="dispatchedTo_id" newDataType="BINARY(16)" tableName="OrderForm_AUD"/>
+    <modifyDataType columnName="referralSite_id" newDataType="BINARY(16)" tableName="PostDonationCounselling_AUD"/>
+    <modifyDataType columnName="returnedFrom_id" newDataType="BINARY(16)" tableName="ReturnForm_AUD"/>
+    <modifyDataType columnName="returnedTo_id" newDataType="BINARY(16)" tableName="ReturnForm_AUD"/>
+    <modifyDataType columnName="location_id" newDataType="BINARY(16)" tableName="TestBatch_AUD"/>
+    <modifyDataType columnName="receivedFrom_id" newDataType="BINARY(16)" tableName="Transfusion_AUD"/>
+
+    <sql>
+      UPDATE Location 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Location ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Location_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD AS updateTable
+        LEFT JOIN Location AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE Location_AUD
+      FROM Location_AUD
+        LEFT JOIN Location AS joinTable ON (Location_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE Component AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.location_id_temp = joinedTable.id_temp)
+      SET updateTable.location_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.location_id_temp = joinedTable.id_temp)
+      SET updateTable.location_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donation AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.venue_id_temp = joinedTable.id_temp)
+      SET updateTable.venue_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.venue_id_temp = joinedTable.id_temp)
+      SET updateTable.venue_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.venue_id_temp = joinedTable.id_temp)
+      SET updateTable.venue_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.venue_id_temp = joinedTable.id_temp)
+      SET updateTable.venue_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.dispatchedFrom_id_temp = joinedTable.id_temp)
+      SET updateTable.dispatchedFrom_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.dispatchedTo_id_temp = joinedTable.id_temp)
+      SET updateTable.dispatchedTo_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.referralSite_id_temp = joinedTable.id_temp)
+      SET updateTable.referralSite_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.returnedFrom_id_temp = joinedTable.id_temp)
+      SET updateTable.returnedFrom_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.returnedTo_id_temp = joinedTable.id_temp)
+      SET updateTable.returnedTo_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE TestBatch AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.location_id_temp = joinedTable.id_temp)
+      SET updateTable.location_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Transfusion AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.receivedFrom_id_temp = joinedTable.id_temp)
+      SET updateTable.receivedFrom_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.location_id_temp = joinedTable.id_temp)
+      SET updateTable.location_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.location_id_temp = joinedTable.id_temp)
+      SET updateTable.location_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donation_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.venue_id_temp = joinedTable.id_temp)
+      SET updateTable.venue_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.venue_id_temp = joinedTable.id_temp)
+      SET updateTable.venue_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.venue_id_temp = joinedTable.id_temp)
+      SET updateTable.venue_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonorDeferral_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.venue_id_temp = joinedTable.id_temp)
+      SET updateTable.venue_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.dispatchedFrom_id_temp = joinedTable.id_temp)
+      SET updateTable.dispatchedFrom_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.dispatchedTo_id_temp = joinedTable.id_temp)
+      SET updateTable.dispatchedTo_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE PostDonationCounselling_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.referralSite_id_temp = joinedTable.id_temp)
+      SET updateTable.referralSite_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.returnedFrom_id_temp = joinedTable.id_temp)
+      SET updateTable.returnedFrom_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE ReturnForm_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.returnedTo_id_temp = joinedTable.id_temp)
+      SET updateTable.returnedTo_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE TestBatch_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.location_id_temp = joinedTable.id_temp)
+      SET updateTable.location_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD AS updateTable
+        LEFT JOIN Location AS joinedTable ON (updateTable.receivedFrom_id_temp = joinedTable.id_temp)
+      SET updateTable.receivedFrom_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="Location"/>
+
+    <dropColumn columnName="id_temp" tableName="Location_AUD"/>
+
+    <dropColumn columnName="location_id_temp" tableName="Component"/>
+
+    <dropColumn columnName="location_id_temp" tableName="ComponentBatch"/>
+
+    <dropColumn columnName="venue_id_temp" tableName="Donation"/>
+
+    <dropColumn columnName="venue_id_temp" tableName="DonationBatch"/>
+
+    <dropColumn columnName="venue_id_temp" tableName="Donor"/>
+
+    <dropColumn columnName="venue_id_temp" tableName="DonorDeferral"/>
+
+    <dropColumn columnName="dispatchedFrom_id_temp" tableName="OrderForm"/>
+
+    <dropColumn columnName="dispatchedTo_id_temp" tableName="OrderForm"/>
+
+    <dropColumn columnName="referralSite_id_temp" tableName="PostDonationCounselling"/>
+
+    <dropColumn columnName="returnedFrom_id_temp" tableName="ReturnForm"/>
+
+    <dropColumn columnName="returnedTo_id_temp" tableName="ReturnForm"/>
+
+    <dropColumn columnName="location_id_temp" tableName="TestBatch"/>
+
+    <dropColumn columnName="receivedFrom_id_temp" tableName="Transfusion"/>
+
+    <dropColumn columnName="location_id_temp" tableName="Component_AUD"/>
+
+    <dropColumn columnName="location_id_temp" tableName="ComponentBatch_AUD"/>
+
+    <dropColumn columnName="venue_id_temp" tableName="Donation_AUD"/>
+
+    <dropColumn columnName="venue_id_temp" tableName="DonationBatch_AUD"/>
+
+    <dropColumn columnName="venue_id_temp" tableName="Donor_AUD"/>
+
+    <dropColumn columnName="venue_id_temp" tableName="DonorDeferral_AUD"/>
+
+    <dropColumn columnName="dispatchedFrom_id_temp" tableName="OrderForm_AUD"/>
+
+    <dropColumn columnName="dispatchedTo_id_temp" tableName="OrderForm_AUD"/>
+
+    <dropColumn columnName="referralSite_id_temp" tableName="PostDonationCounselling_AUD"/>
+
+    <dropColumn columnName="returnedFrom_id_temp" tableName="ReturnForm_AUD"/>
+
+    <dropColumn columnName="returnedTo_id_temp" tableName="ReturnForm_AUD"/>
+
+    <dropColumn columnName="location_id_temp" tableName="TestBatch_AUD"/>
+
+    <dropColumn columnName="receivedFrom_id_temp" tableName="Transfusion_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="Component" constraintName="FK_COMPONENT_LOCATION_ID"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="ComponentBatch" constraintName="fk_ComponentBatch_Location"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="venue_id" baseTableName="Donation" constraintName="FK_donation_Location"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="venue_id" baseTableName="DonationBatch" constraintName="FK_DonationBatch_Location"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="venue_id" baseTableName="Donor" constraintName="fk_donor_venue"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="venue_id" baseTableName="DonorDeferral" constraintName="fk_DonorDeferral_Location"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="dispatchedFrom_id" baseTableName="OrderForm" constraintName="fk_OrderForm_dispatchedFrom"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="dispatchedTo_id" baseTableName="OrderForm" constraintName="fk_OrderForm_dispatchedTo"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="referralSite_id" baseTableName="PostDonationCounselling" constraintName="fk_PostDonationCounselling_Location_referralSite_id"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="returnedFrom_id" baseTableName="ReturnForm" constraintName="fk_ReturnForm_returnedFrom"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="returnedTo_id" baseTableName="ReturnForm" constraintName="fk_ReturnForm_returnedTo"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="TestBatch" constraintName="FK_TESTBATCH_LOCATION_ID"
+      referencedColumnNames="id" referencedTableName="Location"/>
+
+    <addForeignKeyConstraint baseColumnNames="receivedFrom_id" baseTableName="Transfusion" constraintName="fk_Transfusion_location"
+      referencedColumnNames="id" referencedTableName="Location"/>
+  </changeSet>
+</databaseChangeLog>

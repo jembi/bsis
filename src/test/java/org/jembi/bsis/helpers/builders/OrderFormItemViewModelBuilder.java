@@ -1,16 +1,18 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
 
 public class OrderFormItemViewModelBuilder extends AbstractBuilder<OrderFormItemViewModel> {
 
-  private Long id;
+  private UUID id;
   private ComponentTypeViewModel componentType;
   private String bloodGroup;
   private int numberOfUnits;
 
-  public OrderFormItemViewModelBuilder withId(Long id) {
+  public OrderFormItemViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

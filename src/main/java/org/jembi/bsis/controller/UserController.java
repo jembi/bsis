@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -70,7 +71,7 @@ public class UserController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-  public Map<String, Object> getUserDetails(@PathVariable Long id) {
+  public Map<String, Object> getUserDetails(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
     User user = userRepository.findUserById(id);
     map.put("user", userFactory.createViewModel(user));
@@ -93,7 +94,7 @@ public class UserController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-  public UserViewModel updateUser(@Valid @RequestBody UserBackingForm form, @PathVariable Long id) {
+  public UserViewModel updateUser(@Valid @RequestBody UserBackingForm form, @PathVariable UUID id) {
     form.setIsDeleted(false);
     User user = userFactory.createEntity(form);
     user.setId(id);
@@ -134,7 +135,7 @@ public class UserController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  public void deleteUser(@PathVariable Long id) {
+  public void deleteUser(@PathVariable UUID id) {
     userCRUDService.deleteUser(id);
   }
 

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -112,13 +113,13 @@ public class ComponentBatchController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_COMPONENT_BATCH + "')")
-  public void deleteComponentBatch(@PathVariable Long id) {
+  public void deleteComponentBatch(@PathVariable UUID id) {
     componentBatchCRUDService.deleteComponentBatch(id);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT_BATCH + "')")
-  public ResponseEntity<ComponentBatchFullViewModel> getComponentBatch(@PathVariable Long id) {
+  public ResponseEntity<ComponentBatchFullViewModel> getComponentBatch(@PathVariable UUID id) {
     ComponentBatch componentBatch = componentBatchCRUDService.getComponentBatchById(id);
     return new ResponseEntity<>(
         componentBatchFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.OK);

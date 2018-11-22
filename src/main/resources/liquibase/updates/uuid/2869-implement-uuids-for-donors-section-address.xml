@@ -1,0 +1,102 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170330-1103" author="micnice">
+    <comment>This change set: 1) renames addressId to address_id in Donor and Donor_AUD; 2) Adds a foreign key for address in Donor table</comment>
+    <renameColumn tableName="Donor" oldColumnName="addressId" newColumnName="address_id" columnDataType="bigint(20)"/>
+    <renameColumn tableName="Donor_AUD" oldColumnName="addressId" newColumnName="address_id" columnDataType="bigint(20)"/>
+    <addForeignKeyConstraint baseColumnNames="address_id" baseTableName="Donor" constraintName="fk_Donor_address"
+        referencedColumnNames="id" referencedTableName="Address" />
+  </changeSet>
+
+  <changeSet id="20170329-1530"  author="micnice">
+
+    <comment>This change set migrates the Address table from an integer id primary key
+      to a UUID of type BINARY(16). </comment>
+
+    <dropForeignKeyConstraint baseTableName="Donor" constraintName="fk_Donor_address"/>
+
+    <addColumn tableName="Address">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor">
+      <column name="address_id_temp" type="BIGINT" afterColumn="address_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor_AUD">
+      <column name="address_id_temp" type="BIGINT" afterColumn="address_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE Address 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="address_id_temp_index" tableName="Address" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET address_id_temp = address_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor 
+      SET address_id_temp = address_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="Address"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Address"/>
+
+    <modifyDataType columnName="address_id" newDataType="BINARY(16)" tableName="Donor"/>
+
+    <modifyDataType columnName="address_id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
+
+    <sql>
+      UPDATE Address 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Address ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE Donor AS updateTable
+        LEFT JOIN Address AS joinedTable ON (updateTable.address_id_temp = joinedTable.id_temp)
+      SET updateTable.address_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+        LEFT JOIN Address AS joinedTable ON (updateTable.address_id_temp = joinedTable.id_temp)
+      SET updateTable.address_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="Address"/>
+
+    <dropColumn columnName="address_id_temp" tableName="Donor"/>
+
+    <dropColumn columnName="address_id_temp" tableName="Donor_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="address_id" baseTableName="Donor" constraintName="fk_Donor_address"
+      referencedColumnNames="id" referencedTableName="Address"/>
+
+  </changeSet>
+
+</databaseChangeLog>

@@ -19,7 +19,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
@@ -41,7 +41,7 @@ import org.jembi.bsis.repository.OrderFormNamedQueryConstants;
 })
 @Entity
 @Audited
-public class OrderForm extends BaseModificationTrackerEntity {
+public class OrderForm extends BaseModificationTrackerUUIDEntity {
   
   private static final long serialVersionUID = 1L;
 

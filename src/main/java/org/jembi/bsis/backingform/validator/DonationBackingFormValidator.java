@@ -7,16 +7,20 @@ import javax.persistence.NoResultException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.DonationBackingForm;
+import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.SequenceNumberRepository;
+import org.jembi.bsis.service.DonorDeferralStatusCalculator;
 import org.jembi.bsis.service.GeneralConfigAccessorService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -47,6 +51,9 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
   @Autowired
   private LocationRepository locationRepository;
 
+  @Autowired
+  private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
+
   @Override
   public void validateForm(DonationBackingForm form, Errors errors) {
 
@@ -56,8 +63,8 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
       validateDonationIdentificationNumber(form, errors);
     }
     validateDonationBleedTimes(form, errors);
-    validateDonor(form, errors);
-    validateDonationBatch(form, errors);
+    DonationBatch donationBatch = validateDonationBatch(form, errors);
+    validateDonor(form, donationBatch, errors);
     validateVenue(form, errors);
     validateBloodPressure(form, errors);
     validateHaemoglobinCount(form, errors);
@@ -161,7 +168,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     }
   }
 
-  private void validateDonationBatch(DonationBackingForm form, Errors errors) {
+  private DonationBatch validateDonationBatch(DonationBackingForm form, Errors errors) {
     DonationBatch donationBatch = null;
     String batchNumber = form.getDonationBatchNumber();
     if (StringUtils.isNotBlank(batchNumber)) {
@@ -175,6 +182,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     if (donationBatch == null) {
       errors.rejectValue("donation.donationBatch", "donationBatch.invalid", "Please supply a valid donation batch");
     }
+    return donationBatch;
   }
   
   private void validateVenue(DonationBackingForm form, Errors errors) {
@@ -197,7 +205,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     }
   }
 
-  private void validateDonor(DonationBackingForm form, Errors errors) {
+  private void validateDonor(DonationBackingForm form, DonationBatch donationBatch, Errors errors) {
     String donorNumber = form.getDonorNumber();
     Donor donor = null;
     if (StringUtils.isNotBlank(donorNumber)) {
@@ -211,10 +219,45 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     if (donor == null) {
       errors.rejectValue("donation.donor", "donor.invalid", "Please supply a valid donor");
     }
-  }
+
+    if (donationBatch == null || donationBatch.isBackEntry() || !isNewDonation(form)) {
+      // skip validation on donor eligibility
+    } else { 
+      if (donor != null && donor.getDonations() != null) {
+
+        for (Donation donation : donor.getDonations()) {
+
+          PackType packType = donation.getPackType();
+
+          if (!packType.getCountAsDonation()) {
+            // Don't check period between donations if it doesn't count as a donation
+            continue;
+          }
+
+          // Work out the next allowed donation date
+          DateTime nextDonationDate = new DateTime(donation.getDonationDate())
+              .plusDays(packType.getPeriodBetweenDonations())
+              .withTimeAtStartOfDay();
   
+          // Check if the next allowed donation date is after today
+          if (nextDonationDate.isAfter(new DateTime().withTimeAtStartOfDay())) {
+            errors.rejectValue("donation.donor", "errors.invalid.donationBeforeNextAllowedDate", "Selected donation Date is before donor's next allowed donation date");
+          }
+        }
+      }
+
+      if (donor != null && donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())) {
+        errors.rejectValue("donation.donor", "errors.invalid.donorDeferred", "Donor is currently deferred");
+      }
+    }
+  }
+
+  private boolean isNewDonation(DonationBackingForm form) {
+    return form.getDonation().getId() == null;
+  }
+
   private void validateDonationIdentificationNumber(DonationBackingForm form, Errors errors) {
-    Integer dinLength = generalConfigAccessorService.getIntValue("donation.dinLength");
+    Integer dinLength = generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH);
     if (dinLength > 20) {
       dinLength = 20;
     }

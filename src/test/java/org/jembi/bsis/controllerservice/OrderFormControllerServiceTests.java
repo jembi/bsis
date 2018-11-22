@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.factory.OrderFormFactory;
@@ -36,7 +37,7 @@ public class OrderFormControllerServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateOrderFormWithoutStatusChange_shouldUpdateFieldsCorrectly() {
     // Fixture
-    Long orderFormId = Long.valueOf(1);
+    UUID orderFormId = UUID.randomUUID();
     Date createdDate = new Date();
     Date orderDate = new Date();
     Location dispatchedFrom = aDistributionSite().build();
@@ -75,7 +76,7 @@ public class OrderFormControllerServiceTests extends UnitTestSuite {
   @Test
   public void testDeleteOrderForm_should() {
     // Data
-    Long orderFormId = Long.valueOf(1);
+    UUID orderFormId = UUID.randomUUID();
     OrderForm expectedOrderForm = anOrderForm().withId(orderFormId).withIsDeleted(true).build();
     
     // Mocks

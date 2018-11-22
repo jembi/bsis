@@ -3,10 +3,10 @@ package org.jembi.bsis.backingform.validator;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
-import org.jembi.bsis.backingform.validator.OrderFormItemBackingFormValidator;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,13 +31,14 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setId(1L);
+    UUID componentTypeId = UUID.randomUUID();
+    componentType.setId(componentTypeId);
     backingForm.setComponentType(componentType);
     backingForm.setBloodGroup("A+");
     backingForm.setNumberOfUnits(12);
 
     // set up mocks
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderFormItem");
@@ -101,13 +102,14 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setId(1L);
+    UUID componentTypeId = UUID.randomUUID();
+    componentType.setId(componentTypeId);
     backingForm.setComponentType(componentType);
     backingForm.setBloodGroup("A+");
     backingForm.setNumberOfUnits(12);
 
     // set up mocks
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(false);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderFormItem");
@@ -122,12 +124,13 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setId(1L);
+    UUID componentTypeId = UUID.randomUUID();
+    componentType.setId(componentTypeId);
     backingForm.setComponentType(componentType);
     backingForm.setNumberOfUnits(12);
 
     // set up mocks
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderFormItem");
@@ -142,13 +145,14 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setId(1L);
+    UUID componentTypeId = UUID.randomUUID();
+    componentType.setId(componentTypeId);
     backingForm.setComponentType(componentType);
     backingForm.setBloodGroup("A*");
     backingForm.setNumberOfUnits(12);
 
     // set up mocks
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderFormItem");
@@ -163,13 +167,14 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setId(1L);
+    UUID componentTypeId = UUID.randomUUID();
+    componentType.setId(componentTypeId);
     backingForm.setComponentType(componentType);
     backingForm.setBloodGroup("A+");
     backingForm.setNumberOfUnits(-12);
 
     // set up mocks
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderFormItem");

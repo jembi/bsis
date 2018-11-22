@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItem;
 import static org.jembi.bsis.helpers.builders.BloodUnitsOrderDTOBuilder.aBloodUnitsOrderDTO;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
@@ -14,6 +15,7 @@ import static org.jembi.bsis.helpers.matchers.BloodUnitsOrderDTOMatcher.hasSameS
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -101,7 +103,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   @Test(expected = NoResultException.class)
   public void testFindOrderFormWithNoExistingOrderForm() {
     // Test
-    orderFormRepository.findById(1L);
+    orderFormRepository.findById(UUID.randomUUID());
   }
 
   @Test
@@ -123,7 +125,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   @Test
   public void testFindOrderFormByComponentNoneExisting_shouldReturnNull() {
     //Test
-    List<OrderForm> returnedOrderForms = orderFormRepository.findByComponent(1l);
+    List<OrderForm> returnedOrderForms = orderFormRepository.findByComponent(UUID.randomUUID());
     Assert.assertNotNull("Order for list was returned", returnedOrderForms);
     Assert.assertEquals("Order form was not found", 0, returnedOrderForms.size());
   }
@@ -199,15 +201,19 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   public void testFindOrderFormsByPeriodAndLocation_shouldReturnRightOrders() {
     // Set up
     DateTime now = new DateTime();
+    Date today = now.toDate();
     Date aDayAgo = now.minusDays(1).toDate();
     Date twoDaysAgo = now.minusDays(2).toDate();
     Date threeDaysAgo = now.minusDays(3).toDate();
     Location dispatchedFrom = LocationBuilder.aDistributionSite().withName("site1").build();
     Location dispatchedTo = LocationBuilder.aDistributionSite().withName("site2").build();
     OrderForm orderForm = anOrderForm()
-        .withOrderDate(aDayAgo).withOrderDate(twoDaysAgo)
-        .withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo).buildAndPersist(entityManager);
-    anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo).buildAndPersist(entityManager);
+        .withOrderDate(twoDaysAgo)
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .buildAndPersist(entityManager);
+    anOrderForm().withOrderDate(today).withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
+        .buildAndPersist(entityManager);
     anOrderForm().withOrderDate(threeDaysAgo).buildAndPersist(entityManager);
 
     // Test
@@ -362,9 +368,9 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Verify
     assertThat(dtos.size(), is(3));
-    assertThat(dtos.get(0), hasSameStateAsBloodUnitsOrderDTO(dto1));
-    assertThat(dtos.get(1), hasSameStateAsBloodUnitsOrderDTO(dto2));
-    assertThat(dtos.get(2), hasSameStateAsBloodUnitsOrderDTO(dto3));
+    assertThat(dtos, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto1)));
+    assertThat(dtos, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto2)));
+    assertThat(dtos, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto3)));
   }
 
   @Test
@@ -452,9 +458,9 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Verify
     assertThat(dtos.size(), is(3));
-    assertThat(dtos.get(0), hasSameStateAsBloodUnitsOrderDTO(dto1));
-    assertThat(dtos.get(1), hasSameStateAsBloodUnitsOrderDTO(dto2));
-    assertThat(dtos.get(2), hasSameStateAsBloodUnitsOrderDTO(dto3));
+    assertThat(dtos, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto1)));
+    assertThat(dtos, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto2)));
+    assertThat(dtos, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto3)));
   }
 
   @Test
@@ -625,10 +631,10 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Verify
     assertThat(returnedDTOs.size(), is(4));
-    assertThat(returnedDTOs.get(0), hasSameStateAsBloodUnitsOrderDTO(dto1));
-    assertThat(returnedDTOs.get(1), hasSameStateAsBloodUnitsOrderDTO(dto2));
-    assertThat(returnedDTOs.get(2), hasSameStateAsBloodUnitsOrderDTO(dto3));
-    assertThat(returnedDTOs.get(3), hasSameStateAsBloodUnitsOrderDTO(dto4));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto1)));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto2)));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto3)));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto4)));
   }
 
   @Test
@@ -734,10 +740,10 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Verify
     assertThat(returnedDTOs.size(), is(4));
-    assertThat(returnedDTOs.get(0), hasSameStateAsBloodUnitsOrderDTO(dto1));
-    assertThat(returnedDTOs.get(1), hasSameStateAsBloodUnitsOrderDTO(dto2));
-    assertThat(returnedDTOs.get(2), hasSameStateAsBloodUnitsOrderDTO(dto3));
-    assertThat(returnedDTOs.get(3), hasSameStateAsBloodUnitsOrderDTO(dto4));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto1)));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto2)));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto3)));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto4)));
   }
   
 
@@ -846,10 +852,10 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Verify
     assertThat(returnedDTOs.size(), is(4));
-    assertThat(returnedDTOs.get(0), hasSameStateAsBloodUnitsOrderDTO(dto1));
-    assertThat(returnedDTOs.get(1), hasSameStateAsBloodUnitsOrderDTO(dto2));
-    assertThat(returnedDTOs.get(2), hasSameStateAsBloodUnitsOrderDTO(dto3));
-    assertThat(returnedDTOs.get(3), hasSameStateAsBloodUnitsOrderDTO(dto4));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto1)));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto2)));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto3)));
+    assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto4)));
   }
 
   @Test

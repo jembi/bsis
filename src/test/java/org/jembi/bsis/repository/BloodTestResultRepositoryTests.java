@@ -8,6 +8,7 @@ import static org.jembi.bsis.helpers.builders.BloodTestResultDTOBuilder.aBloodTe
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 import static org.junit.Assert.assertEquals;
@@ -16,7 +17,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
 import org.jembi.bsis.dto.BloodTestResultDTO;
 import org.jembi.bsis.dto.BloodTestResultExportDTO;
 import org.jembi.bsis.dto.BloodTestTotalDTO;
@@ -160,6 +160,9 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
             .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
     Donation notReleasedDonation = aDonation().withVenue(expectedVenue).thatIsDeleted().withDonationDate(irrelevantStartDate)
             .thatIsNotReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+    Donation doesntCountAsDonationDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build())
+            .withPackType(aPackType().withCountAsDonation(false).build()).buildAndPersist(entityManager);
     BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI)
             .withTestName("test1").withTestNameShort("t1").buildAndPersist(entityManager);
     BloodTest unexpectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
@@ -198,6 +201,12 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
     // Excluded by not being released
     aBloodTestResult()
             .withDonation(notReleasedDonation)
+            .withBloodTest(expectedBloodTest)
+            .buildAndPersist(entityManager);
+
+    // Excluded by not counting as donation
+    aBloodTestResult()
+            .withDonation(doesntCountAsDonationDonation)
             .withBloodTest(expectedBloodTest)
             .buildAndPersist(entityManager);
 
@@ -270,9 +279,9 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
     Donation expectedDonationEndDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantEndDate)
             .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
     Donation expectedDonationSafe = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_SAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.SAFE).buildAndPersist(entityManager);
     Donation expectedDonationUnsafe = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
 
     Donation outOfRangeDateDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(new Date())
             .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
@@ -280,6 +289,9 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
             .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
     Donation notReleasedDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
             .thatIsNotReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+    Donation doesntCountAsDonationDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build())
+            .withPackType(aPackType().withCountAsDonation(false).build()).buildAndPersist(entityManager);
 
     BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI)
             .withTestName("test1").withTestNameShort("t1").buildAndPersist(entityManager);
@@ -340,6 +352,11 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
             .withBloodTest(expectedBloodTest)
             .buildAndPersist(entityManager);
 
+    // Excluded by not counting as donation
+    aBloodTestResult()
+            .withDonation(doesntCountAsDonationDonation)
+            .withBloodTest(expectedBloodTest)
+            .buildAndPersist(entityManager);
 
     List<BloodTestTotalDTO> expectedDtos = Arrays.asList(
             BloodTestTotalDTOBuilder.aBloodTestTotalDTO()
@@ -363,18 +380,21 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
     Location expectedVenue = aVenue().build();
     Gender expectedGender = Gender.male;
     Donation expectedUnsafeDonationStartDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
     Donation expectedUnsafeDonationEndDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantEndDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
 
     Donation safeDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_SAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.SAFE).buildAndPersist(entityManager);
     Donation deletedDonation = aDonation().withVenue(expectedVenue).thatIsDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
     Donation outOfRangeDateDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(new Date())
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
     Donation notReleasedDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsNotReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsNotReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
+    Donation doesntCountAsDonationDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE)
+            .withPackType(aPackType().withCountAsDonation(false).build()).buildAndPersist(entityManager);
 
     BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI)
             .withTestName("test1").withTestNameShort("t1").buildAndPersist(entityManager);
@@ -426,6 +446,12 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
     // Excluded by not being released
     aBloodTestResult()
             .withDonation(notReleasedDonation)
+            .withBloodTest(expectedBloodTest)
+            .buildAndPersist(entityManager);
+
+    // Excluded by not counting as donation
+    aBloodTestResult()
+            .withDonation(doesntCountAsDonationDonation)
             .withBloodTest(expectedBloodTest)
             .buildAndPersist(entityManager);
 

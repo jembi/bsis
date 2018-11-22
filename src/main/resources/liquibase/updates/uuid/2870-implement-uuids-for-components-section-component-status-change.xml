@@ -1,0 +1,87 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170411-1019"  author="tumijacob">
+    <comment>This change set migrates the ComponentStatusChange table from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+
+    <addColumn tableName="ComponentStatusChange">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentStatusChange_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE ComponentStatusChange 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="componentstatuschange_id_temp_index" tableName="ComponentStatusChange" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE ComponentStatusChange_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="ComponentStatusChange"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentStatusChange"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentStatusChange_AUD"/>
+
+
+
+    <sql>
+      UPDATE ComponentStatusChange 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ComponentStatusChange ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ComponentStatusChange_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentStatusChange_AUD AS updateTable
+        LEFT JOIN ComponentStatusChange AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE ComponentStatusChange_AUD
+      FROM ComponentStatusChange_AUD
+        LEFT JOIN ComponentStatusChange AS joinTable ON (ComponentStatusChange_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="ComponentStatusChange"/>
+
+    <dropColumn columnName="id_temp" tableName="ComponentStatusChange_AUD"/>
+
+  </changeSet>
+</databaseChangeLog>

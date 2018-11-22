@@ -3,13 +3,13 @@ package org.jembi.bsis.model.address;
 import javax.persistence.Entity;
 
 import org.hibernate.validator.constraints.Email;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseUUIDEntity;
 
 /**
  * Entity that contains the Donor's mobile, home and work telephone number and email address.
  */
 @Entity
-public class Contact extends BaseEntity {
+public class Contact extends BaseUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

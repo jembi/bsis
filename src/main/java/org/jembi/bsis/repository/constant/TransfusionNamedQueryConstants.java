@@ -8,7 +8,7 @@ public class TransfusionNamedQueryConstants {
       "SELECT NEW org.jembi.bsis.dto.TransfusionSummaryDTO(t.transfusionOutcome, t.transfusionReactionType, t.receivedFrom, COUNT(t)) " +
       "FROM Transfusion t " +
       "LEFT JOIN t.transfusionReactionType " +
-      "WHERE (:receivedFromId = NULL OR t.receivedFrom.id = :receivedFromId) " +
+      "WHERE (:includeAllLocations is true OR t.receivedFrom.id = :receivedFromId) " +
       "AND (t.dateTransfused BETWEEN :startDate AND :endDate) " +
       "AND (t.isDeleted = :transfusionDeleted) " +
       "GROUP BY t.receivedFrom, t.transfusionOutcome, t.transfusionReactionType " +
@@ -28,9 +28,9 @@ public class TransfusionNamedQueryConstants {
   public static final String QUERY_FIND_TRANSFUSIONS =
       "SELECT t from Transfusion t " +
       "WHERE t.isDeleted = :isDeleted " +
-      "AND (:componentTypeId is null OR t.component.componentType.id = :componentTypeId) " +
+      "AND (:includeAllComponentTypes is true OR t.component.componentType.id = :componentTypeId) " +
       "AND (:includeTransfusionOutcome is false OR t.transfusionOutcome = :transfusionOutcome) " +
-      "AND (:receivedFromId is null OR t.receivedFrom.id = :receivedFromId) " +
+      "AND (:includeAllLocations is true OR t.receivedFrom.id = :receivedFromId) " +
       "AND (:startDate is null OR t.dateTransfused >= :startDate) " +
       "AND (:endDate is null OR t.dateTransfused <= :endDate) ";
 

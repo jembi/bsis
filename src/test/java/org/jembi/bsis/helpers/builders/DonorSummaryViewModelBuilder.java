@@ -1,13 +1,14 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.viewmodel.DonorSummaryViewModel;
 
 public class DonorSummaryViewModelBuilder extends AbstractBuilder<DonorSummaryViewModel> {
 
-  private long id;
+  private UUID id;
   private String firstName;
   private String lastName;
   private Gender gender;
@@ -15,7 +16,7 @@ public class DonorSummaryViewModelBuilder extends AbstractBuilder<DonorSummaryVi
   private String donorNumber;
   private String venueName;
 
-  public DonorSummaryViewModelBuilder withId(long id) {
+  public DonorSummaryViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

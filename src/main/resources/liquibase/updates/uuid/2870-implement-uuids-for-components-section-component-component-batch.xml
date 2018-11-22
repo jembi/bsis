@@ -1,0 +1,221 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170418-1206" author="tumijacob">
+    <comment> Drop and recreate componentBatch_id foreign key in Component Table</comment>
+    <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Compoment_ComponentBatch" />
+    <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="Component"
+      constraintName="fk_Component_ComponentBatch" referencedColumnNames="id" referencedTableName="ComponentBatch" />
+  </changeSet>
+
+  <changeSet id="20170411-1019"  author="tumijacob">
+    <comment>This change set migrates the ComponentBatch table from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+
+    <dropForeignKeyConstraint baseTableName="BloodTransportBox" constraintName="fk_BloodTransportBox_ComponentBatch"/>
+    <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Component_ComponentBatch"/>
+    <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="fk_DonationBatch_ComponentBatch"/>
+
+    <addColumn tableName="ComponentBatch">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="ComponentBatch_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTransportBox">
+      <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
+    </addColumn>
+
+    <addColumn tableName="Component">
+      <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationBatch">
+      <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTransportBox_AUD">
+      <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
+    </addColumn>
+
+    <addColumn tableName="Component_AUD">
+      <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
+    </addColumn>
+
+    <addColumn tableName="DonationBatch_AUD">
+      <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE ComponentBatch 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="componentbatch_id_temp_index" tableName="ComponentBatch" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE ComponentBatch_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTransportBox_AUD 
+      SET componentBatch_id_temp = componentBatch_id;
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD 
+      SET componentBatch_id_temp = componentBatch_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD 
+      SET componentBatch_id_temp = componentBatch_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTransportBox 
+      SET componentBatch_id_temp = componentBatch_id;
+    </sql>
+
+    <sql>
+      UPDATE Component 
+      SET componentBatch_id_temp = componentBatch_id;
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch 
+      SET componentBatch_id_temp = componentBatch_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="ComponentBatch"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentBatch"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentBatch_AUD"/>
+
+    <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="BloodTransportBox"/>
+    <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="Component"/>
+    <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="DonationBatch"/>
+
+    <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="BloodTransportBox_AUD"/>
+    <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="Component_AUD"/>
+    <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="DonationBatch_AUD"/>
+
+    <sql>
+      UPDATE ComponentBatch 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ComponentBatch ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ComponentBatch_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE ComponentBatch_AUD AS updateTable
+        LEFT JOIN ComponentBatch AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE ComponentBatch_AUD
+      FROM ComponentBatch_AUD
+        LEFT JOIN ComponentBatch AS joinTable ON (ComponentBatch_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE BloodTransportBox AS updateTable
+        LEFT JOIN ComponentBatch AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
+      SET updateTable.componentBatch_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Component AS updateTable
+        LEFT JOIN ComponentBatch AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
+      SET updateTable.componentBatch_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch AS updateTable
+        LEFT JOIN ComponentBatch AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
+      SET updateTable.componentBatch_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE BloodTransportBox_AUD AS updateTable
+        LEFT JOIN ComponentBatch AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
+      SET updateTable.componentBatch_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Component_AUD AS updateTable
+        LEFT JOIN ComponentBatch AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
+      SET updateTable.componentBatch_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE DonationBatch_AUD AS updateTable
+        LEFT JOIN ComponentBatch AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
+      SET updateTable.componentBatch_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="ComponentBatch"/>
+
+    <dropColumn columnName="id_temp" tableName="ComponentBatch_AUD"/>
+
+    <dropColumn columnName="componentBatch_id_temp" tableName="BloodTransportBox"/>
+
+    <dropColumn columnName="componentBatch_id_temp" tableName="Component"/>
+
+    <dropColumn columnName="componentBatch_id_temp" tableName="DonationBatch"/>
+
+    <dropColumn columnName="componentBatch_id_temp" tableName="BloodTransportBox_AUD"/>
+
+    <dropColumn columnName="componentBatch_id_temp" tableName="Component_AUD"/>
+
+    <dropColumn columnName="componentBatch_id_temp" tableName="DonationBatch_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="BloodTransportBox" constraintName="fk_BloodTransportBox_ComponentBatch"
+      referencedColumnNames="id" referencedTableName="ComponentBatch"/>
+
+    <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="Component" constraintName="fk_Component_ComponentBatch"
+      referencedColumnNames="id" referencedTableName="ComponentBatch"/>
+
+    <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="DonationBatch" constraintName="fk_DonationBatch_ComponentBatch"
+      referencedColumnNames="id" referencedTableName="ComponentBatch"/>
+
+  </changeSet>
+</databaseChangeLog>

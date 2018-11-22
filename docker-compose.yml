@@ -1,0 +1,38 @@
+---
+version: "3"
+
+services:
+  mysql:
+    image: mysql:5.7
+    networks:
+      - bsis-backend
+    volumes:
+      - bsis_data:/var/lib/mysql
+    ports:
+        - "3306:3306"
+    environment:
+      MYSQL_USER: "root"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "bsis"
+
+  bsis:
+    build: ./docker/tomcat
+    depends_on:
+      - mysql
+    networks:
+      - bsis-backend
+      - bsis
+    volumes:
+      - ./target/bsis:/usr/local/tomcat/webapps/bsis
+    ports:
+      - "8080:8080"
+      - "5005:8000"
+
+networks:
+  bsis-backend:
+  bsis:
+    external:
+      name: bsis
+
+volumes:
+  bsis_data:

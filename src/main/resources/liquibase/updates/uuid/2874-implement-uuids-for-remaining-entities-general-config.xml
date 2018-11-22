@@ -1,0 +1,147 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170511-0904"  author="patience-mpofu">
+    <comment>This change set migrates the GeneralConfig and GeneralConfig_AUD tables from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+        
+    <addColumn tableName="GeneralConfig">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="GeneralConfig_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE GeneralConfig 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="generalconfig_id_temp_index" tableName="GeneralConfig" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE GeneralConfig_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="GeneralConfig"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="GeneralConfig"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="GeneralConfig_AUD"/>
+
+    <sql>
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0261fb8826e4a471449260") WHERE id_temp = 4;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e02671b8826e4a471449260") WHERE id_temp = 5;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0269998826e4a471449260") WHERE id_temp = 6;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e026bb88826e4a471449260") WHERE id_temp = 7;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e026dd58826e4a471449260") WHERE id_temp = 8;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e026fe28826e4a471449260") WHERE id_temp = 9;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0271ef8826e4a471449260") WHERE id_temp = 10;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0273fc8826e4a471449260") WHERE id_temp = 11;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0276098826e4a471449260") WHERE id_temp = 12;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e02780c8826e4a471449260") WHERE id_temp = 13;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e027a038826e4a471449260") WHERE id_temp = 14;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e027bf48826e4a471449260") WHERE id_temp = 15;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e027de98826e4a471449260") WHERE id_temp = 16;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e027fde8826e4a471449260") WHERE id_temp = 17;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0281d18826e4a471449260") WHERE id_temp = 18;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0283c48826e4a471449260") WHERE id_temp = 19;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0285bc8826e4a471449260") WHERE id_temp = 20;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0287bc8826e4a471449260") WHERE id_temp = 21;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0289ae8826e4a471449260") WHERE id_temp = 22;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e028b978826e4a471449260") WHERE id_temp = 23;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e028d8c8826e4a471449260") WHERE id_temp = 24;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e028f828826e4a471449260") WHERE id_temp = 25;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0291678826e4a471449260") WHERE id_temp = 26;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0293558826e4a471449260") WHERE id_temp = 27;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e02954e8826e4a471449260") WHERE id_temp = 28;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0297408826e4a471449260") WHERE id_temp = 29;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e02992a8826e4a471449260") WHERE id_temp = 30;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e029b1e8826e4a471449260") WHERE id_temp = 31;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e029d158826e4a471449260") WHERE id_temp = 32;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e029f018826e4a471449260") WHERE id_temp = 33;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e02a0f08826e4a471449260") WHERE id_temp = 34;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e02a2ed8826e4a471449260") WHERE id_temp = 35;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e02a4e68826e4a471449260") WHERE id_temp = 36;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e02a75e8826e4a471449260") WHERE id_temp = 37;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e02a9678826e4a471449260") WHERE id_temp = 38;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e02ab678826e4a471449260") WHERE id_temp = 39;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0483448826e4a471449260") WHERE id_temp = 40;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04861c8826e4a471449260") WHERE id_temp = 41;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0488698826e4a471449260") WHERE id_temp = 42;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e048a918826e4a471449260") WHERE id_temp = 43;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e048cbc8826e4a471449260") WHERE id_temp = 44;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e048ed08826e4a471449260") WHERE id_temp = 45;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0491878826e4a471449260") WHERE id_temp = 46;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0493988826e4a471449260") WHERE id_temp = 47;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0495a68826e4a471449260") WHERE id_temp = 48;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0497a68826e4a471449260") WHERE id_temp = 49;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e0499b18826e4a471449260") WHERE id_temp = 50;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e049bb18826e4a471449260") WHERE id_temp = 51;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e049dc28826e4a471449260") WHERE id_temp = 52;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e049fc88826e4a471449260") WHERE id_temp = 53;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04a1dc8826e4a471449260") WHERE id_temp = 54;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04a3e98826e4a471449260") WHERE id_temp = 55;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04a75d8826e4a471449260") WHERE id_temp = 56;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04a9708826e4a471449260") WHERE id_temp = 57;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04ab828826e4a471449260") WHERE id_temp = 58;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04ad7f8826e4a471449260") WHERE id_temp = 59;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04afe98826e4a471449260") WHERE id_temp = 60;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04b1f78826e4a471449260") WHERE id_temp = 62;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04b4028826e4a471449260") WHERE id_temp = 63;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04b6778826e4a471449260") WHERE id_temp = 64;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04b95e8826e4a471449260") WHERE id_temp = 65;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04bbda8826e4a471449260") WHERE id_temp = 66;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04be4e8826e4a471449260") WHERE id_temp = 67;
+      UPDATE GeneralConfig SET id = UNHEX("11e868b09e04c0818826e4a471449260") WHERE id_temp = 68;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE GeneralConfig ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE GeneralConfig_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE GeneralConfig_AUD AS updateTable
+        LEFT JOIN GeneralConfig AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE GeneralConfig_AUD
+      FROM GeneralConfig_AUD
+        LEFT JOIN GeneralConfig AS joinTable ON (GeneralConfig_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="GeneralConfig"/>
+
+    <dropColumn columnName="id_temp" tableName="GeneralConfig_AUD"/>
+        
+        
+  </changeSet>
+</databaseChangeLog>

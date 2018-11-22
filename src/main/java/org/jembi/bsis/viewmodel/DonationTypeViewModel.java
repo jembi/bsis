@@ -1,6 +1,8 @@
 package org.jembi.bsis.viewmodel;
 
-public class DonationTypeViewModel extends BaseViewModel {
+import java.util.UUID;
+
+public class DonationTypeViewModel extends BaseViewModel<UUID> {
 
   private String type;
   private Boolean isDeleted;

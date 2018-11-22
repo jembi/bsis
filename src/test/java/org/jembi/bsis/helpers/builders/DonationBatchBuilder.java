@@ -1,35 +1,36 @@
 package org.jembi.bsis.helpers.builders;
 
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.DonationBatchPersister;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.util.RandomTestDate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 
 public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
 
-  private Long id;
+  private UUID id;
   private String batchNumber;
   private String notes;
   private List<Donation> donations;
   private Location venue = aVenue().build();
-  private TestBatch testBatch;
   private boolean deleted;
   private boolean closed;
   private boolean backEntry;
   private ComponentBatch componentBatch;
   private Date lastUpdatedDate;
-  private Date donationBatchDate = new Date();
+  private Date donationBatchDate = new RandomTestDate();
 
-  public DonationBatchBuilder withId(Long id) {
+  public DonationBatchBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
@@ -64,11 +65,6 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
 
   public DonationBatchBuilder withVenue(Location venue) {
     this.venue = venue;
-    return this;
-  }
-
-  public DonationBatchBuilder withTestBatch(TestBatch testBatch) {
-    this.testBatch = testBatch;
     return this;
   }
 
@@ -118,7 +114,6 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     donationBatch.setIsClosed(closed);
     donationBatch.setVenue(venue);
     donationBatch.setBackEntry(backEntry);
-    donationBatch.setTestBatch(testBatch);
     donationBatch.setComponentBatch(componentBatch);
     donationBatch.setLastUpdated(lastUpdatedDate);
     donationBatch.setDonationBatchDate(donationBatchDate);

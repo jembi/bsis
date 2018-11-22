@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Blood Safety Information System">
+    <meta name="author" content="Jembi Health Systems">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="css/login.css" media="screen" rel="stylesheet" type="text/css"/>
+
+    <title>BSIS</title>
+</head>
+
+<body>
+  <div class="form_container">
+    <div class="form_wrap">
+      <form class="form-signin" action="j_spring_security_check" method="POST">
+        <img src="images/bsis_logo.png" width="300" height="153">
+        <input type="username" id="username" name="j_username" class="form-control" placeholder="Username" required autofocus="true">
+        <input type="password" id="password" name="j_password" class="form-control" placeholder="Password" required>
+        <button class="btn btn-primary" type="submit">Log in</button>
+        <div id="error" class="alert_container">
+  	  <div class="alert alert-danger">Invalid Username / Password.</div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="footer_container">
+    <p>© 2014 - <span id="year"></span>
+      <a href="http://www.jembi.org">Jembi Health Systems</a>
+      <br>Version: <span id="version"></span> | Build: <span id="build"></span>
+    </p>
+  </div>
+</body>
+
+<script src='js/jquery-1.8.0.min.js' type='text/javascript'></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#error").toggle(document.URL.indexOf("error=true") !== -1);
+    $("#year").html((new Date()).getFullYear());
+  });
+  $(function(){
+    $.getJSON('/bsis/version', function(data) {
+      console.log(data);
+      $("#version").html(data.version.version);
+      $("#build").html(data.version.buildNumber);
+    });
+  });
+</script>
+
+</html>

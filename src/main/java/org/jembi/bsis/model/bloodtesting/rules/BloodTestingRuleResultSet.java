@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -29,13 +30,13 @@ public class BloodTestingRuleResultSet {
   private Donation donation;
 
   /* the previously saved test results */
-  private Map<Long, String> storedTestResults;
+  private Map<UUID, String> storedTestResults;
 
   /* the saved test results combined with the current test results */
-  private Map<Long, String> availableTestResults;
+  private Map<UUID, String> availableTestResults;
 
   /* only the recent (saved) blood test results */
-  private Map<Long, BloodTestResult> recentTestResults;
+  private Map<UUID, BloodTestResult> recentTestResults;
 
   /* how many blood typing tests were done */
   private Integer numBloodTypingTests = 0;
@@ -50,7 +51,7 @@ public class BloodTestingRuleResultSet {
   private TTIStatus ttiStatus;
 
   /* collection of the basic TTI tests that weren't done */
-  private Set<Long> basicTtiTestsNotDone = new HashSet<>();
+  private Set<UUID> basicTtiTestsNotDone = new HashSet<>();
 
   /* collection of the various blood typing ABO tests done */
   private Set<String> bloodAboChanges = new HashSet<>();
@@ -65,19 +66,19 @@ public class BloodTestingRuleResultSet {
   private Set<String> titreChanges = new HashSet<>();
 
   /* collection of the ABO tests that are still outstanding */
-  private List<Long> pendingAboTestsIds = new ArrayList<>();
+  private List<UUID> pendingAboTestsIds = new ArrayList<>();
 
   /* collection of the Rh tests that are still outstanding */
-  private List<Long> pendingRhTestsIds = new ArrayList<>();
+  private List<UUID> pendingRhTestsIds = new ArrayList<>();
 
   /* collection of the TTI Confirmatory tests that are still outstanding */
-  private List<Long> pendingConfirmatoryTtiTestsIds = new ArrayList<>();
+  private List<UUID> pendingConfirmatoryTtiTestsIds = new ArrayList<>();
 
   /* collection of the TTI Repeat tests that are still outstanding */
-  private List<Long> pendingRepeatTtiTestsIds = new ArrayList<>();
+  private List<UUID> pendingRepeatTtiTestsIds = new ArrayList<>();
 
   /* collection of the TTI Repeat and Confimatory tests that are still outstanding */
-  private List<Long> pendingRepeatAndConfirmatoryTtiTestsIds = new ArrayList<>();
+  private List<UUID> pendingRepeatAndConfirmatoryTtiTestsIds = new ArrayList<>();
 
   /* collection of the TTI and Serology tests that have been done */
   private List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
@@ -92,8 +93,8 @@ public class BloodTestingRuleResultSet {
    * @param recentTestResults    Map<Long, BloodTestResult> of the most recent test results
    * @param bloodTestingRules    List<BloodTestingRules> of the tests performed
    */
-  public BloodTestingRuleResultSet(Donation donation, Map<Long, String> storedTestResults,
-                                   Map<Long, String> availableTestResults, Map<Long, BloodTestResult> recentTestResults,
+  public BloodTestingRuleResultSet(Donation donation, Map<UUID, String> storedTestResults,
+                                   Map<UUID, String> availableTestResults, Map<UUID, BloodTestResult> recentTestResults,
                                    List<BloodTestingRule> bloodTestingRules) {
     this.donation = donation;
     this.storedTestResults = storedTestResults;
@@ -110,15 +111,15 @@ public class BloodTestingRuleResultSet {
     this.donation = donation;
   }
 
-  public Map<Long, BloodTestResult> getRecentTestResults() {
+  public Map<UUID, BloodTestResult> getRecentTestResults() {
     return recentTestResults;
   }
 
-  public Set<Long> getBasicTtiTestsNotDone() {
+  public Set<UUID> getBasicTtiTestsNotDone() {
     return basicTtiTestsNotDone;
   }
 
-  public void setBasicTtiTestsNotDone(Set<Long> basicTtiTestsNotDone) {
+  public void setBasicTtiTestsNotDone(Set<UUID> basicTtiTestsNotDone) {
     this.basicTtiTestsNotDone = basicTtiTestsNotDone;
   }
 
@@ -186,67 +187,67 @@ public class BloodTestingRuleResultSet {
     this.titreChanges.add(titreChange);
   }
 
-  public List<Long> getPendingAboTestsIds() {
+  public List<UUID> getPendingAboTestsIds() {
     return pendingAboTestsIds;
   }
 
-  public void addPendingAboTestsIds(Long pendingAboTestsId) {
+  public void addPendingAboTestsIds(UUID pendingAboTestsId) {
     this.pendingAboTestsIds.add(pendingAboTestsId);
   }
 
-  public List<Long> getPendingRhTestsIds() {
+  public List<UUID> getPendingRhTestsIds() {
     return pendingRhTestsIds;
   }
 
-  public void addPendingRhTestsIds(Long pendingRhTestsId) {
+  public void addPendingRhTestsIds(UUID pendingRhTestsId) {
     this.pendingRhTestsIds.add(pendingRhTestsId);
   }
 
-  public List<Long> getPendingConfirmatoryTtiTestsIds() {
+  public List<UUID> getPendingConfirmatoryTtiTestsIds() {
     return pendingConfirmatoryTtiTestsIds;
   }
 
-  public void addPendingConfirmatoryTtiTestsIds(Long pendingConfirmatoryTtiTestsIds) {
+  public void addPendingConfirmatoryTtiTestsIds(UUID pendingConfirmatoryTtiTestsIds) {
     this.pendingConfirmatoryTtiTestsIds.add(pendingConfirmatoryTtiTestsIds);
   }
 
-  public List<Long> getPendingRepeatTtiTestsIds() {
+  public List<UUID> getPendingRepeatTtiTestsIds() {
     return pendingRepeatTtiTestsIds;
   }
 
-  public void addPendingRepeatTtiTestsIds(Long pendingRepeatTtiTestsId) {
+  public void addPendingRepeatTtiTestsIds(UUID pendingRepeatTtiTestsId) {
     this.pendingRepeatTtiTestsIds.add(pendingRepeatTtiTestsId);
   }
 
-  public List<Long> getPendingRepeatAndConfirmatoryTtiTestsIds() {
+  public List<UUID> getPendingRepeatAndConfirmatoryTtiTestsIds() {
     return pendingRepeatAndConfirmatoryTtiTestsIds;
   }
 
-  public void addPendingRepeatAndConfirmatoryTtiTestsIds(Long pendingRepeatAndConfirmatoryTtiTestsIds) {
+  public void addPendingRepeatAndConfirmatoryTtiTestsIds(UUID pendingRepeatAndConfirmatoryTtiTestsIds) {
     this.pendingRepeatAndConfirmatoryTtiTestsIds.add(pendingRepeatAndConfirmatoryTtiTestsIds);
   }
 
-  public Map<Long, String> getStoredTestResults() {
+  public Map<UUID, String> getStoredTestResults() {
     return storedTestResults;
   }
 
 
-  public void setStoredTestResults(Map<Long, String> storedTestResults) {
+  public void setStoredTestResults(Map<UUID, String> storedTestResults) {
     this.storedTestResults = storedTestResults;
   }
 
 
-  public Map<Long, String> getAvailableTestResults() {
+  public Map<UUID, String> getAvailableTestResults() {
     return availableTestResults;
   }
 
 
-  public void setAvailableTestResults(Map<Long, String> availableTestResults) {
+  public void setAvailableTestResults(Map<UUID, String> availableTestResults) {
     this.availableTestResults = availableTestResults;
   }
 
 
-  public void setRecentTestResults(Map<Long, BloodTestResult> recentTestResults) {
+  public void setRecentTestResults(Map<UUID, BloodTestResult> recentTestResults) {
     this.recentTestResults = recentTestResults;
   }
 
@@ -266,25 +267,25 @@ public class BloodTestingRuleResultSet {
   }
 
 
-  public void setPendingAboTestsIds(List<Long> pendingAboTestsIds) {
+  public void setPendingAboTestsIds(List<UUID> pendingAboTestsIds) {
     this.pendingAboTestsIds = pendingAboTestsIds;
   }
 
 
-  public void setPendingRhTestsIds(List<Long> pendingRhTestsIds) {
+  public void setPendingRhTestsIds(List<UUID> pendingRhTestsIds) {
     this.pendingRhTestsIds = pendingRhTestsIds;
   }
 
 
-  public void setPendingConfirmatoryTtiTestsIds(List<Long> pendingConfirmatoryTtiTestsIds) {
+  public void setPendingConfirmatoryTtiTestsIds(List<UUID> pendingConfirmatoryTtiTestsIds) {
     this.pendingConfirmatoryTtiTestsIds = pendingConfirmatoryTtiTestsIds;
   }
 
-  public void setPendingRepeatTtiTestsIds(List<Long> pendingRepeatTtiTestsIds) {
+  public void setPendingRepeatTtiTestsIds(List<UUID> pendingRepeatTtiTestsIds) {
     this.pendingRepeatTtiTestsIds = pendingRepeatTtiTestsIds;
   }
 
-  public void setPendingRepeatAndConfirmatoryTtiTestsIds(List<Long> pendingRepeatAndConfirmatoryTtiTestsIds) {
+  public void setPendingRepeatAndConfirmatoryTtiTestsIds(List<UUID> pendingRepeatAndConfirmatoryTtiTestsIds) {
     this.pendingRepeatAndConfirmatoryTtiTestsIds = pendingRepeatAndConfirmatoryTtiTestsIds;
   }
 

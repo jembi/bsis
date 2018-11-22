@@ -1,5 +1,16 @@
 package org.jembi.bsis.importer;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -69,16 +80,6 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 @Transactional
 @Service
 @Scope("prototype")
@@ -134,7 +135,7 @@ public class DataImportService {
   private EntityManager entityManager;
 
   private Map<String, Donor> externalDonorIdToBsisDonor = new HashMap<>();
-  private Map<String, Long> donationIdentificationNumberToDonationId = new HashMap<>();
+  private Map<String, UUID> donationIdentificationNumberToDonationId = new HashMap<>();
 
   private boolean validationOnly;
   private String action;
@@ -295,35 +296,35 @@ public class DataImportService {
             break;
             
           case "isUsageSite":
-            locationBackingForm.setIsUsageSite(cell.getBooleanCellValue());
+            locationBackingForm.setUsageSite(cell.getBooleanCellValue());
             break;
             
           case "isMobileSite":
-            locationBackingForm.setIsMobileSite(cell.getBooleanCellValue());
+            locationBackingForm.setMobileSite(cell.getBooleanCellValue());
             break;
             
           case "isVenue":
-            locationBackingForm.setIsVenue(cell.getBooleanCellValue());
+            locationBackingForm.setVenue(cell.getBooleanCellValue());
             break;
             
           case "isProcessingSite":
-            locationBackingForm.setIsProcessingSite(cell.getBooleanCellValue());
+            locationBackingForm.setProcessingSite(cell.getBooleanCellValue());
             break;
             
           case "isDistributionSite":
-            locationBackingForm.setIsDistributionSite(cell.getBooleanCellValue());
+            locationBackingForm.setDistributionSite(cell.getBooleanCellValue());
             break;
             
           case "isTestingSite":
-            locationBackingForm.setIsTestingSite(cell.getBooleanCellValue());
+            locationBackingForm.setTestingSite(cell.getBooleanCellValue());
             break;
             
           case "isDeleted":
-            locationBackingForm.setIsDeleted(cell.getBooleanCellValue());
+            locationBackingForm.setDeleted(cell.getBooleanCellValue());
             break;
           
           case "isReferralSite":
-            locationBackingForm.setIsReferralSite(cell.getBooleanCellValue());
+            locationBackingForm.setReferralSite(cell.getBooleanCellValue());
              break;
 
           case "notes":
@@ -927,8 +928,7 @@ public class DataImportService {
       }
 
       // Get donation batch and validate
-      DonationBatch donationBatch = getDonationBatch(donationBatches, testBatches, donationBackingForm.getDonationDate(),
-          venue);
+      DonationBatch donationBatch = getDonationBatch(donationBatches, donationBackingForm.getDonationDate(), venue);
       donationBackingForm.setDonationBatch(donationBatch);
       donationBackingFormValidator.validate(donationBackingForm, errors);
 
@@ -937,7 +937,10 @@ public class DataImportService {
         throw new IllegalArgumentException("Invalid donation");
       }
 
-      // Save donation
+      // Get test batch
+      TestBatch testBatch = getTestBatch(testBatches, donationBackingForm.getDonationDate());
+
+      // Create and update donation
       Donation donation = donationBackingForm.getDonation();
       donation.setPackType(packTypeCache.get(donation.getPackType().getPackType()));
       if (donationBackingForm.getAdverseEvent() != null) {
@@ -947,17 +950,22 @@ public class DataImportService {
         donation.setAdverseEvent(adverseEvent);
       }
       donation = donationCRUDService.createDonation(donation);
+
       // Populate the cache for use later when importing outcomes
       donationIdentificationNumberToDonationId.put(donation.getDonationIdentificationNumber(), donation.getId());
 
       // Set donation released to true
       donation.setReleased(true);
 
+      // Add the donation to the Test Batch
+      donation.setTestBatch(testBatch);
+
       // Set bloodTypingStatus COMPLETE if bloodAbo and bloodRh are not empty
       if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
         donation.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
-        donationRepository.saveDonation(donation);
       }
+
+      donationRepository.save(donation);
 
       // Periodically flush data
       if (donationCount % 50 == 0) {
@@ -1103,10 +1111,10 @@ public class DataImportService {
       BindException errors = new BindException(testOutcomeBackingForm, "TestResultBackingForm");
 
       Date testedOn = null;
-      Long donationId = null;
+      UUID donationId = null;
       BloodTest bloodTest = null;
       String outcome = null;
-      Map<Long, String> testResults = new HashMap<>();
+      Map<UUID, String> testResults = new HashMap<>();
 
       for (Cell cell : row) {
         Cell header = headers.getCell(cell.getColumnIndex());
@@ -1201,8 +1209,29 @@ public class DataImportService {
     return false; // never found a match for the value
   }
 
-  private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, Map<String, TestBatch> testBatches,
-      Date donationDate, Location venue) {
+  private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, Date donationDate, Location venue) {
+
+    String donationDateString = new SimpleDateFormat("yyyy-MM-dd").format(donationDate);
+    String key = donationDateString + "_" + venue;
+
+    // Get donationBatch and save it if it hasn't been created yet for that date and venue
+    DonationBatch donationBatch = donationBatches.get(key);
+
+    if (donationBatch == null) {
+      donationBatch = new DonationBatch();
+      donationBatch.setBatchNumber(sequenceNumberRepository.getNextBatchNumber());
+      donationBatch.setVenue(venue);
+      donationBatch.setIsClosed(true);
+      donationBatch.setBackEntry(true);
+      donationBatch.setDonationBatchDate(donationDate);
+      donationBatchRepository.addDonationBatch(donationBatch);
+      donationBatches.put(key, donationBatch);
+    }
+
+    return donationBatch;
+  }
+
+  private TestBatch getTestBatch(Map<String, TestBatch> testBatches, Date donationDate) {
 
     String donationDateString = new SimpleDateFormat("yyyy-MM-dd").format(donationDate);
 
@@ -1216,29 +1245,12 @@ public class DataImportService {
       testBatch.setLocation(testingSite);
       testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
       testBatch.setStatus(TestBatchStatus.CLOSED);
-      testBatch.setCreatedDate(donationDate);
+      testBatch.setTestBatchDate(donationDate);
       testBatchRepository.save(testBatch);
       testBatches.put(donationDateString, testBatch);
     }
 
-    String key = donationDateString + "_" + venue;
-
-    // Get donationBatch and save it if it hasn't been created yet for that date and venue
-    DonationBatch donationBatch = donationBatches.get(key);
-
-    if (donationBatch == null) {
-      donationBatch = new DonationBatch();
-      donationBatch.setBatchNumber(sequenceNumberRepository.getNextBatchNumber());
-      donationBatch.setVenue(venue);
-      donationBatch.setIsClosed(true);
-      donationBatch.setBackEntry(true);
-      donationBatch.setTestBatch(testBatch);
-      donationBatch.setDonationBatchDate(donationDate);
-      donationBatchRepository.addDonationBatch(donationBatch);
-      donationBatches.put(key, donationBatch);
-    }
-
-    return donationBatch;
+    return testBatch;
   }
 
   private void setTestingSite() {

@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,25 +16,35 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PackTypeRepository {
 
+  public static final String NAME_FIND_PRODUCING_TEST_SAMPLES = "PackType.findProducingTestSamples";
+  public static final String QUERY_FIND_PRODUCING_TEST_SAMPLES = "SELECT pt FROM PackType pt " +
+      "WHERE pt.testSampleProduced = :testSampleProduced";
+
   @PersistenceContext
-  private EntityManager em;
+  private EntityManager entityManager;
 
   public List<PackType> getAllPackTypes() {
     TypedQuery<PackType> query;
-    query = em.createQuery("SELECT b from PackType b", PackType.class);
+    query = entityManager.createQuery("SELECT b from PackType b", PackType.class);
     return query.getResultList();
   }
 
   public List<PackType> getAllEnabledPackTypes() {
     TypedQuery<PackType> query;
-    query = em.createQuery("SELECT b from PackType b where b.isDeleted=:isDeleted", PackType.class);
+    query = entityManager.createQuery("SELECT b from PackType b where b.isDeleted=:isDeleted", PackType.class);
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
 
+  public List<PackType> getAllPackTypesProducingTestSamples() {
+    return entityManager.createNamedQuery(NAME_FIND_PRODUCING_TEST_SAMPLES, PackType.class)
+        .setParameter("testSampleProduced", true)
+        .getResultList();
+  }
+
   public PackType findPackTypeByName(String packType) {
     String queryString = "SELECT b FROM PackType b WHERE b.packType = :packTypeName";
-    TypedQuery<PackType> query = em.createQuery(queryString, PackType.class);
+    TypedQuery<PackType> query = entityManager.createQuery(queryString, PackType.class);
     query.setParameter("packTypeName", packType);
     PackType result = null;
     try {
@@ -43,9 +54,9 @@ public class PackTypeRepository {
     return result;
   }
 
-  public PackType getPackTypeById(Long packTypeId) {
+  public PackType getPackTypeById(UUID packTypeId) {
     TypedQuery<PackType> query;
-    query = em.createQuery("SELECT b from PackType b " +
+    query = entityManager.createQuery("SELECT b from PackType b " +
         "where b.id=:id", PackType.class);
 
     query.setParameter("id", packTypeId);
@@ -59,17 +70,17 @@ public class PackTypeRepository {
       PackType existingPackType = getPackTypeById(bt.getId());
       if (existingPackType != null) {
         existingPackType.setPackType(bt.getPackType());
-        em.merge(existingPackType);
+        entityManager.merge(existingPackType);
       } else {
-        em.persist(bt);
+        entityManager.persist(bt);
       }
     }
-    em.flush();
+    entityManager.flush();
   }
 
   public PackType savePackType(PackType packType) {
-    em.persist(packType);
-    em.flush();
+    entityManager.persist(packType);
+    entityManager.flush();
     return packType;
   }
 
@@ -79,8 +90,8 @@ public class PackTypeRepository {
       return null;
     }
     existingPackType.copy(packType);
-    em.merge(existingPackType);
-    em.flush();
+    entityManager.merge(existingPackType);
+    entityManager.flush();
     return existingPackType;
   }
 }

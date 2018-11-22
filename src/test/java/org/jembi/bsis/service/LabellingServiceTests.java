@@ -4,7 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.DiscardLabelTemplateObjectBuilder.aDiscardLabelTemplateObject;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfig;
+import static org.jembi.bsis.helpers.builders.PackLabelTemplateObjectBuilder.aPackLabelTemplateObject;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -12,36 +15,34 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
+import org.jembi.bsis.model.admin.GeneralConfig;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.inventory.InventoryStatus;
-import org.jembi.bsis.model.util.BloodAbo;
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.ComponentRepository;
+import org.jembi.bsis.repository.GeneralConfigRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.joda.time.DateTime;
+import org.jembi.bsis.template.TemplateEngine;
+import org.jembi.bsis.template.labelling.DiscardLabelTemplateObject;
+import org.jembi.bsis.template.labelling.PackLabelTemplateObject;
+import org.jembi.bsis.template.labelling.TemplateObjectFactory;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 
 public class LabellingServiceTests extends UnitTestSuite {
-  
-  private static final String DATE_FORMAT = "dd/MM/yyyy";
-  private static final String DATE_TIME_FORMAT = "dd/MM/yyyy hh:mm:ss a";
-  private static final String PREPARATION_INFO = "Prepared from 450 ±50ml";
-  private static final String STORAGE_INFO = "Store below -30°C";
-  private static final String TRANSPORT_INFO = "Transport below -25°C";
 
   @Spy
   @InjectMocks
@@ -52,18 +53,23 @@ public class LabellingServiceTests extends UnitTestSuite {
   
   @Mock
   private LabellingConstraintChecker labellingConstraintChecker;
-  
-  @Mock
-  private GeneralConfigAccessorService generalConfigAccessorService;
 
   @Mock
   private CheckCharacterService checkCharacterService;
 
   @Mock
-  private ComponentVolumeService componentVolumeService;
-  
+  private TemplateObjectFactory templateObjectFactory;
+
   @Mock
   private ComponentRepository componentRepository;
+  
+  @Mock
+  private GeneralConfigRepository generalConfigRepository;
+  
+  @Mock
+  private TemplateEngine templateEngine;
+  
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
 
   @Test
   public void testVerifyPackLabelWithValidInputs_shouldReturnTrue() {
@@ -73,13 +79,13 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withFlagCharacters("11")
         .build();
     Component component = aComponent()
-      .withId(1L)
+      .withId(COMPONENT_ID)
       .withDonation(donation)
       .withStatus(ComponentStatus.AVAILABLE)
       .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
       .build();
     Component componentInStock = aComponent()
-      .withId(1L)
+      .withId(COMPONENT_ID)
       .withDonation(donation)
       .withStatus(ComponentStatus.AVAILABLE)
       .withInventoryStatus(InventoryStatus.IN_STOCK)
@@ -87,7 +93,7 @@ public class LabellingServiceTests extends UnitTestSuite {
       .build();
 
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(componentCRUDService.putComponentInStock(component)).thenReturn(componentInStock);
 
     // run test
@@ -106,14 +112,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withFlagCharacters("11")
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.PROCESSED)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
   
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
   
     // run test
     boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "300050511");
@@ -131,14 +137,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withFlagCharacters("11")
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
 
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
 
     // run test
     boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "1234567", "300050511");
@@ -156,14 +162,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withFlagCharacters("11")
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
 
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
 
     // run test
     boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "123456789");
@@ -174,530 +180,168 @@ public class LabellingServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testPrintDiscardLabel_shouldReturnZPLContainingText() throws Exception {
-    // set up data
-    Long componentId = Long.valueOf(1);
-    Component component = aComponent()
-        .withId(componentId)
-        .withStatus(ComponentStatus.EXPIRED)
-        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
-        .build();
-    
-    // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
-    when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.SERVICE_INFO_LINE_1)).thenReturn("Line 1");
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.SERVICE_INFO_LINE_2)).thenReturn("Line 2");
-
-    // run test
-    String label = labellingService.printDiscardLabel(componentId);
-    
-    // check outcome
-    assertThat(label, label.contains("3001"));
-    assertThat(label, label.contains("Line 1"));
-    assertThat(label, label.contains("Line 2"));
-  }
-
-  @Test
   public void testPrintDiscardLabel_shouldReturnZPLContainingDin() throws Exception {
     // set up data
-    Long componentId = Long.valueOf(1);
     String donationIdentificationNumber = "1234567";
     Donation donation = aDonation()
-        .withId(1L)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .build();
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
+    DiscardLabelTemplateObject discardLabelTemplateObject = aDiscardLabelTemplateObject()
+        .withDIN(donationIdentificationNumber)
+        .build();
+    GeneralConfig generalConfig = aGeneralConfig()
+        .withName(GeneralConfigConstants.DISCARD_LABEL_ZPL)
+        .withValue("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD{{donation.DIN}}")
+        .build();
+    String discardLabelZpl = "CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber();
+    String expectedDiscardLabelZpl = LabellingService.DATA_LINK_ESCAPE + discardLabelZpl;
 
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
+    when(templateObjectFactory.createDiscardLabelTemplateObject(argThat(hasSameStateAsComponent(component))))
+      .thenReturn(discardLabelTemplateObject);
+    when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL))
+      .thenReturn(generalConfig);
+    when(templateEngine.execute(generalConfig.getName(), generalConfig.getValue(), discardLabelTemplateObject))
+      .thenReturn(discardLabelZpl);
 
     // run test
-    String label = labellingService.printDiscardLabel(componentId);
+    String label = labellingService.printDiscardLabel(COMPONENT_ID);
 
     // check outcome
-    assertThat(label, label.contains(donationIdentificationNumber));
+    assertThat(label, is(expectedDiscardLabelZpl));
   }
   
   @Test(expected = IllegalArgumentException.class)
-  public void testPrintDiscardLabel_throwsException() throws Exception {
+  public void testPrintDiscardLabel_throwsIllegalArgumentException() throws Exception {
     // set up data
-    Long componentId = Long.valueOf(1);
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.AVAILABLE)
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(false);
     
     // run test
-    labellingService.printDiscardLabel(componentId);
+    labellingService.printDiscardLabel(COMPONENT_ID);
   }
-  
-  @Test
-  public void testPrintPackLabelWithPositiveRhBlood_shouldReturnZPLContainingText() throws Exception {
-    // set up data
-    Long donationId = Long.valueOf(1);
-    String bloodAbo = "A";
-    String bloodRh = "+";
-    String donationIdentificationNumber = "1234567";
-    Date donationDate = new Date();
-    Donation donation = aDonation()
-        .withId(donationId)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
-        .withDonationDate(donationDate)
-        .withBloodAbo(bloodAbo)
-        .withBloodRh(bloodRh)
-        .withFlagCharacters("28")
-        .build();
-    String componentTypeName = "blood";
-    ComponentType componentType = aComponentType()
-        .withComponentTypeName(componentTypeName)
-        .withPreparationInfo(PREPARATION_INFO)
-        .withStorageInfo(STORAGE_INFO)
-        .withTransportInfo(TRANSPORT_INFO)
-        .build();
-    Long componentId = Long.valueOf(1);
-    String componentCode = "123";
-    Date expiresOn = new DateTime().plusDays(90).toDate();
-    Component component = aComponent()
-        .withId(componentId)
-        .withComponentCode(componentCode)
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withDonation(donation)
-        .withComponentType(componentType)
-        .withExpiresOn(expiresOn)
-        .build();
 
-    Component componentRemoved = aComponent()
-        .withId(componentId)
-        .withComponentCode(componentCode)
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.REMOVED)
-        .withDonation(donation)
-        .withComponentType(componentType)
-        .withExpiresOn(expiresOn)
-        .build();
-    
-    // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
-    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentRemoved);
-
-    // run test
-    String label = labellingService.printPackLabel(componentId);
-    
-    // check outcome
-    assertThat(label, label.contains(donationIdentificationNumber));
-    assertThat(label, label.contains(bloodAbo));
-    assertThat(label, label.contains("RhD POSITIVE"));
-    assertThat(label, label.contains(new SimpleDateFormat(DATE_FORMAT).format(donationDate)));
-    assertThat(label, label.contains(new SimpleDateFormat(DATE_TIME_FORMAT).format(expiresOn)));
-    assertThat(label, label.contains(componentTypeName));
-    assertThat(label, label.contains(PREPARATION_INFO));
-    assertThat(label, label.contains(STORAGE_INFO));
-    assertThat(label, label.contains(TRANSPORT_INFO));
-  }
-  
   @Test
-  public void testPrintPackLabelWithNegativeRhBlood_shouldReturnZPLContainingText() throws Exception {
+  public void testPrintPackLabelWithInStockComponent_shouldMarkAsRemoved() throws Exception {
     // set up data
-    Long donationId = Long.valueOf(1);
-    String bloodAbo = "A";
-    String bloodRh = "-";
     String donationIdentificationNumber = "1234567";
-    Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(donationId)
         .withDonationIdentificationNumber(donationIdentificationNumber)
-        .withDonationDate(donationDate)
-        .withBloodAbo(bloodAbo)
-        .withBloodRh(bloodRh)
-        .withFlagCharacters("32")
-        .build();
-    String componentTypeName = "blood";
-    ComponentType componentType = aComponentType()
-        .withComponentTypeName(componentTypeName)
-        .withPreparationInfo(PREPARATION_INFO)
-        .withStorageInfo(STORAGE_INFO)
-        .withTransportInfo(TRANSPORT_INFO)
-        .build();
-    Long componentId = Long.valueOf(1);
-    String componentCode = "123";
-    Date expiresOn = new DateTime().plusDays(90).toDate();
-    Component component = aComponent()
-        .withId(componentId)
-        .withComponentCode(componentCode)
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withDonation(donation)
-        .withComponentType(componentType)
-        .withExpiresOn(expiresOn)
-        .build();
-
-    Component componentRemoved = aComponent()
-        .withId(componentId)
-        .withComponentCode(componentCode)
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.REMOVED)
-        .withDonation(donation)
-        .withComponentType(componentType)
-        .withExpiresOn(expiresOn)
-        .build();
-    
-    // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
-    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentRemoved);
-    
-    // run test
-    String label = labellingService.printPackLabel(componentId);
-    
-    // check outcome
-    assertThat(label, label.contains(donationIdentificationNumber));
-    assertThat(label, label.contains(bloodAbo));
-    assertThat(label, label.contains("RhD NEGATIVE"));
-    assertThat(label, label.contains(new SimpleDateFormat(DATE_FORMAT).format(donationDate)));
-    assertThat(label, label.contains(new SimpleDateFormat(DATE_TIME_FORMAT).format(expiresOn)));
-    assertThat(label, label.contains(componentTypeName));
-    assertThat(label, label.contains(PREPARATION_INFO));
-    assertThat(label, label.contains(STORAGE_INFO));
-    assertThat(label, label.contains(TRANSPORT_INFO));
-  }
-  
-  @Test
-  public void testPrintPackLabelWithInStockComponent_shouldMarkAsNotInStock() throws Exception {
-    // set up data
-    Long donationId = Long.valueOf(1);
-    String bloodAbo = "A";
-    String bloodRh = "-";
-    String donationIdentificationNumber = "1234567";
-    Date donationDate = new Date();
-    Donation donation = aDonation()
-        .withId(donationId)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
-        .withDonationDate(donationDate)
-        .withBloodAbo(bloodAbo)
-        .withBloodRh(bloodRh)
         .withFlagCharacters("17")
         .build();
-    String componentTypeName = "blood";
-    ComponentType componentType = aComponentType()
-        .withComponentTypeName(componentTypeName)
-        .withPreparationInfo(PREPARATION_INFO)
-        .withStorageInfo(STORAGE_INFO)
-        .withTransportInfo(TRANSPORT_INFO)
-        .build();
-    Long componentId = Long.valueOf(1);
     String componentCode = "123";
-    Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
-        .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withDonation(donation)
-        .withComponentType(componentType)
-        .withExpiresOn(expiresOn)
         .build();
     
     Component labelledComponent = aComponent()
-        .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.REMOVED)
         .withDonation(donation)
-        .withComponentType(componentType)
         .withLocation(component.getLocation())
-        .withExpiresOn(expiresOn)
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(labelledComponent);
+    when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PACK_LABEL_ZPL)).thenReturn(aGeneralConfig().build());
 
     // run test
-    labellingService.printPackLabel(componentId);
+    labellingService.printPackLabel(COMPONENT_ID);
     
     // check outcome
     verify(componentCRUDService).removeComponentFromStock(argThat(hasSameStateAsComponent(component)));
   }
   
   @Test(expected = IllegalArgumentException.class)
-  public void testPrintPackLabel_throwsException() throws Exception {
+  public void testPrintPackLabel_throwsIllegalArgumentException() throws Exception {
     // set up data
-    Long componentId = Long.valueOf(1);
     String donationIdentificationNumber = "1234567";
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.EXPIRED)
         .withDonation(aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(false);
     
     // run test
-    labellingService.printPackLabel(componentId);
+    labellingService.printPackLabel(COMPONENT_ID);
   }
   
   @Test
-  public void testPrintPackLabelThatShouldContainHighTitre_shouldReturnZPLWithHighTitreText() {
+  public void testPrintPackLabel_shouldReturnZPL() throws IOException {
     // set up data
-    Donation donation = aDonation()
-        .withDonationDate(new Date())
-        .withBloodRh("+")
-        .withDonationIdentificationNumber("1234567")
-        .withFlagCharacters("17")
-        .build();
+    Donation donation = aDonation().withDonationIdentificationNumber("1234567").withFlagCharacters("00").build();
     ComponentType componentType = aComponentType().withComponentTypeName("name").build();
-    Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withComponentType(componentType)
-        .withExpiresOn(expiresOn)
         .build();
+    GeneralConfig generalConfig = aGeneralConfig()
+        .withName(GeneralConfigConstants.PACK_LABEL_ZPL)
+        .withValue("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD{{donation.DIN}}")
+        .build();
+    PackLabelTemplateObject packLabelTemplateObject = aPackLabelTemplateObject()
+        .withDIN(donation.getDonationIdentificationNumber())
+        .build();
+    String packLabelZpl =
+        "CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber();
+    String expectedPackLabelZpl = LabellingService.DATA_LINK_ESCAPE + packLabelZpl;
     
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(true);
+    when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PACK_LABEL_ZPL)).thenReturn(generalConfig);
+    when(templateObjectFactory.createPackLabelTemplateObject(component)).thenReturn(packLabelTemplateObject);
+    when(templateEngine.execute(generalConfig.getName(), generalConfig.getValue(), packLabelTemplateObject)).thenReturn(packLabelZpl);
     
     // run test
-    String label = labellingService.printPackLabel(1L);
+    String label = labellingService.printPackLabel(COMPONENT_ID);
 
     // check outcome
-    assertThat(label, label.contains("HIGH TITRE"));
+    assertThat(label, is(expectedPackLabelZpl));
   }
-  
+
   @Test
-  public void testPrintPackLabelThatShouldntContainHighTitre_shouldntReturnZPLWithHighTitreText() {
+  public void testPrintPackLabelWithComponentLinkedToDonationWithoutFlagCharacters_shouldAddFlagcharactersBeforePrinting() throws Exception {
     // set up data
     Donation donation = aDonation()
-        .withDonationDate(new Date())
-        .withBloodRh("+")
-        .withDonationIdentificationNumber("1234567")
-        .withFlagCharacters("17")
-        .build();
-    ComponentType componentType = aComponentType().withComponentTypeName("name").build();
-    Date expiresOn = new DateTime().plusDays(90).toDate();
-    Component component = aComponent()
-        .withId(1L)
-        .withDonation(donation)
-        .withComponentType(componentType)
-        .withExpiresOn(expiresOn)
-        .build();
-    
-    // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
-    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(false);
-    
-    // run test
-    String label = labellingService.printPackLabel(1L);
-
-    // check outcome
-    assertThat(label, !label.contains("HIGH TITRE"));
-  }
-
-  @Test
-  public void testPrintPackLabelThatShouldContainVolume_shouldReturnZPLWithVolumeText() {
-    // set up data
-    Donation donation = aDonation()
-        .withDonationIdentificationNumber("1234567")
-        .withBloodRh("+")
-        .withDonationDate(new Date())
-        .build();
-    ComponentType componentType = aComponentType()
-        .withGravity(1.03)
-        .build();
-    Component component = aComponent()
-        .withId(1L)
-        .withDonation(donation)
-        .withComponentType(componentType)
-        .withExpiresOn(new Date())
-        .withWeight(100)
-        .build();
-
-    // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
-    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(true);
-    when(componentVolumeService.calculateVolume(component)).thenReturn(327);
-
-    // run test
-    String label = labellingService.printPackLabel(1L);
-
-    // check outcome
-    assertThat(label, label.contains("Volume: 327ml"));
-  }
-
-  @Test
-  public void testPrintPackLabelForComponentWithoutWeight_shouldReturnZPLWithVolumeText() {
-    // set up data
-    Donation donation = aDonation()
-        .withDonationIdentificationNumber("1234567")
-        .withBloodRh("+")
-        .withDonationDate(new Date())
-        .build();
-    ComponentType componentType = aComponentType()
-        .withGravity(1.03)
-        .build();
-    Component component = aComponent()
-        .withId(1L)
-        .withDonation(donation)
-        .withComponentType(componentType)
-        .withExpiresOn(new Date())
-        .withWeight(null)
-        .build();
-
-    // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
-    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(true);
-    when(componentVolumeService.calculateVolume(component)).thenReturn(null);
-
-    // run test
-    String label = labellingService.printPackLabel(1L);
-
-    // check outcome
-    assertThat(label.contains("Volume"), is(false));
-  }
-
-  @Test
-  public void testShouldLabelIncludeHighTitre_shouldReturnTrue() {
-    // Set up
-    Donation donation = aDonation().withTitre(Titre.HIGH).withBloodAbo(BloodAbo.O.name()).build();
-    Component component =
-        aComponent().withDonation(donation).withComponentType(aComponentType().thatContainsPlasma().build()).build();
-
-    // Exercise SUT
-    boolean includeHighTitre = labellingService.shouldLabelIncludeHighTitre(component);
-
-    // Verify
-    assertThat(includeHighTitre, is(true));
-  }
-
-  @Test
-  public void testShouldLabelIncludeHighTitreWithLowTitre_shouldReturnFalse() {
-    // Set up
-    Donation donation = aDonation().withTitre(Titre.LOW).withBloodAbo(BloodAbo.O.name()).build();
-    Component component =
-        aComponent().withDonation(donation).withComponentType(aComponentType().thatContainsPlasma().build()).build();
-
-    // Exercise SUT
-    boolean includeHighTitre = labellingService.shouldLabelIncludeHighTitre(component);
-
-    // Verify
-    assertThat(includeHighTitre, is(false));
-  }
-
-  @Test
-  public void testShouldLabelIncludeHighTitreWithNoTitre_shouldReturnFalse() {
-    // Set up
-    Donation donation = aDonation().withTitre(null).withBloodAbo(BloodAbo.O.name()).build();
-    Component component =
-        aComponent().withDonation(donation).withComponentType(aComponentType().thatContainsPlasma().build()).build();
-
-    // Exercise SUT
-    boolean includeHighTitre = labellingService.shouldLabelIncludeHighTitre(component);
-
-    // Verify
-    assertThat(includeHighTitre, is(false));
-  }
-
-  @Test
-  public void testShouldLabelIncludeHighTitreWithNoOAbo_shouldReturnFalse() {
-    // Set up
-    Donation donation = aDonation().withTitre(Titre.HIGH).withBloodAbo(BloodAbo.A.name()).build();
-    Component component =
-        aComponent().withDonation(donation).withComponentType(aComponentType().thatContainsPlasma().build()).build();
-
-    // Exercise SUT
-    boolean includeHighTitre = labellingService.shouldLabelIncludeHighTitre(component);
-
-    // Verify
-    assertThat(includeHighTitre, is(false));
-  }
-
-  @Test
-  public void testShouldLabelIncludeHighTitreWithNoPlasma_shouldReturnFalse() {
-    // Set up
-    Donation donation = aDonation().withTitre(Titre.HIGH).withBloodAbo(BloodAbo.O.name()).build();
-    Component component = aComponent().withDonation(donation)
-        .withComponentType(aComponentType().thatDoesntContainsPlasma().build()).build();
-
-    // Exercise SUT
-    boolean includeHighTitre = labellingService.shouldLabelIncludeHighTitre(component);
-
-    // Verify
-    assertThat(includeHighTitre, is(false));
-  }
-
-  @Test
-  public void testPrintPackLabelWithComponentLinkedToDonationWithoutFlagCharacters_ShouldAddFlagcharactersBeforePrinting() throws Exception {
-    // set up data
-    String bloodAbo = "B";
-    String bloodRh = "-";
-    Date donationDate = new Date();
-    Donation donation = aDonation()
-        .withId(1L)
         .withDonationIdentificationNumber("3000505")
-        .withDonationDate(donationDate)
-        .withBloodAbo(bloodAbo)
-        .withBloodRh(bloodRh)
-        .build();
-    String componentTypeName = "blood";
-    ComponentType componentType = aComponentType()
-        .withComponentTypeName(componentTypeName)
-        .withPreparationInfo(PREPARATION_INFO)
-        .withStorageInfo(STORAGE_INFO)
-        .withTransportInfo(TRANSPORT_INFO)
-        .build();
-    Long componentId = Long.valueOf(1);
-    String componentCode = "123";
-    Date expiresOn = new DateTime().plusDays(90).toDate();    
+        .build();   
     Component labelledComponent = aComponent()
-        .withId(componentId)
-        .withComponentCode(componentCode)
-        .withStatus(ComponentStatus.AVAILABLE)
+        .withId(COMPONENT_ID)
+        .withComponentCode("123")
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withDonation(donation)
-        .withComponentType(componentType)
-        .withExpiresOn(expiresOn)
         .build();
     
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(labelledComponent);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(labelledComponent);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(labelledComponent)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
+    when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PACK_LABEL_ZPL)).thenReturn(aGeneralConfig().build());
     
     // run test
     labellingService.printPackLabel(labelledComponent.getId());
@@ -708,72 +352,47 @@ public class LabellingServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testPrintPackLabelWithFlagCharacters34AndCheckCharacterY_shouldReturnZPLContainingText() throws Exception {
-    // set up data
-    Long donationId = Long.valueOf(1);
-    String bloodAbo = "A";
-    String bloodRh = "+";
-    String donationIdentificationNumber = "123456789102345678";
-    String flagCharacters = "34";
-    Date donationDate = new Date();
-    Donation donation = aDonation()
-        .withId(donationId)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
-        .withDonationDate(donationDate)
-        .withBloodAbo(bloodAbo)
-        .withBloodRh(bloodRh)
-        .withFlagCharacters(flagCharacters)
-        .build();
-    String componentTypeName = "blood";
-    ComponentType componentType = aComponentType()
-        .withComponentTypeName(componentTypeName)
-        .withPreparationInfo(PREPARATION_INFO)
-        .withStorageInfo(STORAGE_INFO)
-        .withTransportInfo(TRANSPORT_INFO)
-        .build();
-    Long componentId = Long.valueOf(1);
-    String componentCode = "123";
-    Date expiresOn = new DateTime().plusDays(90).toDate();
-    Component component = aComponent()
-        .withId(componentId)
-        .withComponentCode(componentCode)
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withDonation(donation)
-        .withComponentType(componentType)
-        .withExpiresOn(expiresOn)
-        .build();
-    
-    // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
-    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
-    when(checkCharacterService.calculateCheckCharacter("34")).thenReturn("Y");
-    // run test
-    String label = labellingService.printPackLabel(componentId);
-    
-    // check outcome
-    assertThat(label, label.contains(donationIdentificationNumber + flagCharacters));
-    assertThat(label, label.contains("^FD34^FS"));  // assert that Label contains Flag Characters
-    assertThat(label, label.contains("^FDY^FS"));   // assert that Label contains Check Character
-  }
-
-  @Test
   public void testFindSafeComponentWithNullDin_shouldDoFindSafeComponentsSearch() {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("a+");
     bloodGroups.add("a-");
-    
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
     // set up mocks
-    when(componentRepository.findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null, false))
+    when(componentRepository.findSafeComponents(componentTypeId, locationId, BloodGroup.toBloodGroups(bloodGroups),
+        null, null, null, false))
         .thenReturn(null);
     // run test
-    labellingService.findSafeComponentsToLabel(null, null, 1L, 1L, bloodGroups, null, null, null);
+    labellingService.findSafeComponentsToLabel(null, null, componentTypeId, locationId, bloodGroups, null, null, null);
     // verify
-    verify(componentRepository).findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null,
-        false);
+    verify(componentRepository).findSafeComponents(componentTypeId, locationId, BloodGroup.toBloodGroups(bloodGroups),
+        null, null, null, false);
+  }
+
+  @Test
+  public void testFindSafeComponentWithNullDinAndWithInventoryStatusNotInStock_shouldDoFindSafeComponentsSearch() {
+    // set up mocks
+    when(componentRepository.findSafeComponents(null, null, null, null, null, 
+        Arrays.asList(InventoryStatus.NOT_IN_STOCK, InventoryStatus.REMOVED), false))
+        .thenReturn(null);
+    // run test
+    labellingService.findSafeComponentsToLabel(null, null, null, null, null, null, null, InventoryStatus.NOT_IN_STOCK);
+    // verify
+    verify(componentRepository).findSafeComponents(null, null, null, null, null, 
+        Arrays.asList(InventoryStatus.NOT_IN_STOCK, InventoryStatus.REMOVED), false);
+  }
+
+  @Test
+  public void testFindSafeComponentWithNullDinAndWithInventoryStatusInStock_shouldDoFindSafeComponentsSearch() {
+    // set up mocks
+    when(componentRepository.findSafeComponents(null, null, null, null, null, 
+        Arrays.asList(InventoryStatus.IN_STOCK), false))
+        .thenReturn(null);
+    // run test
+    labellingService.findSafeComponentsToLabel(null, null, null, null, null, null, null, InventoryStatus.IN_STOCK);
+    // verify
+    verify(componentRepository).findSafeComponents(null, null, null, null, null, 
+        Arrays.asList(InventoryStatus.IN_STOCK), false);
   }
 
   @Test

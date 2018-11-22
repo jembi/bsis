@@ -1,0 +1,31 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170406-1509" author="patience-mpofu">
+    <preConditions>
+      <not><tableExists tableName="BloodTestResult_AUD"/></not>
+    </preConditions>
+    <comment>This creates an audit table for BloodTestResult</comment>
+
+    <createTable remarks="Audit table" tableName="BloodTestResult_AUD">
+      <column name="id" type="BIGINT(20)"/>
+      <column name="REV" type="INT(11)"/>
+      <column name="REVTYPE" type="TINYINT(4)"/>
+      <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+      <column name="lastupdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+      <column name="notes" type="LONGTEXT"/>
+      <column name="result" type="VARCHAR(10)"/>
+      <column name="testedOn" type="DATETIME"/>
+      <column name="bloodTest_id" type="BIGINT(10)"/>
+      <column name="donation_id" type="BINARY(16)"/>
+      <column name="createdBy_id" type="BIGINT(20)"/>
+      <column name="lastUpdatedBy_id" type="BIGINT(20)"/>
+      <column name="reagentLotNumber" type="BIGINT(20)"/>
+      <column name="reEntryRequired" type="TINYINT(1)"/>
+      <column name="isDeleted" type="TINYINT(1)"/>
+    </createTable>
+
+    <addPrimaryKey columnNames="id, REV" tableName="BloodTestResult_AUD" constraintName="pk_BloodTestResult_AUD"/>
+  </changeSet>
+</databaseChangeLog>

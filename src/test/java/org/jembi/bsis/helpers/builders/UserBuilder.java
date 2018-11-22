@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.model.user.User;
@@ -13,7 +14,7 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
   private String username = "default.username";
   private boolean passwordReset;
   private boolean isAdmin;
-  private Long id;
+  private UUID id;
   private String firstName = "Default";
   private String lastName = "User";
   // Password = "password", rounds = 4
@@ -24,7 +25,7 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
   private String notes;
   private Date lastLogin;
 
-  public UserBuilder withId(Long id) {
+  public UserBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

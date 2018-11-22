@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
@@ -66,12 +67,12 @@ public class BloodTestResultConstraintChecker {
         bloodTestResult.getBloodTest().getId());
   }
 
-  private boolean isResultConfirmed(List<BloodTestingRule> rules, Map<Long, String> availableTestResults, Long bloodTestId) {
+  private boolean isResultConfirmed(List<BloodTestingRule> rules, Map<UUID, String> availableTestResults, UUID bloodTestId) {
     for (BloodTestingRule rule : rules) {
       if (rule.getBloodTest().getId().equals(bloodTestId)) {
         // go through the pending tests and check if there are any results
         // if there is a result for a confirmation then this result cannot be edited
-        for (Long pendingTestId : rule.getPendingTestsIdsSet()) {
+        for (UUID pendingTestId : rule.getPendingTestsIdsSet()) {
           String testResult = availableTestResults.get(pendingTestId);
           if (StringUtils.isBlank(testResult)) {
             // no result for this pending test, check if it has any pending tests

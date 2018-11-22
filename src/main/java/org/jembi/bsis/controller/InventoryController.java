@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.controllerservice.InventoryControllerService;
 import org.jembi.bsis.factory.ComponentTypeFactory;
@@ -55,7 +56,7 @@ public class InventoryController {
   @RequestMapping(method = RequestMethod.GET, value = "/search/form")
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
   public ResponseEntity<Map<String, Object>> getOrderFormForm() {
-    List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
+    List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypesThatCanBeIssued();
     List<Location> distributionSites = locationRepository.getDistributionSites();
     Map<String, Object> map = new HashMap<>();
     map.put("distributionSites", locationFactory.createFullViewModels(distributionSites));
@@ -68,8 +69,8 @@ public class InventoryController {
   public ResponseEntity<Map<String, Object>> findComponentBatches(
       @RequestParam(value = "donationIdentificationNumber", required = false) String donationIdentificationNumber,
       @RequestParam(value = "componentCode", required = false) String componentCode,
-      @RequestParam(value = "locationId", required = false) Long locationId,
-      @RequestParam(value = "componentTypeId", required = false) Long componentTypeId,
+      @RequestParam(value = "locationId", required = false) UUID locationId,
+      @RequestParam(value = "componentTypeId", required = false) UUID componentTypeId,
       @RequestParam(value = "dueToExpireBy", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dueToExpireBy,
       @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
     Map<String, Object> map = new HashMap<String, Object>();

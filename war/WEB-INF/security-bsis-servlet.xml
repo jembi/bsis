@@ -11,6 +11,7 @@
   <!-- no authentication needed for static files -->
   <http pattern="/**/*.css" security="none" />
   <http pattern="/**/*.js" security="none" />
+  <http pattern="/**/*.ico" security="none" />
   <http pattern="/**/*.png" security="none" />
 
   <!-- Enable stateless access to REST services using Basic authentication -->
@@ -306,11 +307,11 @@
   </http>
 
   <!-- Enable stateful access to swagger-ui  -->
+  <http pattern="/login.html" security="none" />
   <http auto-config="true" use-expressions="true">
-    <intercept-url pattern="/login.html*" access="isAnonymous()" />
     <intercept-url pattern="/**" access="isFullyAuthenticated()" />
     <form-login login-page="/login.html"
-                default-target-url="/api.html"
+                default-target-url="/index.html"
                 authentication-failure-url="/login.html?error=true"
                 always-use-default-target="true" />
   </http>   

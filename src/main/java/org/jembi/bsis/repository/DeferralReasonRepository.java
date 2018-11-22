@@ -11,6 +11,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import java.util.UUID;
 import java.util.List;
 
 @Repository
@@ -48,7 +49,7 @@ public class DeferralReasonRepository {
     return result;
   }
 
-  public DeferralReason getDeferralReasonById(Long DeferralReasonId) {
+  public DeferralReason getDeferralReasonById(UUID DeferralReasonId) {
     TypedQuery<DeferralReason> query;
     query = em.createQuery("SELECT d from DeferralReason d " +
         "where d.id=:id", DeferralReason.class);
@@ -86,7 +87,7 @@ public class DeferralReasonRepository {
         .getSingleResult();
   }
   
-  public boolean verifyDeferralReasonExists(long id) {
+  public boolean verifyDeferralReasonExists(UUID id) {
     long count = em.createNamedQuery(DeferralReasonNamedQueryConstants.NAME_COUNT_DEFERRAL_REASONS_FOR_ID, Number.class)
         .setParameter("id", id)
         .setParameter("deleted", false)

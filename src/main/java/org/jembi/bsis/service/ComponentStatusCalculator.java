@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -16,6 +17,8 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.DonationRepository;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,9 @@ public class ComponentStatusCalculator {
   
   @Autowired
   private DonationRepository donationRepository;
+  
+  @Autowired
+  private DateGeneratorService dateGeneratorService;
 
   public boolean shouldComponentsBeDiscardedForTestResults(List<BloodTestResult> bloodTestResults) {
 
@@ -139,7 +145,7 @@ public class ComponentStatusCalculator {
       return false;
     }
 
-    Long donationId = component.getDonation().getId();
+    UUID donationId = component.getDonation().getId();
     Donation donation = donationRepository.findDonationById(donationId);
     BloodTypingStatus bloodTypingStatus = donation.getBloodTypingStatus();
     TTIStatus ttiStatus = donation.getTTIStatus();
@@ -155,7 +161,7 @@ public class ComponentStatusCalculator {
     if (donation.isReleased() &&
         bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
         BloodTypingMatchStatus.isBloodGroupConfirmed(donation.getBloodTypingMatchStatus()) &&
-        ttiStatus.equals(TTIStatus.TTI_SAFE)) {
+        ttiStatus.equals(TTIStatus.SAFE)) {
       newComponentStatus = ComponentStatus.AVAILABLE;
     }
 
@@ -189,5 +195,29 @@ public class ComponentStatusCalculator {
       return true;
     }
     return false;
+  }
+  
+  
+  /**
+   * Calculates the number of days before a component expires 
+   * 
+   * If the component has already expired the difference is -1 
+   * 
+   * If the component expires today the difference is 0 
+   * 
+   * Otherwise the number of days left before the component expires is returned
+   * 
+   * @param component
+   * @return
+   */
+  public int getDaysToExpire(Component component) {
+
+    Date today = dateGeneratorService.generateDate();
+    if (today.after(component.getExpiresOn())) {
+      return -1;
+    } else {
+      DateTime expiresOn = new DateTime(component.getExpiresOn());
+      return Days.daysBetween(new DateTime(today), expiresOn).getDays();
+    }
   }
 }

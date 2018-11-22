@@ -3,34 +3,31 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.location.Location;
 
-public class LocationMatcher extends TypeSafeMatcher<Location> {
-
-  private Location expected;
+public class LocationMatcher extends AbstractTypeSafeMatcher<Location> {
 
   public LocationMatcher(Location expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, Location location) {
     description.appendText("A location with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nName: ").appendValue(expected.getName())
-        .appendText("\nisUsageSite: ").appendValue(expected.getIsUsageSite())
-        .appendText("\nisMobileSite: ").appendValue(expected.getIsMobileSite())
-        .appendText("\nisVenue: ").appendValue(expected.getIsVenue())
-        .appendText("\nisDistributionSite: ").appendValue(expected.getIsDistributionSite())
-        .appendText("\nisProcessingSite: ").appendValue(expected.getIsProcessingSite())
-        .appendText("\nisTestingSite: ").appendValue(expected.getIsTestingSite())
-        .appendText("\nisReferralSite: ").appendValue(expected.getIsReferralSite())
-        .appendText("\nisDeleted: ").appendValue(expected.getIsDeleted())
-        .appendText("\nNotes: ").appendValue(expected.getNotes())
-        .appendText("\nDivision level 1: ").appendValue(expected.getDivisionLevel1())
-        .appendText("\nDivision level 2: ").appendValue(expected.getDivisionLevel2())
-        .appendText("\nDivision level 3: ").appendValue(expected.getDivisionLevel3());
+        .appendText("\nId: ").appendValue(location.getId())
+        .appendText("\nName: ").appendValue(location.getName())
+        .appendText("\nisUsageSite: ").appendValue(location.getIsUsageSite())
+        .appendText("\nisMobileSite: ").appendValue(location.getIsMobileSite())
+        .appendText("\nisVenue: ").appendValue(location.getIsVenue())
+        .appendText("\nisDistributionSite: ").appendValue(location.getIsDistributionSite())
+        .appendText("\nisProcessingSite: ").appendValue(location.getIsProcessingSite())
+        .appendText("\nisTestingSite: ").appendValue(location.getIsTestingSite())
+        .appendText("\nisReferralSite: ").appendValue(location.getIsReferralSite())
+        .appendText("\nisDeleted: ").appendValue(location.getIsDeleted())
+        .appendText("\nNotes: ").appendValue(location.getNotes())
+        .appendText("\nDivision level 1: ").appendValue(location.getDivisionLevel1())
+        .appendText("\nDivision level 2: ").appendValue(location.getDivisionLevel2())
+        .appendText("\nDivision level 3: ").appendValue(location.getDivisionLevel3());
   }
 
   @Override

@@ -1,5 +1,7 @@
 package org.jembi.bsis.suites;
 
+import java.util.UUID;
+
 import org.jembi.bsis.helpers.builders.UserBuilder;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.security.BsisUserDetails;
@@ -13,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @RunWith(MockitoJUnitRunner.class)
 public abstract class UnitTestSuite {
 
-  protected static final Long USER_ID = 1L;
+  protected static final UUID USER_ID = UUID.randomUUID();
   protected static final String USERNAME = "admin";
 
   protected User loggedInUser;

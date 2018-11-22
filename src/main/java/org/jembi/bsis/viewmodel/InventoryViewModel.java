@@ -1,6 +1,7 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class InventoryViewModel {
 
-  private Long id;
+  private UUID id;
 
   private String donationIdentificationNumber;
 
@@ -20,7 +21,7 @@ public class InventoryViewModel {
 
   private ComponentTypeViewModel componentType;
 
-  private String expiryStatus;
+  private int daysToExpire;
 
   private LocationViewModel location;
 
@@ -32,11 +33,11 @@ public class InventoryViewModel {
 
   private ComponentStatus status;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
@@ -66,12 +67,12 @@ public class InventoryViewModel {
     this.createdOn = createdOn;
   }
 
-  public String getExpiryStatus() {
-    return expiryStatus;
+  public int getDaysToExpire() {
+    return daysToExpire;
   }
 
-  public void setExpiryStatus(String expiryStatus) {
-    this.expiryStatus = expiryStatus;
+  public void setDaysToExpire(int daysToExpire) {
+    this.daysToExpire = daysToExpire;
   }
 
   public ComponentTypeViewModel getComponentType() {

@@ -1,5 +1,21 @@
 package org.jembi.bsis.model.testbatch;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import org.hibernate.annotations.Where;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
+import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.repository.constant.TestBatchNamedQueryConstants;
+import org.jembi.bsis.service.TestBatchCRUDService;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,23 +27,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
-import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
-import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.service.TestBatchCRUDService;
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.CLOSED;
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.OPEN;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-
+@NamedQueries({
+    @NamedQuery(name = TestBatchNamedQueryConstants.NAME_FIND_TEST_BATCHES_BY_STATUSES_PERIOD_AND_LOCATION,
+        query = TestBatchNamedQueryConstants.QUERY_FIND_TEST_BATCHES_BY_STATUSES_PERIOD_AND_LOCATION)
+})
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class TestBatch extends BaseModificationTrackerEntity {
+public class TestBatch extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -41,19 +58,60 @@ public class TestBatch extends BaseModificationTrackerEntity {
   @Size(min = 6, max = 6)
   private String batchNumber;
 
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(columnDefinition = "DATETIME", nullable = false)
+  private Date testBatchDate;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
   private TestBatchStatus status;
 
-  @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
-  private Set<DonationBatch> donationBatches;
+  @SuppressWarnings("unchecked")
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @OneToMany(mappedBy = "testBatch", fetch = FetchType.LAZY)
+  @Where(clause = "isDeleted = 0")
+  private Set<Donation> donations = Collections.EMPTY_SET;
 
   @ManyToOne(optional = false)
   private Location location;
 
+  private boolean backEntry;
+
   public TestBatch() {
     super();
+  }
+
+  public boolean isOpen() {
+    return OPEN == status;
+  }
+
+  public boolean isClosed() {
+    return CLOSED == status;
+  }
+
+  public void addDonation(Donation donation) {
+    if (!this.isOpen()) {
+      throw new IllegalStateException("Donations may only be added to open test batches");
+    } else if (donation.getTestBatch() != null && !Objects.equals(donation.getTestBatch(), this)) {
+      throw new IllegalArgumentException(String
+          .format("Unable to add %s to %s. Donation already assigned to %s", donation, this, donation
+              .getTestBatch()));
+    }
+    donation.setTestBatch(this);
+    this.donations.add(donation);
+  }
+
+  public void removeDonation(Donation donation) {
+    if (!this.isOpen()) {
+      throw new IllegalStateException("Donations may only be removed from open test batches");
+    } else if (donation.getTestBatch() != null && !Objects.equals(donation.getTestBatch(), this)) {
+      throw new IllegalArgumentException(String.
+          format("Unable to remove %s from %s. Donation already assigned to %s", donation, this, donation
+              .getTestBatch()));
+    }
+    donation.setTestBatch(null);
+    this.donations.remove(donation);
   }
 
   public String getNotes() {
@@ -93,14 +151,6 @@ public class TestBatch extends BaseModificationTrackerEntity {
     this.status = status;
   }
 
-  public Set<DonationBatch> getDonationBatches() {
-    return donationBatches;
-  }
-
-  public void setDonationBatches(Set<DonationBatch> donationBatches) {
-    this.donationBatches = donationBatches;
-  }
-
   public Location getLocation() {
     return location;
   }
@@ -109,4 +159,27 @@ public class TestBatch extends BaseModificationTrackerEntity {
     this.location = location;
   }
 
+  public Date getTestBatchDate() {
+    return testBatchDate;
+  }
+
+  public void setTestBatchDate(Date testBatchDate) {
+    this.testBatchDate = testBatchDate;
+  }
+
+  public Set<Donation> getDonations() {
+    return donations;
+  }
+
+  public void setDonations(Set<Donation> donations) {
+    this.donations = donations;
+  }
+
+  public boolean isBackEntry() {
+    return backEntry;
+  }
+
+  public void setBackEntry(boolean backEntry) {
+    this.backEntry = backEntry;
+  }
 }

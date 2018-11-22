@@ -8,13 +8,13 @@ package org.jembi.bsis.model.address;
 
 import javax.persistence.Entity;
 
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseUUIDEntity;
 
 /**
  * Entity containing the Donor's preferred contact address
  */
 @Entity
-public class AddressType extends BaseEntity {
+public class AddressType extends BaseUUIDEntity {
   private static final long serialVersionUID = 1L;
 
   private String preferredAddressType;

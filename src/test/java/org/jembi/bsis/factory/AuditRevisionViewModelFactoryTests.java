@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.envers.RevisionType;
 import org.jembi.bsis.model.audit.AuditRevision;
@@ -45,17 +46,19 @@ public class AuditRevisionViewModelFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateAuditRevisionViewModels_shouldCreateAuditRevisionViewModelWithTheCorrectState() {
     String irrelevantUsername = "irrelevant.username";
-    int irrelevantAuditRevisionId = 78;
+    long irrelevantAuditRevisionId = 78;
     Date irrelevantRevisionDate = new DateTime().minusDays(7).toDate();
+    UUID entityModificationId1 = UUID.randomUUID();
+    UUID entityModificationId2 = UUID.randomUUID();
 
     List<EntityModification> entityModifications = Arrays.asList(
         anEntityModification()
-            .withId(88l)
+            .withId(entityModificationId1)
             .withRevisionType(RevisionType.MOD)
             .withEntityName(Donor.class.getSimpleName())
             .build(),
         anEntityModification()
-            .withId(107l)
+            .withId(entityModificationId2)
             .withRevisionType(RevisionType.ADD)
             .withEntityName(Donation.class.getSimpleName())
             .build()
@@ -68,13 +71,15 @@ public class AuditRevisionViewModelFactoryTests extends UnitTestSuite {
         .withEntityModifications(new HashSet<>(entityModifications))
         .build();
 
+    UUID autidRevisionUserId = UUID.randomUUID();
+
     User auditRevisionUser = aUser()
-        .withId(56l)
+        .withId(autidRevisionUserId)
         .withUsername(irrelevantUsername)
         .build();
 
     UserViewModel auditRevisionUserViewModel = aUserViewModel()
-        .withId(56L)
+        .withId(autidRevisionUserId)
         .withUsername(irrelevantUsername)
         .build();
 

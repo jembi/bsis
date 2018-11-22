@@ -9,6 +9,7 @@ import static org.jembi.bsis.helpers.matchers.BloodTestingRuleResultMatcher.hasS
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
@@ -24,7 +25,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
-  
+
+  private static final UUID DONATION_ID = UUID.randomUUID();
+
   @InjectMocks
   BloodTestingRuleResultViewModelFactory bloodTestingRuleResultViewModelFactory;
 
@@ -35,13 +38,14 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
   private DonationConstraintChecker donationConstraintChecker;
 
   @Test
-  public void testCreateBloodTestResultViewModelWithHighTitre_shouldCreateCorrectResultSet() throws Exception {    
+  public void testCreateBloodTestResultFullViewModelWithHighTitre_shouldCreateCorrectResultSet()
+      throws Exception {
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
+        new HashMap<UUID, String>(), new HashMap<UUID, String>(), new HashMap<UUID, BloodTestResult>(), 
         new ArrayList<BloodTestingRule>());
 
     bloodTestingRuleResultSet.addTitreChanges("HIGH");
@@ -50,20 +54,21 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     
     // Run test
     BloodTestingRuleResult ruleResult =
-        bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(bloodTestingRuleResultSet);
+        bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(bloodTestingRuleResultSet);
 
     // Verify result
     assertThat(ruleResult, is(hasSameStateAsBloodTestingRuleResult(expectedRuleResult)));
   }
 
   @Test
-  public void testCreateBloodTestResultViewModelWithLowTitre_shouldCreateCorrectResultSet() throws Exception {    
+  public void testCreateBloodTestResultFullViewModelWithLowTitre_shouldCreateCorrectResultSet()
+      throws Exception {
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
+        new HashMap<UUID, String>(), new HashMap<UUID, String>(), new HashMap<UUID, BloodTestResult>(), 
         new ArrayList<BloodTestingRule>());
 
     bloodTestingRuleResultSet.addTitreChanges("LOW");
@@ -72,20 +77,21 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     
     // Run test
     BloodTestingRuleResult ruleResult =
-        bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(bloodTestingRuleResultSet);
+        bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(bloodTestingRuleResultSet);
 
     // Verify result
     assertThat(ruleResult, is(hasSameStateAsBloodTestingRuleResult(expectedRuleResult)));
   }
 
   @Test
-  public void testCreateBloodTestResultViewModelWithNTTitre_shouldCreateCorrectResultSet() throws Exception {    
+  public void testCreateBloodTestResultFullViewModelWithNTTitre_shouldCreateCorrectResultSet()
+      throws Exception {
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
+        new HashMap<UUID, String>(), new HashMap<UUID, String>(), new HashMap<UUID, BloodTestResult>(), 
         new ArrayList<BloodTestingRule>());
 
     bloodTestingRuleResultSet.addTitreChanges("");
@@ -94,20 +100,21 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     
     // Run test
     BloodTestingRuleResult ruleResult =
-        bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(bloodTestingRuleResultSet);
+        bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(bloodTestingRuleResultSet);
 
     // Verify result
     assertThat(ruleResult, is(hasSameStateAsBloodTestingRuleResult(expectedRuleResult)));
   }
 
   @Test
-  public void testCreateBloodTestResultViewModelWithUpdatedTitre_shouldCreateCorrectResultSet() throws Exception {    
+  public void testCreateBloodTestResultFullViewModelWithUpdatedTitre_shouldCreateCorrectResultSet()
+      throws Exception {
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withTitre(Titre.HIGH).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withTitre(Titre.HIGH).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
+        new HashMap<UUID, String>(), new HashMap<UUID, String>(), new HashMap<UUID, BloodTestResult>(), 
         new ArrayList<BloodTestingRule>());
 
     bloodTestingRuleResultSet.addTitreChanges("LOW");
@@ -116,20 +123,21 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     
     // Run test
     BloodTestingRuleResult ruleResult =
-        bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(bloodTestingRuleResultSet);
+        bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(bloodTestingRuleResultSet);
 
     // Verify result
     assertThat(ruleResult, is(hasSameStateAsBloodTestingRuleResult(expectedRuleResult)));
   }
   
   @Test
-  public void testCreateBloodTestResultViewModelWithUpdatedNTTitre_shouldCreateCorrectResultSet() throws Exception {    
+  public void testCreateBloodTestResultFullViewModelWithUpdatedNTTitre_shouldCreateCorrectResultSet()
+      throws Exception {
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withTitre(Titre.HIGH).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withTitre(Titre.HIGH).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
+        new HashMap<UUID, String>(), new HashMap<UUID, String>(), new HashMap<UUID, BloodTestResult>(), 
         new ArrayList<BloodTestingRule>());
 
     bloodTestingRuleResultSet.addTitreChanges("");
@@ -138,7 +146,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     
     // Run test
     BloodTestingRuleResult ruleResult =
-        bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(bloodTestingRuleResultSet);
+        bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(bloodTestingRuleResultSet);
 
     // Verify result
     assertThat(ruleResult, is(hasSameStateAsBloodTestingRuleResult(expectedRuleResult)));

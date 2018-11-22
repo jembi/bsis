@@ -1,0 +1,171 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170328-1410"  author="tumijacob">
+    <comment>This is one large change set that migrates the Patient table from an integer id primary key
+    to a UUID of type BINARY(16). </comment>
+    <dropForeignKeyConstraint baseTableName="OrderForm" constraintName="fk_OrderForm_patient"/>
+    <dropForeignKeyConstraint baseTableName="Transfusion" constraintName="fk_Transfusion_patient"/>
+
+    <addColumn tableName="Patient">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Patient_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm">
+      <column name="patient_id_temp" type="BIGINT" afterColumn="patient_id"/>
+    </addColumn>
+
+    <addColumn tableName="Transfusion">
+      <column name="patient_id_temp" type="BIGINT" afterColumn="patient_id"/>
+    </addColumn>
+
+    <addColumn tableName="OrderForm_AUD">
+      <column name="patient_id_temp" type="BIGINT" afterColumn="patient_id"/>
+    </addColumn>
+
+    <addColumn tableName="Transfusion_AUD">
+      <column name="patient_id_temp" type="BIGINT" afterColumn="patient_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE Patient 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="patient_id_temp_index" tableName="Patient" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+
+    <sql>
+      UPDATE Patient_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD 
+      SET patient_id_temp = patient_id;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD 
+      SET patient_id_temp = patient_id;
+    </sql>
+
+    <sql>
+      UPDATE OrderForm 
+      SET patient_id_temp = patient_id;
+    </sql>
+
+    <sql>
+      UPDATE Transfusion 
+      SET patient_id_temp = patient_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="Patient"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Patient"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Patient_AUD"/>
+
+    <modifyDataType columnName="patient_id" newDataType="BINARY(16)" tableName="OrderForm"/>
+    <modifyDataType columnName="patient_id" newDataType="BINARY(16)" tableName="Transfusion"/>
+
+    <modifyDataType columnName="patient_id" newDataType="BINARY(16)" tableName="OrderForm_AUD"/>
+    <modifyDataType columnName="patient_id" newDataType="BINARY(16)" tableName="Transfusion_AUD"/>
+
+    <sql>
+      UPDATE Patient 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Patient ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Patient_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql>
+      UPDATE Patient_AUD AS updateTable
+        LEFT JOIN Patient AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE Patient_AUD
+      FROM Patient_AUD
+        LEFT JOIN Patient AS joinTable ON (Patient_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE OrderForm AS updateTable
+        LEFT JOIN Patient AS joinedTable ON (updateTable.patient_id_temp = joinedTable.id_temp)
+      SET updateTable.patient_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Transfusion AS updateTable
+        LEFT JOIN Patient AS joinedTable ON (updateTable.patient_id_temp = joinedTable.id_temp)
+      SET updateTable.patient_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE OrderForm_AUD AS updateTable
+        LEFT JOIN Patient AS joinedTable ON (updateTable.patient_id_temp = joinedTable.id_temp)
+      SET updateTable.patient_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Transfusion_AUD AS updateTable
+        LEFT JOIN Patient AS joinedTable ON (updateTable.patient_id_temp = joinedTable.id_temp)
+      SET updateTable.patient_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="Patient"/>
+
+    <dropColumn columnName="id_temp" tableName="Patient_AUD"/>
+
+    <dropColumn columnName="patient_id_temp" tableName="OrderForm"/>
+
+    <dropColumn columnName="patient_id_temp" tableName="Transfusion"/>
+
+    <dropColumn columnName="patient_id_temp" tableName="OrderForm_AUD"/>
+
+    <dropColumn columnName="patient_id_temp" tableName="Transfusion_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="patient_id" baseTableName="OrderForm" constraintName="fk_OrderForm_patient"
+      referencedColumnNames="id" referencedTableName="Patient"/>
+
+    <addForeignKeyConstraint baseColumnNames="patient_id" baseTableName="Transfusion" constraintName="fk_Transfusion_patient"
+      referencedColumnNames="id" referencedTableName="Patient"/>
+  </changeSet>
+</databaseChangeLog>

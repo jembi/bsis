@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -46,7 +47,7 @@ public class PackTypeController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
-  public ResponseEntity<Map<String, Object>> getPackTypeById(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getPackTypeById(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<>();
     map.put("packtype", packTypeControllerService.getPackTypeById(id));
     return new ResponseEntity<>(map, HttpStatus.OK);
@@ -62,7 +63,7 @@ public class PackTypeController {
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
   public ResponseEntity<Map<String, Object>> updatePackType(@Valid @RequestBody PackTypeBackingForm formData,
-      @PathVariable Long id) {
+      @PathVariable UUID id) {
     // Use the id from the path
     formData.setId(id);
     Map<String, Object> map = new HashMap<>();
