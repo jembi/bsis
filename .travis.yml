@@ -1,4 +1,4 @@
-dist: trusty
+dist: xenial
 sudo: enabled
 
 language: java
@@ -12,6 +12,9 @@ addons:
     packages:
       - mysql-server
       - mysql-client
+
+services:
+  - mysql
 
 before_install:
   - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('root') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
