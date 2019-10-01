@@ -53,7 +53,7 @@ The challenges listed above have influenced the design of BSIS and the following
 Many other design decisions in the future will be influenced by the same parameters.
 
 ## Learn about BSIS
-Learn more about BSIS and the Blood Safety Sregthening Programme [here](https://www.jembi.org/Project/Blood-Safety-Strengthening-Programme-(BSSP)). Full Requirements Specifications are available.
+Learn more about BSIS and the Blood Safety Strengthening Programme [here](https://www.jembi.org/Project/Blood-Safety-Strengthening-Programme-(BSSP)). Full Requirements Specifications are available.
 
 # Developer Documentation
 
