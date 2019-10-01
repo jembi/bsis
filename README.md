@@ -12,6 +12,9 @@ If you are considering forking this code and making any changes, please make sur
 
 2. Under no circumstances and under no legal theory, whether tort (including negligence), contract, or otherwise, shall any Contributor, or anyone who distributes Covered Software as permitted by the license, be liable to You for any indirect, special, incidental, consequential damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other damages or losses of any nature whatsoever (direct or otherwise) on account of or associated with the use or inability to use the covered content (including, without limitation, the use of information or content made available by the covered code, all documentation associated therewith, and the failure of the covered code to comply with privacy laws and regulations or clinical care industry standards and protocols), even if such party shall have been informed of the possibility of such damages.
 
+# BSIS Contributors Agreement 
+If you are planning to contribute in any way to the source code, please first read the [Contributors Agreement](https://github.com/jembi/bsis/blob/develop/CONTRIBUTORS-AGREEMENT.md).
+
 # Background
 
 BSIS is a software to manage blood related information from the point of donation through testing, storage to its eventual usage in a hospital or a clinic. 
