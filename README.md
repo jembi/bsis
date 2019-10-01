@@ -6,23 +6,23 @@ BSIS
 BSIS (Blood Safety Information System) was a project started at Georgia Institute of Technology as part of the [Computing For Good (C4G)](http://www.cc.gatech.edu/about/advancing/c4g/) Program at Georgia Tech, under the name V2V (Vein to Vein). 
 The project is now maintained by [Jembi Health Systems](http://www.jembi.org) in South Africa.
 
-# Background
-
-BSIS is a software to manage blood related information from the point of donation through testing, storage to its eventual usage in a hospital or a clinic. 
-Handling of blood is a sensitive operation and record of movement of blood as it goes through the following chain is critical to the effective functioning of blood processing centers. 
-This solution is primary targeted for deployment in the developing countries of Africa where much of the blood inventory tracking is done on paper.
-
-![Lifecycle of Donated Blood] (https://raw.github.com/jembi/bsis/master/lifecycle_blood.png)
-
-The software was developed at Georgia Tech as part of the C4G program in collaboration with Centers for Disease Control and Prevention (CDC), Safe Blood for Africa (SBFA) and the participating countries of Africa, and is now developed and maintained by Jembi Health Systems (JHS) in South Africa.
-
 # BSIS Disclaimer
 If you are considering forking this code and making any changes, please make sure that you read the Disclaimer below to ensure you are aware of the risks associated with this.
 1. No warranties of any kind whatsoever are made as to the results that You will obtain from relying upon the covered code (or any information or content obtained by way of the covered code), including but not limited to compliance with privacy laws or regulations or laboratory and clinical care industry standards and protocols. Use of the covered code is not a substitute for appropriately-trained and registered professional blood service and healthcare providers, standard practice, quality assurance guidelines or professional judgment. Any decision with regard to the appropriateness of treatment, or the validity or reliability of information or content made available by the covered code, is the sole responsibility of the appropriately-trained and registered professional blood service personnel and health care providers.
 
 2. Under no circumstances and under no legal theory, whether tort (including negligence), contract, or otherwise, shall any Contributor, or anyone who distributes Covered Software as permitted by the license, be liable to You for any indirect, special, incidental, consequential damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other damages or losses of any nature whatsoever (direct or otherwise) on account of or associated with the use or inability to use the covered content (including, without limitation, the use of information or content made available by the covered code, all documentation associated therewith, and the failure of the covered code to comply with privacy laws and regulations or clinical care industry standards and protocols), even if such party shall have been informed of the possibility of such damages.
 
-# [Video Introduction to BSIS] (http://www.youtube.com/watch?v=O_zIIXepPHc)
+# Background
+
+BSIS is a software to manage blood related information from the point of donation through testing, storage to its eventual usage in a hospital or a clinic. 
+Handling of blood is a sensitive operation and record of movement of blood as it goes through the following chain is critical to the effective functioning of blood processing centers. 
+This solution is primary targeted for deployment in the developing countries of Africa where much of the blood inventory tracking is done on paper.
+
+![Lifecycle of Donated Blood](https://github.com/jembi/bsis/blob/master/lifecycle_blood.png?raw=true)
+
+The software was developed at Georgia Tech as part of the C4G program in collaboration with Centers for Disease Control and Prevention (CDC), Safe Blood for Africa (SBFA) and the participating countries of Africa, and is now developed and maintained by Jembi Health Systems (JHS) in South Africa.
+
+## [Video Introduction to BSIS](http://www.youtube.com/watch?v=O_zIIXepPHc)
 
 ## Problems related to blood supply in Africa
 
@@ -32,7 +32,7 @@ If you are considering forking this code and making any changes, please make sur
 * Shortage of blood
 * Many countries of Africa depend on paper based systems to track the movement of blood through the blood processing chain
 
-[This factsheet] (http://www.who.int/mediacentre/factsheets/fs279/en/index.html) from WHO discusses the problems related to blood safety and availability specifically the developing countries of Africa in greater detail.
+[This factsheet](http://www.who.int/mediacentre/factsheets/fs279/en/index.html) from WHO discusses the problems related to blood safety and availability specifically the developing countries of Africa in greater detail.
 
 ## Challenges
 
