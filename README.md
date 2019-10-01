@@ -25,8 +25,6 @@ This solution is primary targeted for deployment in the developing countries of 
 
 The software was developed at Georgia Tech as part of the C4G program in collaboration with Centers for Disease Control and Prevention (CDC), Safe Blood for Africa (SBFA) and the participating countries of Africa, and is now developed and maintained by Jembi Health Systems (JHS) in South Africa.
 
-## [Video Introduction to BSIS](http://www.youtube.com/watch?v=O_zIIXepPHc)
-
 ## Problems related to blood supply in Africa
 
 * Unsafe blood can lead to disease transmissions
@@ -53,6 +51,9 @@ The challenges listed above have influenced the design of BSIS and the following
  * A single installer which installs and configures all dependencies like Java, MySQL, Apache Tomcat etc. to make first time configuration simple.
 
 Many other design decisions in the future will be influenced by the same parameters.
+
+## Learn about BSIS
+Learn more about BSIS and the Blood Safety Sregthening Programme [here](https://www.jembi.org/Project/Blood-Safety-Strengthening-Programme-(BSSP)). Full Requirements Specifications are available.
 
 # Developer Documentation
 
