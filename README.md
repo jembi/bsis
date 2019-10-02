@@ -21,8 +21,6 @@ BSIS is a software to manage blood related information from the point of donatio
 Handling of blood is a sensitive operation and record of movement of blood as it goes through the following chain is critical to the effective functioning of blood processing centers. 
 This solution is primary targeted for deployment in the developing countries of Africa where much of the blood inventory tracking is done on paper.
 
-![Lifecycle of Donated Blood](https://github.com/jembi/bsis/blob/master/lifecycle_blood.png?raw=true)
-
 The software was developed at Georgia Tech as part of the C4G program in collaboration with Centers for Disease Control and Prevention (CDC), Safe Blood for Africa (SBFA) and the participating countries of Africa, and is now developed and maintained by Jembi Health Systems (JHS) in South Africa.
 
 ## Problems related to blood supply in Africa
