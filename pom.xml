@@ -11,7 +11,7 @@
     <properties>
         <webapp.name>bsis</webapp.name>
         <cxf-version>2.2.10</cxf-version>
-        <spring-version>4.1.0.RELEASE</spring-version>
+        <spring-version>4.3.25.RELEASE</spring-version>
         <spring-security-version>3.2.5.RELEASE</spring-security-version>
         <hibernate-version>4.3.7.Final</hibernate-version>
         <liquibase.propertyFile>src/main/resources/bsis.properties</liquibase.propertyFile>
@@ -318,7 +318,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>3.2.1.RELEASE</version>
+            <version>${spring-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -512,8 +512,8 @@
         <!-- Test Dependencies-->
         <dependency>
             <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
-            <version>4.11</version>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
