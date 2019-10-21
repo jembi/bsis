@@ -273,7 +273,7 @@
         <dependency>
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
-            <version>0.9.2.1</version>
+            <version>0.9.5.4</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -384,7 +384,7 @@
         <dependency>
             <groupId>com.mchange</groupId>
             <artifactId>mchange-commons-java</artifactId>
-            <version>0.2.3.3</version>
+            <version>0.2.18</version>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
