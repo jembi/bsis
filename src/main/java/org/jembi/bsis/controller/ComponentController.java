@@ -182,7 +182,7 @@ public class ComponentController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
   
-  @RequestMapping(value = "{id}/preprocess ", method = RequestMethod.PUT)
+  @RequestMapping(value = "{id}/preprocess", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> preProcessComponent(
       @PathVariable("id") UUID componentId,
