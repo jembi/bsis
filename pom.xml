@@ -13,7 +13,7 @@
         <cxf-version>2.2.10</cxf-version>
         <spring-version>4.3.25.RELEASE</spring-version>
         <spring-security-version>3.2.5.RELEASE</spring-security-version>
-        <hibernate-version>4.3.7.Final</hibernate-version>
+        <hibernate-version>5.4.24.Final</hibernate-version>
         <liquibase.propertyFile>src/main/resources/bsis.properties</liquibase.propertyFile>
     </properties>
 
